@@ -21,6 +21,7 @@
 	td, th {
 		padding: 16px 24px;
 		font-weight: 400;
+		text-align: left;
 	}
 	tbody {
 		tr {
@@ -40,4 +41,14 @@
 	font-size: 14px;
 	color: #fff;
 	margin-bottom: 17px;
+}
+.dashicons-no {
+	color: red;
+}
+.dashicons-edit {
+	color: var(--color-accent);
+}
+
+.product-thumbnail {
+	max-width: 50px;
 }

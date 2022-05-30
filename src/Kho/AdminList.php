@@ -1,6 +1,6 @@
 <?php
 
-namespace CRM\SanPham;
+namespace CRM\Kho;
 
 class AdminList {
 	protected $table;
@@ -11,17 +11,17 @@ class AdminList {
 
 	public function add_menu() {
 		add_menu_page(
-			'Sản phẩm',
-			'Sản phẩm',
+			'Kho',
+			'Kho',
 			'administrator',
-			'products',
+			'kho',
 			[ $this, 'render' ],
-			'dashicons-products',
+			'dashicons-admin-home',
 			30
 		);
 	}
 
 	public function render() {
-		include CRM_DIR . 'templates/product.php';
+		include CRM_DIR . 'templates/kho.php';
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace CRM\SanPham;
+namespace CRM\DonHang;
 
 class AdminList {
 	protected $table;
@@ -11,17 +11,17 @@ class AdminList {
 
 	public function add_menu() {
 		add_menu_page(
-			'Sản phẩm',
-			'Sản phẩm',
+			'Đơn hàng',
+			'Đơn hàng',
 			'administrator',
-			'products',
+			'orders',
 			[ $this, 'render' ],
-			'dashicons-products',
+			'dashicons-cart',
 			30
 		);
 	}
 
 	public function render() {
-		include CRM_DIR . 'templates/product.php';
+		include CRM_DIR . 'templates/orders.php';
 	}
 }

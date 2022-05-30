@@ -13,9 +13,9 @@ class Schema {
 		CREATE TABLE sanpham (
 			`id` mediumint unsigned NOT NULL auto_increment,
 			`ten_sp` varchar(50) NOT NULL,
-			`gia_1` int unsigned NOT NULL,
-			`gia_2` int unsigned NOT NULL,
-			`gia_3` int unsigned NOT NULL,
+			`gia_niem_yet` int unsigned NOT NULL,
+			`gia_ban_le` int unsigned NOT NULL,
+			`gia_ban_buon` int unsigned NOT NULL,
 			`thongso_kythuat` text,
 			`hinhanh` text,
 			PRIMARY KEY  (`id`)

@@ -23,4 +23,6 @@ if ( is_admin() ) {
 	new Schema;
 	new Assets;
 	( new SanPham\AdminList() )->init();
+	( new DonHang\AdminList() )->init();
+	( new Kho\AdminList() )->init();
 }
