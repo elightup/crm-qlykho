@@ -20,4 +20,7 @@ define( 'CRM_URL', plugin_dir_url( __FILE__ ) );
 
 if ( is_admin() ) {
 	new Menu;
+	new Schema;
+	new Assets;
+	( new SanPham\AdminList() )->init();
 }

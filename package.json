@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "start": "sass --style=compressed --no-source-map assets/sass:assets/css",
+        "watch": "sass --style=compressed --no-source-map --watch assets/sass:assets/css"
+    }
+}
