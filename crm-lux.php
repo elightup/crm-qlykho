@@ -22,6 +22,7 @@ if ( is_admin() ) {
 	new Menu;
 	new Schema;
 	new Assets;
+	new Field;
 	( new SanPham\AdminList() )->init();
 	( new DonHang\AdminList() )->init();
 	( new Kho\AdminList() )->init();

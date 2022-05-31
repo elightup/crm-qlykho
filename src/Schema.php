@@ -25,7 +25,7 @@ class Schema {
 			CREATE TABLE kho (
 				`id` mediumint unsigned NOT NULL auto_increment,
 				`ten_kho` varchar(50) NOT NULL,
-				`id_khachhang` mediumint NOT NULL,
+				`id_user` mediumint NOT NULL,
 				PRIMARY KEY  (`id`)
 			);
 		';
