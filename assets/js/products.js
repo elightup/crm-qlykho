@@ -41,8 +41,8 @@ jQuery( function( $ ) {
 					thongso: thongso.val(),
 					hinh_anh: hinh_anh.val(),
 				}, response => {
-					if ( !response.success ) {
-						alert( 'Có lỗi xảy ra, vui lòng thử lại' );
+					if ( ! response.success ) {
+						$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
 						return;
 					}
 					let data_sp = {
@@ -77,13 +77,11 @@ jQuery( function( $ ) {
 				</div>
 			</div>`;
 
-			$( 'body' ).append( toast ).fadeTo( 2000, 1, function() {
+			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
 				$( '.toast' ).remove();
 			} );
 		}
 	};
-
-
 
 	product.init();
 } );
