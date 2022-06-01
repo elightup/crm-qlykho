@@ -3,8 +3,6 @@
 namespace CRM\SanPham;
 
 class AdminList {
-	protected $table;
-
 	public function init() {
 		add_action( 'admin_menu', [ $this, 'add_menu' ] );
 	}

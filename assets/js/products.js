@@ -4,9 +4,9 @@ jQuery( function( $ ) {
 			product.add();
 		},
 		htmlLayout: function(data) {
-			let gia_niem_yet = product.formatNumber( 0, 3, '.', ',', parseFloat( data.gia_niem_yet ) ),
-				gia_ban_le = product.formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_le ) ),
-				gia_ban_buon = product.formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_buon ) ),
+			let gia_niem_yet = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_niem_yet ) ),
+				gia_ban_le = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_le ) ),
+				gia_ban_buon = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_buon ) ),
 				thongso_kythuat = data.thongso_kythuat.substr( 0, 40 );
 			return `
 			<tr>
@@ -55,6 +55,7 @@ jQuery( function( $ ) {
 						hinhanh         : hinh_anh.val(),
 					}
 					$( '.data-list' ).prepend( product.htmlLayout( data_sp ) );
+					product.showPopup();
 
 					ten.val( '' );
 					gia_niem_yet.val( '' );
@@ -66,10 +67,19 @@ jQuery( function( $ ) {
 				} );
 			} );
 		},
-		formatNumber: function( n, x, s, c, number ) {
-			var re = '\\d(?=(\\d{' + ( x || 3 ) + '})+' + ( n > 0 ? '\\D' : '$' ) + ')',
-				num = number.toFixed( Math.max( 0, ~~n ) );
-			return ( c ? num.replace( '.', c ) : num ).replace( new RegExp( re, 'g' ), '$&' + ( s || ',' ) );
+
+		showPopup: function() {
+			const toast =
+			`<div class="toast">
+				<p class="title">Đã thêm sản phẩm thành công</p>
+				<div class="img-toast">
+					<span class="dashicons dashicons-yes-alt"></span>
+				</div>
+			</div>`;
+
+			$( 'body' ).append( toast ).fadeTo( 2000, 1, function() {
+				$( '.toast' ).remove();
+			} );
 		}
 	};
 
@@ -77,3 +87,8 @@ jQuery( function( $ ) {
 
 	product.init();
 } );
+function formatNumber( n, x, s, c, number ) {
+	var re = '\\d(?=(\\d{' + ( x || 3 ) + '})+' + ( n > 0 ? '\\D' : '$' ) + ')',
+		num = number.toFixed( Math.max( 0, ~~n ) );
+	return ( c ? num.replace( '.', c ) : num ).replace( new RegExp( re, 'g' ), '$&' + ( s || ',' ) );
+}
