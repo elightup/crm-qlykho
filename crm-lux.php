@@ -23,7 +23,7 @@ if ( is_admin() ) {
 	new Schema;
 	new Assets;
 	new Field;
-	( new SanPham\AdminList() )->init();
+	new SanPham\Index;
 	( new DonHang\AdminList() )->init();
 	( new Kho\AdminList() )->init();
 }
