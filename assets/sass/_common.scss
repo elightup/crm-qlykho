@@ -66,10 +66,17 @@
 }
 .dashicons-no,
 .message-error {
-	color: red;
+	color: var(--color-red);
+	font-weight: 500;
 }
 .dashicons-edit {
 	color: var(--color-accent);
+}
+
+.action-required {
+	color: var(--color-red);
+	font-weight: bold;
+	margin-left: 3px;
 }
 
 .toast {

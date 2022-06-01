@@ -23,7 +23,7 @@ class Ajax {
 			'thongso'      => isset( $_POST['thongso'] ) ? $_POST['thongso'] : '',
 			'hinh_anh'     => isset( $_POST['hinh_anh'] ) ? $_POST['hinh_anh'] : '',
 		];
-		if ( empty( $data['ten'] || $data['gia_niem_yet'] || $data['gia_ban_buon'] ) ) {
+		if ( empty( $data['ten'] ) || empty( $data['gia_niem_yet'] ) || empty( $data['gia_ban_buon'] ) ) {
 			wp_send_json_error( 'Thông tin sản phẩm trống. Bạn hãy nhập đủ thông tin ' );
 		}
 

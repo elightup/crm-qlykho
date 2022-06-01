@@ -42,6 +42,7 @@ jQuery( function( $ ) {
 					hinh_anh: hinh_anh.val(),
 				}, response => {
 					if ( ! response.success ) {
+						$( '.message-error' ).remove();
 						$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
 						return;
 					}
@@ -64,6 +65,8 @@ jQuery( function( $ ) {
 					thongso.val( '' );
 					hinh_anh.val( '' );
 					ten.focus();
+
+					$( '.message-error' ).remove();
 				} );
 			} );
 		},

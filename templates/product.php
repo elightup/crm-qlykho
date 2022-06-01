@@ -51,20 +51,20 @@
 			<legend><h2>Thông tin sản phẩm</h2></legend>
 			<div class="action_input">
 				<div class="action_input-item">
-					<label for="ten">Tên sản phẩm:</label>
+					<label for="ten">Tên sản phẩm <span class="action-required">*</span></label>
 					<input type="text" id="ten" name="ten" autofocus />
 				</div>
 				<div class="action_input-item">
-					<label for="gia_niem_yet">Giá niêm yết:</label>
-					<input type="text" id="gia_niem_yet" name="gia_niem_yet" />
+					<label for="gia_niem_yet">Giá niêm yết <span class="action-required">*</span></label>
+					<input type="number" id="gia_niem_yet" name="gia_niem_yet" />
 				</div>
 				<div class="action_input-item">
-					<label for="gia_ban_le">Giá bán lẻ:</label>
-					<input type="text" id="gia_ban_le" name="gia_ban_le" />
+					<label for="gia_ban_le">Giá bán lẻ <span class="action-required">*</span></label>
+					<input type="number" id="gia_ban_le" name="gia_ban_le" />
 				</div>
 				<div class="action_input-item">
-					<label for="gia_ban_buon">Giá bán buôn:</label>
-					<input type="text" id="gia_ban_buon" name="gia_ban_buon" />
+					<label for="gia_ban_buon">Giá bán buôn <span class="action-required">*</span></label>
+					<input type="number" id="gia_ban_buon" name="gia_ban_buon" />
 				</div>
 				<div class="action_input-item">
 					<label for="thong_so_ky_thuat">Thông số kỹ thuật:</label>
