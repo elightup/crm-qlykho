@@ -1,6 +1,10 @@
 {
     "scripts": {
         "start": "sass --style=compressed --no-source-map assets/sass:assets/css",
-        "watch": "sass --style=compressed --no-source-map --watch assets/sass:assets/css"
+        "watch": "sass --style=compressed --no-source-map --watch assets/sass:assets/css",
+        "watchs": "node-sass --output-style compressed -w sass -r -o ."
+    },
+    "dependencies": {
+        "node-sass": "^4.14.1"
     }
 }

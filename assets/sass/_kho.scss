@@ -1,0 +1,21 @@
+#user_name {
+	width: 100%;
+	max-width: none;
+	padding: 5px;
+}
+
+.product-kho {
+	position: relative;
+	gap: 10px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: end;
+}
+
+.product-list,
+.product_add {
+	position: relative;
+	display: grid;
+	gap: 5px;
+	grid-template-columns: 80% 1fr;
+}

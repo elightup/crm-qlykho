@@ -3,11 +3,10 @@ namespace CRM;
 
 class Field {
 	public function __construct() {
-		// add_action( 'admin_menu', array( $this, 'remove_menus' ) );
-		add_filter( 'rwmb_meta_boxes', array( $this, 'your_prefix_function_name' ) );
+		add_filter( 'rwmb_meta_boxes', array( $this, 'create_user_infomation' ) );
 	}
 
-	public function your_prefix_function_name( $meta_boxes ) {
+	public function create_user_infomation( $meta_boxes ) {
 		$prefix = '';
 
 		$meta_boxes[] = [

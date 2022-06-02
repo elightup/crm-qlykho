@@ -1,7 +1,9 @@
 :root {
-	--color-accent: rgba(59,130,246,1);
+	--color-accent: rgba(59, 130, 246, 1);
 	--color-gray: #c3c4c7;
 	--color-red: #dc3232;
 }
+
 @import 'common';
 @import 'product';
+@import "kho";

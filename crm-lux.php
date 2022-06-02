@@ -24,6 +24,6 @@ if ( is_admin() ) {
 	new Assets;
 	new Field;
 	new SanPham\Index;
+	new Kho\Index;
 	( new DonHang\AdminList() )->init();
-	( new Kho\AdminList() )->init();
 }
