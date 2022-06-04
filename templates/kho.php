@@ -2,8 +2,6 @@
 	global $wpdb;
 	$sql        = 'SELECT * FROM kho ORDER BY id DESC';
 	$warehouses = $wpdb->get_results( $sql );
-	$sql_sp     = 'SELECT * FROM sanpham ORDER BY id DESC';
-	$products   = $wpdb->get_results( $sql_sp );
 ?>
 
 <div class="wrap">
@@ -24,23 +22,25 @@
 				<tbody class="data-list">
 					<?php
 					foreach ( $warehouses as $key => $warehouse ) :
-						$user       = get_user_by( 'id', $warehouse->id_user );
-						$user_id    = $user->ID;
-						$user_meta  = get_user_meta( $user_id );
-						$user_phone = $user_meta['user_phone'][0];
+						$user      = get_user_by( 'id', $warehouse->id_user );
+						$user_id   = $user->ID;
+						$user_meta = get_user_meta( $user_id, 'user_phone', true );
+						$id_kho    = $warehouse->id;
+						$sql_kho   = 'SELECT * FROM sanpham_kho WHERE idKho = ' . $id_kho;
+						$products  = $wpdb->get_results( $sql_kho );
 						?>
 						<tr>
-							<td>#<?= esc_html( $warehouse->id ) ?></td>
-							<td><?= esc_html( $warehouse->ten_kho ) ?></td>
+							<td data-bs-toggle="modal" data-bs-target="#modal_<?= esc_attr( $warehouse->id );?>">#<?= esc_html( $warehouse->id ) ?></td>
+							<td data-bs-toggle="modal" data-bs-target="#modal_<?= esc_attr( $warehouse->id );?>"><?= esc_html( $warehouse->ten_kho ) ?></td>
 							<td><?= esc_html( $user->display_name ) ?></td>
 							<td><?= esc_html( $user->user_email ) ?></td>
-							<td><?= esc_html( $user_phone ) ?></td>
-
+							<td><?= esc_html( $user_meta ) ?></td>
 							<td>
 								<span class="dashicons dashicons-edit" title="Sửa"></span>
 								<span class="dashicons dashicons-no" title="Xóa"></span>
 							</td>
 						</tr>
+						<?php include CRM_DIR . 'src/kho/modal.php'; ?>
 					<?php endforeach; ?>
 				</tbody>
 			</table>
@@ -75,7 +75,6 @@
 						?>
 					</select>
 				</div>
-
 			</div>
 			<div class="action_btn">
 				<button class="btn btn_add_kho">Lưu</button>
