@@ -22,7 +22,7 @@
 						$numbersp = $product->soLuong;
 						?>
 						<div class="modal-body__inner">
-							<div class="modal-body__id"><?= esc_html( $san_pham[0]->id )?></div>
+							<div class="modal-body__id">#<?= esc_html( $idsp );// esc_html( $san_pham[0]->id );?></div>
 							<div class="modal-body__name">
 								<?php
 								echo esc_html( $san_pham[0]->ten_sp );
@@ -44,12 +44,21 @@
 					<input type="text" name="idkho" id="idkho" value="<?= esc_attr( $warehouse->id );?>" hidden>
 					<div class="add-product">
 						<select name="product_name" id="product_name" class="rwmb">
+							<option value="" selected disabled hidden>Chọn sản phẩm</option>
 							<?php
 							$sql     = 'SELECT * FROM sanpham ORDER BY id DESC';
 							$sanpham = $wpdb->get_results( $sql );
 							foreach ( $sanpham as $sp ) :
+								$id_sp  = $sp->id;
+								$hidden = '';
+								foreach ( $products as $product ) {
+									$idproduct = $product->idSanPham;
+									if ( $id_sp === $idproduct ) {
+										$hidden = 'hidden';
+									}
+								}
 								?>
-								<option value="<?= esc_attr( $sp->id );?>"><?= esc_html( $sp->ten_sp );?></option>
+								<option value="<?= esc_attr( $sp->id );?>" <?= esc_attr( $hidden );?>><?= esc_html( $sp->ten_sp );?></option>
 								<?php
 							endforeach;
 							?>

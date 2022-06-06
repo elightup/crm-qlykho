@@ -72,18 +72,17 @@ jQuery( function ( $ ) {
 			product_kho.addsp();
 		},
 		htmlLayout: function ( data ) {
-			console.log( data );
 			return `
-			<tr>
-				<td>#${ data.id }</td>
-				<td>${ data.ten_sp }</td>
-				<td>${ data.number_sp }</td>
-				<td>
+			<div class="modal-body__inner">
+				<div class="modal-body__id">#${ data.products[ 0 ][ 'id_product' ] }</div>
+				<div class="modal-body__name">${ data.products[ 0 ][ 'name_sp' ] }</div>
+				<div class="modal-body__name">${ data.products[ 0 ][ 'number' ] }</div>
+				<div class="modal-body__name">
 					<span class="dashicons dashicons-edit" title="Sửa"></span>
 					<span class="dashicons dashicons-no" title="Xóa"></span>
 					<span class="dashicons dashicons-saved" title="Lưu"></span>
-				</td>
-			</tr>
+				</div>
+			</div>
 			`;
 		},
 		addsp: function () {
@@ -101,13 +100,12 @@ jQuery( function ( $ ) {
 					};
 					products.push( product );
 				} );
-				console.log( products );
+
 				$.post( ProductParams.ajaxUrl, {
 					action: 'them_product_kho',
 					id_kho: id_kho,
 					products: products,
 				}, response => {
-					console.log( response );
 					if ( !response.success ) {
 						$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
 						return;
@@ -116,42 +114,15 @@ jQuery( function ( $ ) {
 						id: response.data,
 						products: products,
 					};
-					$( '.modal-body__content' ).prepend( product_kho.htmlLayout( data_sp_kho ) );
-					product_kho.showPopup();
+					$( '.modal-body__content' ).append( product_kho.htmlLayout( data_sp_kho ) );
+					//product_kho.showPopup();
 
 					$( '.message-error' ).remove();
 				} );
 			} );
 		},
-		showPopup: function () {
-			const toast =
-				`<div class="toast">
-				<p class="title">Đã thêm sản phẩm thành công</p>
-				<div class="img-toast">
-					<span class="dashicons dashicons-yes-alt"></span>
-				</div>
-			</div>`;
 
-			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
-				$( '.toast' ).remove();
-			} );
-		}
 	};
-
-	// $( '.save_product' ).on( 'click', function () {
-	// 	var products = [];
-	// 	$( this ).closest( '.modal-body' ).find( ".add-product" ).each( function ( index ) {
-	// 		var id = $( this ).find( '#product_name' ).val();
-	// 		var number = $( this ).find( '#number_product' ).val();
-	// 		var product = {
-	// 			'id_product': id,
-	// 			'number': number
-	// 		};
-	// 		products.push( product );
-	// 	} );
-	// 	console.log( products );
-	// } );
-
 
 	kho.init();
 	product_kho.init();

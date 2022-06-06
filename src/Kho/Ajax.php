@@ -23,8 +23,11 @@ class Ajax {
 		wp_send_json_success( $id_kho );
 	}
 	public function ajax_them_product_kho() {
-		$data = isset( $_POST['products'] ) ? $_POST['products'] : '';
-		var_dump( $data );
+		$data = [
+			'id_kho'   => isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '',
+			'products' => isset( $_POST['products'] ) ? $_POST['products'] : '',
+		];
+		// var_dump( $data );
 		$id_sp_kho = $this->them_sp_kho( $data );
 		wp_send_json_success( $id_sp_kho );
 	}
@@ -42,17 +45,21 @@ class Ajax {
 		return $kho_id;
 	}
 
-	// public function them_sp_kho( $data ) {
-	// global $wpdb;
-	// $wpdb->insert(
-	// 'sanpham_kho',
-	// [
-	// 'ten_kho' => $data['ten'],
-	// 'id_user' => $data['user'],
-	// ]
-	// );
-	// $sp_kho = $wpdb->insert_id;
-	// return $sp_kho;
-	// }
+	public function them_sp_kho( $data ) {
+		global $wpdb;
+		$products = $data['products'];
+		foreach ( $products as $product ) {
+			$wpdb->insert(
+				'sanpham_kho',
+				[
+					'idKho'     => $data['id_kho'],
+					'idSanPham' => $product['id_product'],
+					'soLuong'   => $product['number'],
+				]
+			);
+		}
+		$kho_id = $wpdb->insert_id;
+		return $kho_id;
+	}
 
 }
