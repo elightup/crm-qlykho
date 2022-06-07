@@ -6,6 +6,7 @@ class Ajax {
 		$actions = [
 			'them_san_pham',
 			'edit_san_pham',
+			'remove_san_pham',
 		];
 
 		foreach ( $actions as $action ) {
@@ -79,6 +80,24 @@ class Ajax {
 				'thongso_kythuat' => $data['thongso_kythuat'],
 				'hinhanh'         => $data['hinh_anh'],
 			],
+			[ 'id' => $id ]
+		);
+	}
+
+	public function ajax_remove_san_pham() {
+		$id = isset( $_POST['id'] ) ? $_POST['id'] : '';
+		if ( empty( $id ) ) {
+			wp_send_json_error( 'Có lỗi xảy ra' );
+		}
+
+		$this->remove_san_pham( $id );
+		wp_send_json_success();
+	}
+
+	public function remove_san_pham( $id ) {
+		global $wpdb;
+		$wpdb->delete(
+			'sanpham',
 			[ 'id' => $id ]
 		);
 	}

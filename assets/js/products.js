@@ -3,6 +3,7 @@ jQuery( function( $ ) {
 		init: function() {
 			product.onSave();
 			product.editButton();
+			product.removeButton();
 		},
 		htmlLayout: function(data) {
 			let gia_niem_yet    = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_niem_yet ) ),
@@ -110,6 +111,19 @@ jQuery( function( $ ) {
 				tr.replaceWith( product.htmlLayout( data_sp ) );
 			} );
 		},
+		remove: function( id ) {
+			$.post( ProductParams.ajaxUrl, {
+				action: 'remove_san_pham',
+				id: id,
+			}, response => {
+				if ( ! response.success ) {
+					return;
+				}
+
+				let tr = $( 'tr[data-product='+ id +']' );
+				tr.remove();
+			} );
+		},
 
 		editButton: function() {
 			$( '.data-list .dashicons-edit' ).on( 'click', function() {
@@ -130,6 +144,15 @@ jQuery( function( $ ) {
 
 				$( '.btn_add_product' ).addClass( 'edit' );
 				$( '.btn_add_product' ).attr( 'data-id', id_product );
+			} );
+		},
+
+		removeButton: function() {
+			$( '.data-list .dashicons-no' ).on( 'click', function() {
+				let parent     = $(this).parents( 'tr' ),
+					id_product = parent.data( 'product' );
+
+				product.remove( id_product );
 			} );
 		},
 
