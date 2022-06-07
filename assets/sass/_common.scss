@@ -1,34 +1,32 @@
 .crm-content {
 	display: grid;
 	grid-template-columns: 70% 30%;
-	table {
-		text-indent: 0;
-		width: 100%;
-		border-collapse: collapse;
-		// min-width: 100%;
-		// border: 1px solid var(--color-gray);
-		background: #fff;
-		border-radius: 12px;
-		overflow: hidden;
-		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgb(0, 0, 0, 0.06);
-	}
-	thead {
-		background: #f3f4f6;
-		border-bottom: 1px solid var(--color-gray);
-	}
-	td, th {
-		padding: 16px 24px;
-		font-weight: 400;
-		text-align: left;
-	}
-	tbody {
-		tr {
-			border-bottom: 1px solid var(--color-gray);
-		}
-		tr:last-child {
-			border: none;
-		}
-	}
+	// table {
+	// 	text-indent: 0;
+	// 	width: 100%;
+	// 	border-collapse: collapse;
+	// 	background: #fff;
+	// 	border-radius: 12px;
+	// 	overflow: hidden;
+	// 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgb(0, 0, 0, 0.06);
+	// }
+	// thead {
+	// 	background: #f3f4f6;
+	// 	border-bottom: 1px solid var(--color-gray);
+	// }
+	// td, th {
+	// 	padding: 16px 24px;
+	// 	font-weight: 400;
+	// 	text-align: left;
+	// }
+	// tbody {
+	// 	tr {
+	// 		border-bottom: 1px solid var(--color-gray);
+	// 	}
+	// 	tr:last-child {
+	// 		border: none;
+	// 	}
+	// }
 	fieldset {
 		border: 1px solid var(--color-gray);
 		padding: 5px 20px 20px;
@@ -41,7 +39,6 @@
 		padding: 0 20px;
 	}
 }
-
 .action_input-item {
 	margin: 10px 0;
 	label {
@@ -69,8 +66,8 @@
 }
 .dashicons-no,
 .message-error {
-	color: var(--color-red);
-	font-weight: 500;
+	// color: var(--color-red);
+	// font-weight: 500;
 }
 .dashicons-edit {
 	color: var(--color-accent);
