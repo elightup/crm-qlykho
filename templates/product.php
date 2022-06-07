@@ -26,18 +26,18 @@
 				</thead>
 				<tbody class="data-list">
 					<?php foreach ( $products as $key => $product ) : ?>
-						<tr>
+						<tr data-product="<?= esc_attr( $product->id ) ?>">
 							<td>#<?= esc_html( $product->id ) ?></td>
-							<td>
-								<img src="<?= esc_url( $product->hinhanh ) ?>" alt="" class="product-thumbnail">
+							<td data-link-image="<?= esc_attr( $product->hinhanh ) ?>" class="product__thumbnail">
+								<img src="<?= esc_url( $product->hinhanh ) ?>">
 							</td>
-							<td><?= esc_html( $product->ten_sp ) ?></td>
-							<td>
+							<td class="product__name"><?= esc_html( $product->ten_sp ) ?></td>
+							<td data-gia-niem-yet="<?= esc_attr( $product->gia_niem_yet ) ?>" class="product__gia-niem-yet">
 								<?= esc_html( number_format( $product->gia_niem_yet, 0, ',', '.' ) . ' ₫' ) ?>
 							</td>
-							<td><?= esc_html( number_format( $product->gia_ban_le, 0, ',', '.' ) . ' ₫' ) ?></td>
-							<td><?= esc_html( number_format( $product->gia_ban_buon, 0, ',', '.' ) . ' ₫' ) ?></td>
-							<td class="product-thongso"><?= esc_html( wp_trim_words( $product->thongso_kythuat, 15 ) ) ?></td>
+							<td data-gia-ban-le="<?= esc_attr( $product->gia_ban_le ) ?>" class="product__gia-ban-le"><?= esc_html( number_format( $product->gia_ban_le, 0, ',', '.' ) . ' ₫' ) ?></td>
+							<td data-gia-ban-buon="<?= esc_attr( $product->gia_ban_buon ) ?>" class="product__gia-ban-buon"><?= esc_html( number_format( $product->gia_ban_buon, 0, ',', '.' ) . ' ₫' ) ?></td>
+							<td class="product__thongso"><?= esc_html( wp_trim_words( $product->thongso_kythuat, 15 ) ) ?></td>
 							<td>
 								<span class="dashicons dashicons-edit" title="Sửa"></span>
 								<span class="dashicons dashicons-no" title="Xóa"></span>
