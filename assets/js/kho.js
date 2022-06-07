@@ -47,7 +47,9 @@ jQuery( function ( $ ) {
 					};
 					$( '.data-list' ).prepend( kho.htmlLayout( data_kho ) );
 					kho.showPopup();
-
+					ten.val( '' );
+					user.val( '' );
+					user_name.text( 'Chọn user' );
 					$( '.message-error' ).remove();
 				} );
 			} );
@@ -93,36 +95,87 @@ jQuery( function ( $ ) {
 					var id_product = $( this ).find( '#product_name' ).val();
 					var name_sp = $( this ).find( '#product_name option:selected' ).text();
 					var number = $( this ).find( '#number_product' ).val();
-					var product = {
-						'id_product': id_product,
-						'name_sp': name_sp,
-						'number': number
-					};
-					products.push( product );
-				} );
-
-				$.post( ProductParams.ajaxUrl, {
-					action: 'them_product_kho',
-					id_kho: id_kho,
-					products: products,
-				}, response => {
-					if ( !response.success ) {
-						$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
-						return;
+					//console.log( id_product );
+					if ( id_product != null ) {
+						var product = {
+							'id_product': id_product,
+							'name_sp': name_sp,
+							'number': number
+						};
+						products.push( product );
 					}
-					let data_sp_kho = {
-						id: response.data,
-						products: products,
-					};
-					$( '.modal-body__content' ).append( product_kho.htmlLayout( data_sp_kho ) );
-					//product_kho.showPopup();
-
-					$( '.message-error' ).remove();
 				} );
+				console.log( products );
+				if ( products.length !== 0 ) {
+					$.post( ProductParams.ajaxUrl, {
+						action: 'them_product_kho',
+						id_kho: id_kho,
+						products: products,
+					}, response => {
+						if ( !response.success ) {
+							$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
+							return;
+						}
+						let data_sp_kho = {
+							id: response.data,
+							products: products,
+						};
+						$( '.modal-body__content' ).append( product_kho.htmlLayout( data_sp_kho ) );
+						//product_kho.showPopup();
+						name_sp = $( this ).find( '#product_name option:selected' ).text( 'Chọn sản phẩm' );
+						number = $( this ).find( '#number_product' ).val( '' );
+						$( '.message-error' ).remove();
+					} );
+				}
+
 			} );
 		},
 
 	};
+
+	$( '.data-list .dashicons-no' ).on( 'click', function ( e ) {
+		e.preventDefault();
+		var currentRow = $( this ).closest( "tr" );
+		var id_kho = $( this ).closest( '.action' ).find( '#id_kho' ).val();
+		$.ajax( {
+			type: 'post',
+			dataType: 'json',
+			url: ProductParams.ajaxUrl,
+			data: {
+				action: 'xoa_kho',
+				id_kho: id_kho,
+			},
+			beforeSend: function () {
+				alert( 'Bạn có muốn xóa không' );
+
+			},
+			success: function ( response ) {
+				currentRow.remove();
+			},
+		} );
+	} );
+	$( '.modal-body .dashicons-no' ).on( 'click', function ( e ) {
+		var currentRow = $( this ).closest( ".modal-body__inner" );
+		var id_sp = $( this ).closest( '.modal-body__action' ).find( '#id_sp' ).val();
+		console.log( id_sp );
+		$.ajax( {
+			type: 'post',
+			dataType: 'json',
+			url: ProductParams.ajaxUrl,
+			data: {
+				action: 'xoa_sp_kho',
+				id_sp: id_sp,
+			},
+			beforeSend: function () {
+				alert( 'Bạn có muốn xóa không' );
+			},
+			success: function ( response ) {
+				currentRow.remove();
+			},
+		} );
+
+	} );
+
 
 	kho.init();
 	product_kho.init();

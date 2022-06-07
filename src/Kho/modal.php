@@ -7,7 +7,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="modal-body__top">
-					<div class="modal-body__id">STT</div>
+					<div class="modal-body__id">Mã sản phẩm</div>
 					<div class="modal-body__name">Tên sản phẩm</div>
 					<div class="modal-body__name">Số lượng</div>
 					<div class="modal-body__name"></div>
@@ -29,7 +29,8 @@
 								?>
 							</div>
 							<div class="modal-body__name"><?= esc_html( $numbersp );?></div>
-							<div class="modal-body__name">
+							<div class="modal-body__action">
+								<input type="text" name="id_sp" id="id_sp" value="<?= esc_attr( $idsp );?>" hidden>
 								<span class="dashicons dashicons-edit" title="Sửa"></span>
 								<span class="dashicons dashicons-no" title="Xóa"></span>
 								<span class="dashicons dashicons-saved" title="Lưu"></span>

@@ -35,7 +35,8 @@
 							<td><?= esc_html( $user->display_name ) ?></td>
 							<td><?= esc_html( $user->user_email ) ?></td>
 							<td><?= esc_html( $user_meta ) ?></td>
-							<td>
+							<td class="action">
+								<input type="text" name="id_kho" id="id_kho" value="<?= esc_attr( $warehouse->id );?>" hidden>
 								<span class="dashicons dashicons-edit" title="Sửa"></span>
 								<span class="dashicons dashicons-no" title="Xóa"></span>
 							</td>

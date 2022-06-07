@@ -6,6 +6,8 @@ class Ajax {
 		$actions = [
 			'them_kho',
 			'them_product_kho',
+			'xoa_kho',
+			'xoa_sp_kho',
 		];
 
 		foreach ( $actions as $action ) {
@@ -23,13 +25,22 @@ class Ajax {
 		wp_send_json_success( $id_kho );
 	}
 	public function ajax_them_product_kho() {
-		$data = [
+		$data      = [
 			'id_kho'   => isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '',
 			'products' => isset( $_POST['products'] ) ? $_POST['products'] : '',
 		];
-		// var_dump( $data );
 		$id_sp_kho = $this->them_sp_kho( $data );
 		wp_send_json_success( $id_sp_kho );
+	}
+	public function ajax_xoa_kho() {
+		global $wpdb;
+		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
+		$wpdb->delete( 'kho', array( 'id' => $id_kho ) );
+	}
+	public function ajax_xoa_sp_kho() {
+		global $wpdb;
+		$id_sp = isset( $_POST['id_sp'] ) ? $_POST['id_sp'] : '';
+		$wpdb->delete( 'sanpham_kho', array( 'idSanPham' => $id_sp ) );
 	}
 
 	public function them_kho( $data ) {
