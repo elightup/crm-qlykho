@@ -41,32 +41,7 @@ jQuery( function( $ ) {
 			</tr>
 			`;
 		},
-		onSave: function() {
-			$d.on( 'click', '.btn_add_product', function() {
-				let ten          = $( 'input[name=ten]' ),
-					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
-					gia_ban_le   = $( 'input[name=gia_ban_le]' ),
-					gia_ban_buon = $( 'input[name=gia_ban_buon]' ),
-					thongso      = $( 'textarea[name=thong_so_ky_thuat]' ),
-					hinh_anh     = $( 'input[name=hinh_anh]' );
 
-				if ( $(this).hasClass( 'edit' ) ) {
-					let data_sp = {
-						id              : $(this).attr( 'data-id' ),
-						ten_sp          : ten.val(),
-						gia_niem_yet    : gia_niem_yet.val(),
-						gia_ban_le      : gia_ban_le.val(),
-						gia_ban_buon    : gia_ban_buon.val(),
-						thongso_kythuat : thongso.val(),
-						hinhanh         : hinh_anh.val(),
-					}
-					console.log('data_sp', data_sp);
-					product.edit( data_sp );
-				} else {
-					product.add( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
-				}
-			} );
-		},
 		add: function( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'them_san_pham',
@@ -93,7 +68,7 @@ jQuery( function( $ ) {
 				}
 				$( '.data-list' ).prepend( product.htmlLayout( data_sp ) );
 				product.showPopup();
-				product.clearInput( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
+				product.clearInput();
 
 				ten.focus();
 
@@ -134,13 +109,46 @@ jQuery( function( $ ) {
 			} );
 		},
 
-		clearInput: function( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh ) {
+		clearInput: function() {
+			let ten          = $( 'input[name=ten]' ),
+				gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
+				gia_ban_le   = $( 'input[name=gia_ban_le]' ),
+				gia_ban_buon = $( 'input[name=gia_ban_buon]' ),
+				thongso      = $( 'textarea[name=thong_so_ky_thuat]' ),
+				hinh_anh     = $( 'input[name=hinh_anh]' );
+
 			ten.val( '' );
 			gia_niem_yet.val( '' );
 			gia_ban_le.val( '' );
 			gia_ban_buon.val( '' );
 			thongso.val( '' );
 			hinh_anh.val( '' );
+		},
+
+		onSave: function() {
+			$d.on( 'click', '.btn_add_product', function() {
+				let ten          = $( 'input[name=ten]' ),
+					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
+					gia_ban_le   = $( 'input[name=gia_ban_le]' ),
+					gia_ban_buon = $( 'input[name=gia_ban_buon]' ),
+					thongso      = $( 'textarea[name=thong_so_ky_thuat]' ),
+					hinh_anh     = $( 'input[name=hinh_anh]' );
+
+				if ( $(this).hasClass( 'edit' ) ) {
+					let data_sp = {
+						id              : $(this).attr( 'data-id' ),
+						ten_sp          : ten.val(),
+						gia_niem_yet    : gia_niem_yet.val(),
+						gia_ban_le      : gia_ban_le.val(),
+						gia_ban_buon    : gia_ban_buon.val(),
+						thongso_kythuat : thongso.val(),
+						hinhanh         : hinh_anh.val(),
+					}
+					product.edit( data_sp );
+				} else {
+					product.add( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
+				}
+			} );
 		},
 
 		editButton: function() {
@@ -169,27 +177,19 @@ jQuery( function( $ ) {
 			$d.on( 'click', '.data-list .button-remove', function() {
 				let parent     = $(this).parents( 'tr' ),
 					id_product = parent.data( 'product' );
-					console.log('id_product', id_product);
 
 				$( '.confirm-remove' ).addClass( 'confirmed' );
 				$( '.confirm-remove' ).attr( 'data-id', id_product );
 				product.confirmRemove( id_product );
 			} );
 		},
+
 		confirmRemove: function() {
 			$d.on( 'click', '.confirm-remove', function() {
 				let id_product = $(this).attr( 'data-id' );
 
 				product.remove( id_product );
-
-				let ten          = $( 'input[name=ten]' ),
-					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
-					gia_ban_le   = $( 'input[name=gia_ban_le]' ),
-					gia_ban_buon = $( 'input[name=gia_ban_buon]' ),
-					thongso      = $( 'textarea[name=thong_so_ky_thuat]' ),
-					hinh_anh     = $( 'input[name=hinh_anh]' );
-
-				product.clearInput( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
+				product.clearInput();
 
 			} );
 		},

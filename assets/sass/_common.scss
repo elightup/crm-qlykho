@@ -110,6 +110,25 @@
 		}
 	}
 }
+.form-search {
+	input[type=text] {
+		padding: 8px 8px 8px 32px;
+		line-height: 1.5;
+	}
+}
+.pagination {
+	li {
+		margin-bottom: 0;
+	}
+	li.active a {
+		color: #fff;
+		transition-duration: .15s;
+		transition-property: background-color,border-color,color,fill,stroke;
+		background-color: #7e3af2;
+		border-radius: 0.375rem;
+	}
+}
+
 @keyframes zoomIn {
 	from {
 		opacity: 0;

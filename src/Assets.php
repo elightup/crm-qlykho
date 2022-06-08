@@ -15,6 +15,8 @@ class Assets {
 		wp_enqueue_script( 'alpine', 'https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js', [], '2', true );
 		wp_enqueue_script( 'alpine_init', CRM_URL . 'assets/js/init-alpine.js', [ 'alpine' ], filemtime( CRM_DIR . 'assets/js/init-alpine.js' ), true );
 		wp_enqueue_script( 'focus_trap_script', CRM_URL . 'assets/js/focus-trap.js', [], filemtime( CRM_DIR . 'assets/js/focus-trap.js' ), true );
+		wp_enqueue_script( 'list-js', 'https://cdn.jsdelivr.net/npm/list.js@2.3.1/dist/list.min.js', [], '2.3.1', true );
+		wp_enqueue_script( 'script', CRM_URL . 'assets/js/script.js', [ 'jquery' ], '1.0', true );
 
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 		if ( is_admin() && $page != '' ) {
