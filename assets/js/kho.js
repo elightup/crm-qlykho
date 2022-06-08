@@ -1,5 +1,5 @@
 jQuery( function ( $ ) {
-
+	const $d = $( document );
 	$( '.add_product_kho' ).on( 'click', function ( e ) {
 		e.preventDefault();
 		$( this ).closest( '.modal-body' ).find( '.add-product' ).last().clone().appendTo( '.modal-body__product' );
@@ -7,51 +7,98 @@ jQuery( function ( $ ) {
 
 	let kho = {
 		init: function () {
-			kho.add();
+			kho.onSave();
+			kho.editButton();
+			kho.removeButton();
 		},
 		htmlLayout: function ( data ) {
 			return `
-			<tr>
-				<td>#${ data.id }</td>
-				<td>${ data.ten_kho }</td>
-				<td>${ data.user_name }</td>
-				<td></td>
-				<td></td>
-				<td>
-					<span class="dashicons dashicons-edit" title="Sửa"></span>
-					<span class="dashicons dashicons-no" title="Xóa"></span>
+			<tr class="text-gray-700 dark:text-gray-400" data-kho="${ data.id }">
+				<td class="px-4 py-3">#${ data.id }</td>
+				<td data-name-kho="${ data.ten }" class="px-4 py-3">${ data.ten }</td>
+				<td data-user="${ data.user }" data-name-user="${ data.user_name }" class="name_user px-4 py-3">${ data.user_name }</td>
+				<td class="email_user px-4 py-3"></td>
+				<td class="phone_user px-4 py-3"></td>
+				<td class="action px-4 py-3">
+					<div class="flex items-center space-x-4 text-sm">
+						<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+							<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+							</svg>
+						</button>
+						<button data-kho="${ data.id }" @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
+							<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+							</svg>
+						</button>
+						<button data-kho="<?= esc_attr( $warehouse->id ) ?>" class="button-view flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="View">
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+							</svg>
+						</button>
+					</div>
 				</td>
 			</tr>
 			`;
 		},
-		add: function () {
-			$( '.btn_add_kho' ).on( 'click', function () {
-				var ten = $( 'input[name=ten]' ),
+		onSave: function () {
+			$d.on( 'click', '.btn_add_kho', function () {
+				let ten = $( 'input[name=ten]' ),
 					user = $( 'select[name="user_name"] option:selected' ),
 					user_name = $( 'select[name="user_name"] option:selected' );
-				$.post( ProductParams.ajaxUrl, {
-					action: 'them_kho',
-					ten: ten.val(),
-					user: user.val(),
-					user_name: user_name.text(),
-				}, response => {
-					if ( !response.success ) {
-						$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
-						return;
-					}
+				if ( $( this ).hasClass( 'edit' ) ) {
 					let data_kho = {
-						id: response.data,
-						ten_kho: ten.val(),
+						id: $( this ).data( 'id' ),
+						ten: ten.val(),
 						user: user.val(),
 						user_name: user_name.text(),
 					};
-					$( '.data-list' ).prepend( kho.htmlLayout( data_kho ) );
-					kho.showPopup();
-					ten.val( '' );
-					user.val( '' );
-					user_name.text( 'Chọn user' );
-					$( '.message-error' ).remove();
-				} );
+					kho.edit( data_kho );
+				} else {
+					kho.add( ten, user, user_name );
+				}
+			} );
+		},
+		add: function ( ten, user, user_name ) {
+			$.post( ProductParams.ajaxUrl, {
+				action: 'them_kho',
+				ten: ten.val(),
+				user: user.val(),
+				user_name: user_name.text(),
+			}, response => {
+				console.log( data.ten );
+				if ( !response.success ) {
+					$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
+					return;
+				}
+				let data_kho = {
+					id: response.data,
+					ten: ten.val(),
+					user: user.val(),
+					user_name: user_name.text(),
+				};
+				$( '.data-list' ).prepend( kho.htmlLayout( data_kho ) );
+				kho.showPopup();
+				ten.val( '' );
+				user.val( '' );
+				user_name.text( 'Chọn user' );
+				$( '.message-error' ).remove();
+			} );
+		},
+		edit: function ( data_kho ) {
+			$.post( ProductParams.ajaxUrl, {
+				action: 'edit_kho',
+				id: data_kho.id,
+				ten_kho: data_kho.ten,
+				user: data_kho.user,
+				user_name: data.user_name,
+			}, response => {
+				if ( !response.success ) {
+					return;
+				}
+				let tr = $( 'tr[data-kho=' + data_kho.id + ']' );
+				tr.replaceWith( kho.htmlLayout( data_kho ) );
 			} );
 		},
 		showPopup: function () {
@@ -66,26 +113,94 @@ jQuery( function ( $ ) {
 			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
 				$( '.toast' ).remove();
 			} );
-		}
+		},
+		editButton: function () {
+			$d.on( 'click', '.data-list .button-edit', function ( e ) {
+				let parent = $( this ).parents( 'tr' ),
+					id_kho = parent.data( 'kho' ),
+					ten = parent.find( '.name_kho' ),
+					id_user = parent.find( '.name_user' );
+				$( 'input[name="ten"]' ).val( ten.text() );
+				$( 'select[name="user_name"] option:selected' ).val( id_user.data( 'user' ) );
+				$( 'select[name="user_name"] option:selected' ).text( id_user.data( 'name-user' ) );
+
+				$( '.btn_add_kho' ).addClass( 'edit' );
+				$( '.btn_add_kho' ).attr( 'data-id', id_kho );
+			} );
+		},
+		remove: function ( id ) {
+			$.post( ProductParams.ajaxUrl, {
+				action: 'xoa_kho',
+				id_kho: id,
+			}, response => {
+				if ( !response.success ) {
+					return;
+				}
+				$( '.action_user' ).html( response.data );
+				let tr = $( 'tr[data-kho=' + id + ']' );
+				tr.remove();
+			} );
+		},
+		removeButton: function () {
+			$d.on( 'click', '.data-list .action .button-remove', function ( e ) {
+				let parent = $( this ).parents( 'tr' ),
+					id_kho = parent.data( 'kho' );
+
+				$( '.confirm-remove' ).addClass( 'confirmed' );
+				$( '.confirm-remove' ).attr( 'data-id', id_kho );
+				kho.confirmRemove( id_kho );
+			} );
+		},
+		confirmRemove: function () {
+			$d.on( 'click', '.confirm-remove', function () {
+				let id_kho = $( this ).attr( 'data-id' );
+				console.log( id_kho );
+				kho.remove( id_kho );
+			} );
+		},
+		clearInput: function () {
+			let ten = $( 'input[name=ten]' ),
+				user = $( 'select[name="user_name"] option:selected' ),
+				user_name = $( 'select[name="user_name"] option:selected' );
+			ten.val( '' );
+			user.val( '' );
+			user_name.text();
+		},
 	};
+
 
 	let product_kho = {
 		init: function () {
 			product_kho.addsp();
+			product_kho.removeButton();
 		},
 		htmlLayout: function ( data ) {
-			return `
-			<div class="modal-body__inner">
-				<div class="modal-body__id">#${ data.products[ 0 ][ 'id_product' ] }</div>
-				<div class="modal-body__name">${ data.products[ 0 ][ 'name_sp' ] }</div>
-				<div class="modal-body__name">${ data.products[ 0 ][ 'number' ] }</div>
-				<div class="modal-body__name">
-					<span class="dashicons dashicons-edit" title="Sửa"></span>
-					<span class="dashicons dashicons-no" title="Xóa"></span>
-					<span class="dashicons dashicons-saved" title="Lưu"></span>
+			products = data.products;
+			inner = ``;
+			$.each( products, function ( i, val ) {
+				inner = inner + `
+				<div class="modal-body__inner">
+					<div class="modal-body__id px-4 py-3">#${ products[ i ][ 'id_product' ] }</div>
+					<div class="modal-body__name px-4 py-3">${ products[ i ][ 'name_sp' ] }</div>
+					<div class="modal-body__name px-4 py-3">${ products[ i ][ 'number' ] }</div>
+					<div class="modal-body__action px-4 py-3">
+						<div class="flex items-center space-x-4 text-sm">
+							<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+								<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+									<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+								</svg>
+							</button>
+							<button data-kho="<?= esc_attr( $warehouse->id ) ?>" @click="openList" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
+								<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+									<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+								</svg>
+							</button>
+						</div>
+					</div>
 				</div>
-			</div>
-			`;
+				`;
+			} );
+			return inner;
 		},
 		addsp: function () {
 			$( '.save_product' ).on( 'click', function () {
@@ -95,7 +210,6 @@ jQuery( function ( $ ) {
 					var id_product = $( this ).find( '#product_name' ).val();
 					var name_sp = $( this ).find( '#product_name option:selected' ).text();
 					var number = $( this ).find( '#number_product' ).val();
-					//console.log( id_product );
 					if ( id_product != null ) {
 						var product = {
 							'id_product': id_product,
@@ -105,7 +219,6 @@ jQuery( function ( $ ) {
 						products.push( product );
 					}
 				} );
-				console.log( products );
 				if ( products.length !== 0 ) {
 					$.post( ProductParams.ajaxUrl, {
 						action: 'them_product_kho',
@@ -120,8 +233,8 @@ jQuery( function ( $ ) {
 							id: response.data,
 							products: products,
 						};
+						//console.log( product_kho.htmlLayout( data_sp_kho ) );
 						$( '.modal-body__content' ).append( product_kho.htmlLayout( data_sp_kho ) );
-						//product_kho.showPopup();
 						name_sp = $( this ).find( '#product_name option:selected' ).text( 'Chọn sản phẩm' );
 						number = $( this ).find( '#number_product' ).val( '' );
 						$( '.message-error' ).remove();
@@ -130,54 +243,59 @@ jQuery( function ( $ ) {
 
 			} );
 		},
-
+		remove: function ( id, id_kho ) {
+			console.log( id_kho );
+			$.post( ProductParams.ajaxUrl, {
+				action: 'xoa_sp_kho',
+				id_sp: id,
+				id_kho: id_kho,
+			}, response => {
+				if ( !response.success ) {
+					return;
+				}
+				$( '.add-product' ).html( response.data );
+				let tr = $( '.modal-body__inner[data-product=' + id + ']' );
+				tr.remove();
+			} );
+		},
+		removeButton: function () {
+			$( '.modal-body .remove-product' ).on( 'click', function ( e ) {
+				var id_kho = $( this ).closest( '.modal' ).attr( 'data-modal' );
+				let parent = $( this ).parents( '.modal-body__inner' ),
+					id_product = parent.data( 'product' );
+				$( '.confirm-remove' ).addClass( 'confirmed' );
+				$( '.confirm-remove' ).attr( 'data-id', id_product );
+				$( '.confirm-remove' ).attr( 'data-kho', id_kho );
+				product_kho.confirmRemove( id_product, id_kho );
+			} );
+		},
+		confirmRemove: function () {
+			$( '.confirm-remove' ).on( 'click', function () {
+				let id_kho = $( this ).attr( 'data-kho' );
+				let id_product = $( this ).attr( 'data-id' );
+				product_kho.remove( id_product, id_kho );
+			} );
+		}
 	};
 
-	$( '.data-list .dashicons-no' ).on( 'click', function ( e ) {
-		e.preventDefault();
-		var currentRow = $( this ).closest( "tr" );
-		var id_kho = $( this ).closest( '.action' ).find( '#id_kho' ).val();
-		$.ajax( {
-			type: 'post',
-			dataType: 'json',
-			url: ProductParams.ajaxUrl,
-			data: {
-				action: 'xoa_kho',
-				id_kho: id_kho,
-			},
-			beforeSend: function () {
-				alert( 'Bạn có muốn xóa không' );
+	function modal_popup() {
+		$( '.data-list .button-view' ).on( 'click', function () {
+			var modal_id = $( this ).attr( 'data-kho' );
 
-			},
-			success: function ( response ) {
-				currentRow.remove();
-			},
-		} );
-	} );
-	$( '.modal-body .dashicons-no' ).on( 'click', function ( e ) {
-		var currentRow = $( this ).closest( ".modal-body__inner" );
-		var id_sp = $( this ).closest( '.modal-body__action' ).find( '#id_sp' ).val();
-		console.log( id_sp );
-		$.ajax( {
-			type: 'post',
-			dataType: 'json',
-			url: ProductParams.ajaxUrl,
-			data: {
-				action: 'xoa_sp_kho',
-				id_sp: id_sp,
-			},
-			beforeSend: function () {
-				alert( 'Bạn có muốn xóa không' );
-			},
-			success: function ( response ) {
-				currentRow.remove();
-			},
-		} );
+			$( '.data-list .button-view' ).removeClass( 'current' );
+			$( '.modal' ).removeClass( 'current' );
 
-	} );
+			$( this ).addClass( 'current' );
+			$( "#modal_" + modal_id ).addClass( 'current' );;
+		} );
+		$( '.btn-close' ).on( 'click', function () {
+			$( '.modal' ).removeClass( 'current' );
+		} );
+	}
 
 
 	kho.init();
 	product_kho.init();
+	modal_popup();
 } );
 
