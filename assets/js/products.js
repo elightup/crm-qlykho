@@ -1,4 +1,5 @@
 jQuery( function( $ ) {
+	const $d = $( document );
 	let product = {
 		init: function() {
 			product.onSave();
@@ -18,7 +19,7 @@ jQuery( function( $ ) {
 						<img class="object-cover w-full h-full rounded-full border-0" src="${data.hinhanh}">
 					</div>
 				</td>
-				<td class="product__name px-4 py-3">${data.ten_sp}</td>
+				<td class="product__name">${data.ten_sp}</td>
 				<td class="product__gia-niem-yet px-4 py-3" data-gia-niem-yet="${data.gia_niem_yet}">${gia_niem_yet} ₫</td>
 				<td class="product__gia-ban-le px-4 py-3" data-gia-ban-le="${data.gia_ban_le}">${gia_ban_le} ₫</td>
 				<td class="product__gia-ban-buon px-4 py-3" data-gia-ban-buon="${data.gia_ban_buon}">${gia_ban_buon} ₫</td>
@@ -41,7 +42,7 @@ jQuery( function( $ ) {
 			`;
 		},
 		onSave: function() {
-			$( '.btn_add_product' ).on( 'click', function() {
+			$d.on( 'click', '.btn_add_product', function() {
 				let ten          = $( 'input[name=ten]' ),
 					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
 					gia_ban_le   = $( 'input[name=gia_ban_le]' ),
@@ -51,7 +52,7 @@ jQuery( function( $ ) {
 
 				if ( $(this).hasClass( 'edit' ) ) {
 					let data_sp = {
-						id              : $(this).data( 'id' ),
+						id              : $(this).attr( 'data-id' ),
 						ten_sp          : ten.val(),
 						gia_niem_yet    : gia_niem_yet.val(),
 						gia_ban_le      : gia_ban_le.val(),
@@ -59,6 +60,7 @@ jQuery( function( $ ) {
 						thongso_kythuat : thongso.val(),
 						hinhanh         : hinh_anh.val(),
 					}
+					console.log('data_sp', data_sp);
 					product.edit( data_sp );
 				} else {
 					product.add( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
@@ -91,13 +93,8 @@ jQuery( function( $ ) {
 				}
 				$( '.data-list' ).prepend( product.htmlLayout( data_sp ) );
 				product.showPopup();
+				product.clearInput( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
 
-				ten.val( '' );
-				gia_niem_yet.val( '' );
-				gia_ban_le.val( '' );
-				gia_ban_buon.val( '' );
-				thongso.val( '' );
-				hinh_anh.val( '' );
 				ten.focus();
 
 				$( '.message-error' ).remove();
@@ -137,8 +134,17 @@ jQuery( function( $ ) {
 			} );
 		},
 
+		clearInput: function( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh ) {
+			ten.val( '' );
+			gia_niem_yet.val( '' );
+			gia_ban_le.val( '' );
+			gia_ban_buon.val( '' );
+			thongso.val( '' );
+			hinh_anh.val( '' );
+		},
+
 		editButton: function() {
-			$( '.data-list .button-edit' ).on( 'click', function() {
+			$d.on( 'click', '.data-list .button-edit',  function() {
 				let parent       = $(this).parents( 'tr' ),
 					id_product   = parent.data( 'product' ),
 					ten          = parent.find( '.product__name' ),
@@ -160,9 +166,10 @@ jQuery( function( $ ) {
 		},
 
 		removeButton: function() {
-			$( '.data-list .button-remove' ).on( 'click', function() {
+			$d.on( 'click', '.data-list .button-remove', function() {
 				let parent     = $(this).parents( 'tr' ),
 					id_product = parent.data( 'product' );
+					console.log('id_product', id_product);
 
 				$( '.confirm-remove' ).addClass( 'confirmed' );
 				$( '.confirm-remove' ).attr( 'data-id', id_product );
@@ -170,10 +177,19 @@ jQuery( function( $ ) {
 			} );
 		},
 		confirmRemove: function() {
-			$( '.confirm-remove' ).on( 'click', function() {
-				let id_product = $(this).data( 'id' );
+			$d.on( 'click', '.confirm-remove', function() {
+				let id_product = $(this).attr( 'data-id' );
 
 				product.remove( id_product );
+
+				let ten          = $( 'input[name=ten]' ),
+					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
+					gia_ban_le   = $( 'input[name=gia_ban_le]' ),
+					gia_ban_buon = $( 'input[name=gia_ban_buon]' ),
+					thongso      = $( 'textarea[name=thong_so_ky_thuat]' ),
+					hinh_anh     = $( 'input[name=hinh_anh]' );
+
+				product.clearInput( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
 
 			} );
 		},
