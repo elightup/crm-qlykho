@@ -22,9 +22,17 @@
 				</thead>
 				<tbody class="data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 					<?php
-					foreach ( $warehouses as $key => $warehouse ) :
-						$user      = get_user_by( 'id', $warehouse->id_user );
-						$user_id   = $user->ID;
+					foreach ( $warehouses as $warehouse ) :
+						$user_id = $warehouse->id_user;
+						if ( $user_id !== '0' ) {
+							$user = get_user_by( 'id', $warehouse->id_user );
+
+							$user_name = $user->display_name;
+							$usermail  = $user->user_email;
+						} else {
+							$user_name = '';
+							$usermail  = '';
+						}
 						$user_meta = get_user_meta( $user_id, 'user_phone', true );
 						$id_kho    = $warehouse->id;
 						$sql_kho   = 'SELECT * FROM sanpham_kho WHERE idKho = ' . $id_kho;
@@ -33,8 +41,8 @@
 						<tr class="text-gray-700 dark:text-gray-400" data-kho="<?= esc_attr( $warehouse->id );?>" >
 							<td class="px-4 py-3">#<?= esc_html( $warehouse->id ) ?></td>
 							<td data-name-kho="<?= esc_attr( $warehouse->ten_kho );?>" class="name_kho px-4 py-3"><?= esc_html( $warehouse->ten_kho ) ?></td>
-							<td data-user="<?= esc_attr( $warehouse->id_user );?>" data-name-user="<?= esc_attr( $user->display_name ) ?>" class="name_user px-4 py-3"><?= esc_html( $user->display_name ) ?></td>
-							<td class="email_user px-4 py-3"><?= esc_html( $user->user_email ) ?></td>
+							<td data-user="<?= esc_attr( $warehouse->id_user );?>" data-name-user="<?= esc_attr( $user_name ) ?>" class="name_user px-4 py-3"><?= esc_html( $user_name ) ?></td>
+							<td class="email_user px-4 py-3"><?= esc_html( $usermail ) ?></td>
 							<td class="phone_user px-4 py-3"><?= esc_html( $user_meta ) ?></td>
 							<td class="action px-4 py-3">
 								<div class="flex items-center space-x-4 text-sm">
@@ -72,7 +80,7 @@
 					<input type="text" id="ten" name="ten" autofocus />
 				</div>
 				<div class="action_input-item action_user">
-					<label for="user">User: <span class="action-required">*</span></label>
+					<label for="user">User:</label>
 					<select name="user_name" id="user_name">
 						<option value=""><?= esc_html( 'Chọn user' );?></option>
 						<?php

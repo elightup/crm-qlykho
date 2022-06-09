@@ -245,13 +245,14 @@ jQuery( function ( $ ) {
 		},
 		onSave: function () {
 			$d.on( 'click', '.save_product', function () {
-				var id_kho = $( this ).closest( '.modal-body' ).find( '#idkho' ).val();
+				var id_kho = $( this ).attr( 'data-kho' );
 				var products = [];
 				$( this ).closest( '.modal-body' ).find( ".add-product" ).each( function ( index ) {
-					var id_product = $( this ).find( '#product__name' ).val();
-					var name_sp = $( this ).find( '#product__name option:selected' ).text();
+					var id_product = $( this ).find( 'select[name="product_name"] option:selected' ).val();
+					console.log( 'id_product', id_product );
+					var name_sp = $( this ).find( 'select[name="product_name"] option:selected' ).text();
 					var number = $( this ).find( '#number_product' ).val();
-					if ( id_product != null ) {
+					if ( id_product !== '' ) {
 						var product = {
 							'id_product': id_product,
 							'name_sp': name_sp,

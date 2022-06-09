@@ -22,7 +22,9 @@ class Ajax {
 			'ten'  => isset( $_POST['ten'] ) ? $_POST['ten'] : '',
 			'user' => isset( $_POST['user'] ) ? $_POST['user'] : '',
 		];
-
+		if ( empty( $data['ten'] ) ) {
+			wp_send_json_error( 'Thông tin kho trống. Bạn hãy nhập đủ thông tin ' );
+		}
 		$id_kho = $this->them_kho( $data );
 		wp_send_json_success( $id_kho );
 	}

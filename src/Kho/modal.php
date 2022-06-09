@@ -50,7 +50,6 @@
 					?>
 				</div>
 				<div class="modal-body__product">
-					<input type="text" name="idkho" id="idkho" value="<?= esc_attr( $warehouse->id );?>" hidden>
 					<div class="add-product">
 						<select name="product_name" id="product__name" class="rwmb">
 							<option value="" selected hidden>Chọn sản phẩm</option>
@@ -77,7 +76,7 @@
 				</div>
 				<div class="modal-body__add">
 					<button data-kho="<?= esc_attr( $warehouse->id );?>" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple add_product_kho">Thêm</button>
-					<button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save_product">Lưu</button>
+					<button data-kho="<?= esc_attr( $warehouse->id );?>" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save_product">Lưu</button>
 				</div>
 			</div>
 		</div>
