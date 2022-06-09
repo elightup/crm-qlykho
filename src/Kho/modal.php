@@ -1,11 +1,11 @@
-<div class="modal fade" data-modal="<?= esc_attr( $warehouse->id );?>" id="modal_<?= esc_attr( $warehouse->id );?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" data-kho="<?= esc_attr( $warehouse->id );?>" id="modal_<?= esc_attr( $warehouse->id );?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">Danh sách sản phẩm <?= esc_html( $warehouse->ten_kho ) ?></h5>
 				<button type="button" class="btn-close dashicons dashicons-no" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" data-kho="<?= esc_attr( $warehouse->id ) ?>">
 				<div class="modal-body__top text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 ">
 					<div class="modal-body__id px-4 py-3">Mã sản phẩm</div>
 					<div class="modal-body__name px-4 py-3">Tên sản phẩm</div>
@@ -31,7 +31,7 @@
 							<div data-number="<?= esc_attr( $numbersp );?>" class="product__number px-4 py-3"><?= esc_html( $numbersp );?></div>
 							<div class="modal-body__action px-4 py-3">
 								<div class="flex items-center space-x-4 text-sm">
-									<button data-kho="<?= esc_attr( $warehouse->id ) ?>" class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+									<button data-kho="<?= esc_attr( $warehouse->id ) ?>" class="edit-product flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
 										<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
 											<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
 										</svg>
@@ -52,7 +52,7 @@
 				<div class="modal-body__product">
 					<input type="text" name="idkho" id="idkho" value="<?= esc_attr( $warehouse->id );?>" hidden>
 					<div class="add-product">
-						<select name="product_name" id="product_name" class="rwmb">
+						<select name="product_name" id="product__name" class="rwmb">
 							<option value="" selected hidden>Chọn sản phẩm</option>
 							<?php
 							$sql     = 'SELECT * FROM sanpham ORDER BY id DESC';
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 				<div class="modal-body__add">
-					<button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple add_product_kho">Thêm</button>
+					<button data-kho="<?= esc_attr( $warehouse->id );?>" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple add_product_kho">Thêm</button>
 					<button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save_product">Lưu</button>
 				</div>
 			</div>

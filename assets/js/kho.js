@@ -210,17 +210,17 @@ jQuery( function ( $ ) {
 				products: data_sp.products,
 			}, response => {
 				if ( !response.success ) {
-					console.log( 'dssss' );
 					return;
 				}
 				$( '.modal-body__product' ).html( response.data );
-				$( '.add_product_kho' ).removeClass( 'disabled' );
-				$( '.add_product_kho' ).removeAttr( "disabled" );
+				$( '.add_product_kho[data-kho=' + data_sp.id_kho + ']' ).removeClass( 'disabled' );
+				$( '.add_product_kho[data-kho=' + data_sp.id_kho + ']' ).removeAttr( "disabled" );
 				let tr = $( '.modal-body__inner[data-product=' + data_sp.id_sp + ']' );
 				tr.replaceWith( product_kho.htmlLayout( data_sp ) );
 			} );
 		},
 		addsp: function ( id_kho, products ) {
+			console.log( products );
 			if ( products.length !== 0 ) {
 				$.post( ProductParams.ajaxUrl, {
 					action: 'them_product_kho',
@@ -248,8 +248,8 @@ jQuery( function ( $ ) {
 				var id_kho = $( this ).closest( '.modal-body' ).find( '#idkho' ).val();
 				var products = [];
 				$( this ).closest( '.modal-body' ).find( ".add-product" ).each( function ( index ) {
-					var id_product = $( this ).find( '#product_name' ).val();
-					var name_sp = $( this ).find( '#product_name option:selected' ).text();
+					var id_product = $( this ).find( '#product__name' ).val();
+					var name_sp = $( this ).find( '#product__name option:selected' ).text();
 					var number = $( this ).find( '#number_product' ).val();
 					if ( id_product != null ) {
 						var product = {
@@ -274,20 +274,21 @@ jQuery( function ( $ ) {
 			} );
 		},
 		editButton: function () {
-			$( '.modal .modal-body .button-edit' ).on( 'click', function () {
-				console.log( 'ádf' );
+			$( '.modal-body .edit-product' ).on( 'click', function () {
+				let id_kho = $( this ).attr( 'data-kho' );
+				//console.log( id_kho );
 				let parent = $( this ).parents( '.modal-body__inner' ),
 					id_product = parent.data( 'product' ),
 					name_product = parent.find( '.product__name' ),
 					number_product = parent.find( '.product__number' );
-				console.log( name_product.data( 'name' ) );
+				//console.log( name_product.data( 'name' ) );
 				$( 'input[name="number_product"]' ).val( number_product.data( 'number' ) );
-				$( '#product_name option:selected' ).text( name_product.data( 'name' ) );
-				$( '#product_name option:selected' ).val( id_product );
+				$( 'select[name="product_name"] option:selected' ).text( name_product.data( 'name' ) );
+				$( 'select[name="product_name"] option:selected' ).val( id_product );
 				$( '.save_product' ).addClass( 'edit' );
 				$( '.save_product' ).attr( 'data-id', id_product );
-				$( '.add_product_kho' ).addClass( 'disabled' );
-				$( '.add_product_kho' ).attr( "disabled", true );
+				$( '.add_product_kho[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
+				$( '.add_product_kho[data-kho=' + id_kho + ']' ).attr( "disabled", true );
 			} );
 		},
 		remove: function ( id, id_kho ) {
