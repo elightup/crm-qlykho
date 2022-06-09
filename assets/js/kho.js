@@ -236,7 +236,7 @@ jQuery( function ( $ ) {
 						products: products,
 					};
 					$( '.modal-body__product' ).html( response.data );
-					$( '.modal-body__content' ).append( product_kho.htmlLayout( data_sp_kho ) );
+					$( '.modal-body__content[data-kho=' + id_kho + ']' ).append( product_kho.htmlLayout( data_sp_kho ) );
 					name_sp = $( this ).find( '#product_name option:selected' ).text( 'Chọn sản phẩm' );
 					number = $( this ).find( '#number_product' ).val( '' );
 					$( '.message-error' ).remove();
@@ -274,11 +274,13 @@ jQuery( function ( $ ) {
 			} );
 		},
 		editButton: function () {
-			$d.on( 'click', '.modal-body .button-edit', function () {
+			$( '.modal .modal-body .button-edit' ).on( 'click', function () {
+				console.log( 'ádf' );
 				let parent = $( this ).parents( '.modal-body__inner' ),
 					id_product = parent.data( 'product' ),
 					name_product = parent.find( '.product__name' ),
 					number_product = parent.find( '.product__number' );
+				console.log( name_product.data( 'name' ) );
 				$( 'input[name="number_product"]' ).val( number_product.data( 'number' ) );
 				$( '#product_name option:selected' ).text( name_product.data( 'name' ) );
 				$( '#product_name option:selected' ).val( id_product );
@@ -299,7 +301,7 @@ jQuery( function ( $ ) {
 					return;
 				}
 				$( '.add-product' ).html( response.data );
-				let tr = $( '.modal-body__inner[data-product=' + id + ']' );
+				let tr = $( '.modal-body__content[data-kho=' + id_kho + '] .modal-body__inner[data-product=' + id + ']' );
 				tr.remove();
 			} );
 		},

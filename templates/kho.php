@@ -57,10 +57,10 @@
 								</div>
 							</td>
 						</tr>
-						<?php include CRM_DIR . 'src/kho/modal.php'; ?>
+						<?php include CRM_DIR . 'src/Kho/modal.php'; ?>
 						<?php endforeach; ?>
-						<?php require CRM_DIR . 'src/kho/list.php'; ?>
-						<?php require CRM_DIR . 'src/kho/popup.php'; ?>
+						<?php require CRM_DIR . 'src/Kho/list.php'; ?>
+						<?php require CRM_DIR . 'src/Kho/popup.php'; ?>
 				</tbody>
 			</table>
 		</div>
