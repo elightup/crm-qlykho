@@ -23,12 +23,12 @@
 						?>
 						<div class="modal-body__inner" data-product="<?= esc_attr( $idsp );?>">
 							<div class="modal-body__id px-4 py-3">#<?= esc_html( $idsp );?></div>
-							<div class="modal-body__name px-4 py-3">
+							<div data-name="<?= esc_attr( $san_pham[0]->ten_sp );?>" class="product__name px-4 py-3">
 								<?php
 								echo esc_html( $san_pham[0]->ten_sp );
 								?>
 							</div>
-							<div class="modal-body__name px-4 py-3"><?= esc_html( $numbersp );?></div>
+							<div data-number="<?= esc_attr( $numbersp );?>" class="product__number px-4 py-3"><?= esc_html( $numbersp );?></div>
 							<div class="modal-body__action px-4 py-3">
 								<div class="flex items-center space-x-4 text-sm">
 									<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
@@ -53,7 +53,7 @@
 					<input type="text" name="idkho" id="idkho" value="<?= esc_attr( $warehouse->id );?>" hidden>
 					<div class="add-product">
 						<select name="product_name" id="product_name" class="rwmb">
-							<option value="" selected disabled hidden>Chọn sản phẩm</option>
+							<option value="" selected hidden>Chọn sản phẩm</option>
 							<?php
 							$sql     = 'SELECT * FROM sanpham ORDER BY id DESC';
 							$sanpham = $wpdb->get_results( $sql );

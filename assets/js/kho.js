@@ -171,7 +171,8 @@ jQuery( function ( $ ) {
 
 	let product_kho = {
 		init: function () {
-			product_kho.addsp();
+			product_kho.onSave();
+			product_kho.editButton();
 			product_kho.removeButton();
 		},
 		htmlLayout: function ( data ) {
@@ -181,8 +182,8 @@ jQuery( function ( $ ) {
 				inner = inner + `
 				<div class="modal-body__inner">
 					<div class="modal-body__id px-4 py-3">#${ products[ i ][ 'id_product' ] }</div>
-					<div class="modal-body__name px-4 py-3">${ products[ i ][ 'name_sp' ] }</div>
-					<div class="modal-body__name px-4 py-3">${ products[ i ][ 'number' ] }</div>
+					<div data-name="${ products[ i ][ 'name_sp' ] }" class="product__name px-4 py-3">${ products[ i ][ 'name_sp' ] }</div>
+					<div data-number="${ products[ i ][ 'number' ] }" class="product__number px-4 py-3">${ products[ i ][ 'number' ] }</div>
 					<div class="modal-body__action px-4 py-3">
 						<div class="flex items-center space-x-4 text-sm">
 							<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
@@ -202,8 +203,48 @@ jQuery( function ( $ ) {
 			} );
 			return inner;
 		},
-		addsp: function () {
-			$( '.save_product' ).on( 'click', function () {
+		edit: function ( data_sp ) {
+			$.post( ProductParams.ajaxUrl, {
+				action: 'edit_product_kho',
+				id_kho: data_sp.id_kho,
+				products: data_sp.products,
+			}, response => {
+				if ( !response.success ) {
+					console.log( 'dssss' );
+					return;
+				}
+				$( '.modal-body__product' ).html( response.data );
+				$( '.add_product_kho' ).removeClass( 'disabled' );
+				$( '.add_product_kho' ).removeAttr( "disabled" );
+				let tr = $( '.modal-body__inner[data-product=' + data_sp.id_sp + ']' );
+				tr.replaceWith( product_kho.htmlLayout( data_sp ) );
+			} );
+		},
+		addsp: function ( id_kho, products ) {
+			if ( products.length !== 0 ) {
+				$.post( ProductParams.ajaxUrl, {
+					action: 'them_product_kho',
+					id_kho: id_kho,
+					products: products,
+				}, response => {
+					if ( !response.success ) {
+						$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
+						return;
+					}
+					let data_sp_kho = {
+						id: response.data,
+						products: products,
+					};
+					$( '.modal-body__product' ).html( response.data );
+					$( '.modal-body__content' ).append( product_kho.htmlLayout( data_sp_kho ) );
+					name_sp = $( this ).find( '#product_name option:selected' ).text( 'Chọn sản phẩm' );
+					number = $( this ).find( '#number_product' ).val( '' );
+					$( '.message-error' ).remove();
+				} );
+			}
+		},
+		onSave: function () {
+			$d.on( 'click', '.save_product', function () {
 				var id_kho = $( this ).closest( '.modal-body' ).find( '#idkho' ).val();
 				var products = [];
 				$( this ).closest( '.modal-body' ).find( ".add-product" ).each( function ( index ) {
@@ -219,28 +260,32 @@ jQuery( function ( $ ) {
 						products.push( product );
 					}
 				} );
-				if ( products.length !== 0 ) {
-					$.post( ProductParams.ajaxUrl, {
-						action: 'them_product_kho',
+				if ( $( this ).hasClass( 'edit' ) ) {
+
+					let data_sp = {
 						id_kho: id_kho,
 						products: products,
-					}, response => {
-						if ( !response.success ) {
-							$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
-							return;
-						}
-						let data_sp_kho = {
-							id: response.data,
-							products: products,
-						};
-						//console.log( product_kho.htmlLayout( data_sp_kho ) );
-						$( '.modal-body__content' ).append( product_kho.htmlLayout( data_sp_kho ) );
-						name_sp = $( this ).find( '#product_name option:selected' ).text( 'Chọn sản phẩm' );
-						number = $( this ).find( '#number_product' ).val( '' );
-						$( '.message-error' ).remove();
-					} );
+						id_sp: products[ 0 ][ 'id_product' ],
+					};
+					product_kho.edit( data_sp );
+				} else {
+					product_kho.addsp( id_kho, products );
 				}
-
+			} );
+		},
+		editButton: function () {
+			$d.on( 'click', '.modal-body .button-edit', function () {
+				let parent = $( this ).parents( '.modal-body__inner' ),
+					id_product = parent.data( 'product' ),
+					name_product = parent.find( '.product__name' ),
+					number_product = parent.find( '.product__number' );
+				$( 'input[name="number_product"]' ).val( number_product.data( 'number' ) );
+				$( '#product_name option:selected' ).text( name_product.data( 'name' ) );
+				$( '#product_name option:selected' ).val( id_product );
+				$( '.save_product' ).addClass( 'edit' );
+				$( '.save_product' ).attr( 'data-id', id_product );
+				$( '.add_product_kho' ).addClass( 'disabled' );
+				$( '.add_product_kho' ).attr( "disabled", true );
 			} );
 		},
 		remove: function ( id, id_kho ) {

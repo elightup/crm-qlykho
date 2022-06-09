@@ -5,10 +5,11 @@ class Ajax {
 	public function __construct() {
 		$actions = [
 			'them_kho',
-			'them_product_kho',
-			'xoa_kho',
-			'xoa_sp_kho',
 			'edit_kho',
+			'xoa_kho',
+			'them_product_kho',
+			'xoa_sp_kho',
+			'edit_product_kho',
 		];
 
 		foreach ( $actions as $action ) {
@@ -96,14 +97,85 @@ class Ajax {
 		return $kho_id;
 	}
 
-
+	public function ajax_edit_product_kho() {
+		global $wpdb;
+		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
+		$data   = [
+			'id_kho'   => isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '',
+			'products' => isset( $_POST['products'] ) ? $_POST['products'] : '',
+		];
+		$this->edit_sp_kho( $data );
+		ob_start();
+		$sql_kho  = 'SELECT * FROM sanpham_kho WHERE idKho = ' . $id_kho;
+		$products = $wpdb->get_results( $sql_kho );
+		?>
+		<input type="text" name="idkho" id="idkho" value="<?= esc_attr( $id_kho )?>" hidden>
+		<div class="add-product">
+		<select name="product_name" id="product_name" class="rwmb">
+			<option value="" selected disabled hidden>Chọn sản phẩm</option>
+			<?php
+			$sql     = 'SELECT * FROM sanpham ORDER BY id DESC';
+			$sanpham = $wpdb->get_results( $sql );
+			foreach ( $sanpham as $sp ) :
+				$id_sp  = $sp->id;
+				$hidden = '';
+				foreach ( $products as $product ) {
+					$idproduct = $product->idSanPham;
+					if ( $id_sp === $idproduct ) {
+						$hidden = 'hidden';
+					}
+				}
+				?>
+				<option value="<?= esc_attr( $sp->id );?>" <?= esc_attr( $hidden );?>><?= esc_html( $sp->ten_sp );?></option>
+				<?php
+			endforeach;
+			?>
+		</select>
+		<input type="number" name="number_product" id="number_product" class="rwmb">
+		</div>
+		<?php
+		$result = ob_get_clean();
+		wp_send_json_success( $result );
+	}
 	public function ajax_them_product_kho() {
-		$data = [
+		global $wpdb;
+		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
+		$data   = [
 			'id_kho'   => isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '',
 			'products' => isset( $_POST['products'] ) ? $_POST['products'] : '',
 		];
 		$this->them_sp_kho( $data );
-		wp_send_json_success();
+		ob_start();
+		$sql_kho  = 'SELECT * FROM sanpham_kho WHERE idKho = ' . $id_kho;
+		$products = $wpdb->get_results( $sql_kho );
+		?>
+		<input type="text" name="idkho" id="idkho" value="<?= esc_attr( $id_kho )?>" hidden>
+		<div class="add-product">
+		<select name="product_name" id="product_name" class="rwmb">
+			<option value="" selected disabled hidden>Chọn sản phẩm</option>
+			<?php
+			$sql     = 'SELECT * FROM sanpham ORDER BY id DESC';
+			$sanpham = $wpdb->get_results( $sql );
+			foreach ( $sanpham as $sp ) :
+				$id_sp  = $sp->id;
+				$hidden = '';
+				foreach ( $products as $product ) {
+					$idproduct = $product->idSanPham;
+					if ( $id_sp === $idproduct ) {
+						$hidden = 'hidden';
+					}
+				}
+				?>
+				<option value="<?= esc_attr( $sp->id );?>" <?= esc_attr( $hidden );?>><?= esc_html( $sp->ten_sp );?></option>
+				<?php
+			endforeach;
+			?>
+		</select>
+		<input type="number" name="number_product" id="number_product" class="rwmb">
+		</div>
+		<?php
+		$result = ob_get_clean();
+		wp_send_json_success( $result );
 	}
 	public function ajax_xoa_sp_kho() {
 		global $wpdb;
@@ -140,8 +212,6 @@ class Ajax {
 		wp_send_json_success( $result );
 	}
 
-
-
 	public function them_sp_kho( $data ) {
 		global $wpdb;
 		$products = $data['products'];
@@ -157,6 +227,20 @@ class Ajax {
 		}
 		$kho_id = $wpdb->insert_id;
 		return $kho_id;
+	}
+	public function edit_sp_kho( $data ) {
+		global $wpdb;
+		$products = $data['products'];
+		foreach ( $products as $product ) {
+			$wpdb->update(
+				'sanpham_kho',
+				[
+					'idSanPham' => $product['id_product'],
+					'soLuong'   => $product['number'],
+				],
+				[ 'idSanPham' => $product['id_product'] ]
+			);
+		}
 	}
 
 }
