@@ -63,8 +63,6 @@ function data() {
 
     openList() {
       this.isListOpen = true;
-      // var modal_id = this.data( 'modal' );
-      // console.log( modal_id );
       this.trapCleanup1 = focusTrap( document.querySelector( '#modalProduct' ) );
     },
     closeList() {

@@ -22,6 +22,18 @@ class AdminList {
 	}
 
 	public function render() {
+		if ( empty( $_GET['id'] ) ) {
+			$this->render_kho();
+		} else {
+			$this->render_product();
+		}
+	}
+
+	protected function render_kho() {
 		include CRM_DIR . 'templates/kho.php';
+	}
+
+	protected function render_product() {
+		include CRM_DIR . 'templates/chiTietKho.php';
 	}
 }

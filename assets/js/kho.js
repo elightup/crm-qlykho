@@ -2,12 +2,12 @@ jQuery( function ( $ ) {
 	const $d = $( document );
 	$( '.add_product_kho' ).on( 'click', function ( e ) {
 		e.preventDefault();
-		$( this ).closest( '.modal-body' ).find( '.add-product' ).last().clone().appendTo( '.modal-body__product' );
+		$( this ).closest( '.crm-action' ).find( '.add-product' ).last().clone().appendTo( '.add-product__inner' );
 	} );
 
 	let kho = {
 		init: function () {
-			kho.onSave();
+			kho.clickSave();
 			kho.editButton();
 			kho.removeButton();
 		},
@@ -15,7 +15,7 @@ jQuery( function ( $ ) {
 			return `
 			<tr class="text-gray-700 dark:text-gray-400" data-kho="${ data.id }">
 				<td class="px-4 py-3">#${ data.id }</td>
-				<td data-name-kho="${ data.ten }" class="px-4 py-3">${ data.ten }</td>
+				<td data-name-kho="${ data.ten }" class="name_kho px-4 py-3">${ data.ten }</td>
 				<td data-user="${ data.user }" data-name-user="${ data.user_name }" class="name_user px-4 py-3">${ data.user_name }</td>
 				<td class="email_user px-4 py-3"></td>
 				<td class="phone_user px-4 py-3"></td>
@@ -31,19 +31,20 @@ jQuery( function ( $ ) {
 								<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
 							</svg>
 						</button>
-						<button data-kho="<?= esc_attr( $warehouse->id ) ?>" class="button-view flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="View">
+						<a data-kho="${ data.id }" href="${ data.href }&id=${ data.id }" class="button-view flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="View">
 							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
 							</svg>
-						</button>
+						</a>
 					</div>
 				</td>
 			</tr>
 			`;
 		},
-		onSave: function () {
+		clickSave: function () {
 			$d.on( 'click', '.btn_add_kho', function () {
+				let href = $( '.action_btn' ).data( 'href' );
 				let ten = $( 'input[name=ten]' ),
 					user = $( 'select[name="user_name"] option:selected' ),
 					user_name = $( 'select[name="user_name"] option:selected' );
@@ -53,21 +54,22 @@ jQuery( function ( $ ) {
 						ten: ten.val(),
 						user: user.val(),
 						user_name: user_name.text(),
+						href: href,
 					};
 					kho.edit( data_kho );
 				} else {
-					kho.add( ten, user, user_name );
+					kho.add( ten, user, user_name, href );
 				}
 			} );
 		},
-		add: function ( ten, user, user_name ) {
+		add: function ( ten, user, user_name, href ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'them_kho',
 				ten: ten.val(),
 				user: user.val(),
 				user_name: user_name.text(),
+				href: href,
 			}, response => {
-				console.log( data.ten );
 				if ( !response.success ) {
 					$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
 					return;
@@ -77,6 +79,7 @@ jQuery( function ( $ ) {
 					ten: ten.val(),
 					user: user.val(),
 					user_name: user_name.text(),
+					href: href,
 				};
 				$( '.data-list' ).prepend( kho.htmlLayout( data_kho ) );
 				kho.showPopup();
@@ -139,6 +142,7 @@ jQuery( function ( $ ) {
 				$( '.action_user' ).html( response.data );
 				let tr = $( 'tr[data-kho=' + id + ']' );
 				tr.remove();
+				kho.clearInput();
 			} );
 		},
 		removeButton: function () {
@@ -154,7 +158,6 @@ jQuery( function ( $ ) {
 		confirmRemove: function () {
 			$d.on( 'click', '.confirm-remove', function () {
 				let id_kho = $( this ).attr( 'data-id' );
-				console.log( id_kho );
 				kho.remove( id_kho );
 			} );
 		},
@@ -171,23 +174,23 @@ jQuery( function ( $ ) {
 
 	let product_kho = {
 		init: function () {
-			product_kho.onSave();
+			product_kho.clickSave();
 			product_kho.editButton();
 			product_kho.removeButton();
 		},
 		htmlLayout: function ( data ) {
-			//console.log( 'data', data );
 			products = data.products;
 			inner = ``;
 			$.each( products, function ( i, val ) {
 				inner = inner + `
-				<div class="modal-body__inner" data-product="${ products[ i ][ 'id_product' ] }">
-					<div class="modal-body__id px-4 py-3">#${ products[ i ][ 'id_product' ] }</div>
-					<div data-name="${ products[ i ][ 'name_sp' ] }" class="product__name px-4 py-3">${ products[ i ][ 'name_sp' ] }</div>
-					<div data-number="${ products[ i ][ 'number' ] }" class="product__number px-4 py-3">${ products[ i ][ 'number' ] }</div>
-					<div class="modal-body__action px-4 py-3">
+				<tr class="text-gray-700 dark:text-gray-400" product-id="${ products[ i ][ 'id_product' ] }" >
+					<td class="px-4 py-3">#${ products[ i ][ 'id_product' ] }</td>
+					<td product-name="${ products[ i ][ 'name_sp' ] }" class="name_product px-4 py-3">${ products[ i ][ 'name_sp' ] }</td>
+					<td product-number="${ products[ i ][ 'number' ] }" class="product-number px-4 py-3">${ products[ i ][ 'number' ] }</td>
+
+					<td class="action px-4 py-3">
 						<div class="flex items-center space-x-4 text-sm">
-							<button data-kho="${ data.id_kho }" class="edit-product flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+							<button data-kho="${ data.id_kho }" class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
 								<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
 									<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
 								</svg>
@@ -198,13 +201,14 @@ jQuery( function ( $ ) {
 								</svg>
 							</button>
 						</div>
-					</div>
-				</div>
+					</td>
+				</tr>
 				`;
 			} );
 			return inner;
 		},
 		edit: function ( data_sp ) {
+			console.log( 'edit' );
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_product_kho',
 				id_kho: data_sp.id_kho,
@@ -213,10 +217,11 @@ jQuery( function ( $ ) {
 				if ( !response.success ) {
 					return;
 				}
-				$( '.modal-body__product' ).html( response.data );
+				$( '.add-product__inner' ).html( response.data );
 				$( '.add_product_kho[data-kho=' + data_sp.id_kho + ']' ).removeClass( 'disabled' );
 				$( '.add_product_kho[data-kho=' + data_sp.id_kho + ']' ).removeAttr( "disabled" );
-				let tr = $( '.modal-body__inner[data-product=' + data_sp.id_sp + ']' );
+				$( '.title-action' ).text( 'Thông tin sản phẩm' );
+				let tr = $( 'tr[product-id=' + data_sp.id_sp + ']' );
 				tr.replaceWith( product_kho.htmlLayout( data_sp ) );
 			} );
 		},
@@ -236,21 +241,18 @@ jQuery( function ( $ ) {
 						products: products,
 						id_kho: id_kho,
 					};
-					$( '.modal-body__product' ).html( response.data );
-					$( '.modal-body__content[data-kho=' + id_kho + ']' ).append( product_kho.htmlLayout( data_sp_kho ) );
-					name_sp = $( this ).find( '#product_name option:selected' ).text( 'Chọn sản phẩm' );
-					number = $( this ).find( '#number_product' ).val( '' );
+					$( '.add-product__inner' ).html( response.data );
+					$( '.data-list' ).prepend( product_kho.htmlLayout( data_sp_kho ) );
 					$( '.message-error' ).remove();
 				} );
 			}
 		},
-		onSave: function () {
+		clickSave: function () {
 			$d.on( 'click', '.save_product', function () {
 				var id_kho = $( this ).attr( 'data-kho' );
 				var products = [];
-				$( this ).closest( '.modal-body' ).find( ".add-product" ).each( function ( index ) {
+				$( this ).closest( '.crm-action' ).find( ".add-product" ).each( function ( index ) {
 					var id_product = $( this ).find( 'select[name="product_name"] option:selected' ).val();
-					//console.log( 'id_product', id_product );
 					var name_sp = $( this ).find( 'select[name="product_name"] option:selected' ).text();
 					var number = $( this ).find( '#number_product' ).val();
 					if ( id_product !== '' ) {
@@ -262,6 +264,7 @@ jQuery( function ( $ ) {
 						products.push( product );
 					}
 				} );
+				//console.log( 'products', products );
 				if ( $( this ).hasClass( 'edit' ) ) {
 
 					let data_sp = {
@@ -276,78 +279,59 @@ jQuery( function ( $ ) {
 			} );
 		},
 		editButton: function () {
-			$( '.modal-body .edit-product' ).on( 'click', function () {
+			$( '.data-list .button-edit' ).on( 'click', function () {
 				let id_kho = $( this ).attr( 'data-kho' );
-				//console.log( id_kho );
-				let parent = $( this ).parents( '.modal-body__inner' ),
-					id_product = parent.data( 'product' ),
-					name_product = parent.find( '.product__name' ),
-					number_product = parent.find( '.product__number' );
-				//console.log( name_product.data( 'name' ) );
-				$( 'input[name="number_product"]' ).val( number_product.data( 'number' ) );
-				$( 'select[name="product_name"] option:selected' ).text( name_product.data( 'name' ) );
+				let parent = $( this ).parents( 'tr' ),
+					id_product = parent.attr( 'product-id' ),
+					name_product = parent.find( '.name_product' ),
+					number_product = parent.find( '.product-number' );
+				$( 'input[name="number_product"]' ).val( number_product.attr( 'product-number' ) );
+				$( 'select[name="product_name"] option:selected' ).text( name_product.attr( 'product-name' ) );
 				$( 'select[name="product_name"] option:selected' ).val( id_product );
+				$( 'select[name="product_name"]' ).attr( "disabled", true );
 				$( '.save_product' ).addClass( 'edit' );
 				$( '.save_product' ).attr( 'data-id', id_product );
 				$( '.add_product_kho[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
 				$( '.add_product_kho[data-kho=' + id_kho + ']' ).attr( "disabled", true );
+				$( '.title-action' ).text( 'Sửa thông tin sản phẩm' );
 			} );
 		},
-		remove: function ( id, id_kho ) {
-			console.log( id_kho );
+		remove: function ( id_product, id_kho ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'xoa_sp_kho',
-				id_sp: id,
+				id_sp: id_product,
 				id_kho: id_kho,
 			}, response => {
 				if ( !response.success ) {
 					return;
 				}
-				$( '.add-product' ).html( response.data );
-				let tr = $( '.modal-body__content[data-kho=' + id_kho + '] .modal-body__inner[data-product=' + id + ']' );
+				$( '.add-product__inner' ).html( response.data );
+				let tr = $( 'tr[product-id=' + id_product + ']' );
 				tr.remove();
 			} );
 		},
 		removeButton: function () {
-			$( '.remove-product' ).on( 'click', function ( e ) {
+			$( '.data-list tr .remove-product' ).on( 'click', function () {
 				var id_kho = $( this ).attr( 'data-kho' );
 				console.log( 'id_kho', id_kho );
-				let parent = $( this ).parents( '.modal-body__inner' ),
-					id_product = parent.data( 'product' );
-				console.log( 'id_product', id_product );
+				let parent = $( this ).parents( 'tr' ),
+					id_product = parent.attr( 'product-id' );
 				$( '.confirm-remove' ).addClass( 'confirmed' );
 				$( '.confirm-remove' ).attr( 'data-id', id_product );
 				$( '.confirm-remove' ).attr( 'data-kho', id_kho );
-				product_kho.confirmRemove( id_product, id_kho );
+				product_kho.confirmRemove();
 			} );
 		},
 		confirmRemove: function () {
 			$( '.confirm-remove' ).on( 'click', function () {
-				let id_kho = $( this ).attr( 'data-kho' );
-				let id_product = $( this ).attr( 'data-id' );
+				let id_kho = $( this ).attr( 'data-kho' ),
+					id_product = $( this ).attr( 'data-id' );
 				product_kho.remove( id_product, id_kho );
 			} );
 		}
 	};
 
-	function modal_popup() {
-		$( '.data-list .button-view' ).on( 'click', function () {
-			var modal_id = $( this ).attr( 'data-kho' );
-
-			$( '.data-list .button-view' ).removeClass( 'current' );
-			$( '.modal' ).removeClass( 'current' );
-
-			$( this ).addClass( 'current' );
-			$( "#modal_" + modal_id ).addClass( 'current' );;
-		} );
-		$( '.btn-close' ).on( 'click', function () {
-			$( '.modal' ).removeClass( 'current' );
-		} );
-	}
-
-
 	kho.init();
 	product_kho.init();
-	modal_popup();
 } );
 

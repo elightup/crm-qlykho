@@ -28,130 +28,74 @@
 	color: var(--color-green);
 }
 
-.fade {
-	transition: opacity .15s linear;
-}
-
-.modal {
-	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: var(--bs-modal-zindex);
-	display: none;
-	width: 100%;
-	height: 100%;
-	overflow-x: hidden;
-	overflow-y: auto;
-	outline: 0;
-	--bs-modal-zindex: 9999;
-	background: rgba($color: #000000, $alpha: 0.5);
-
-	&.current {
-		display: block;
-	}
-}
-
-.modal-dialog {
-	position: relative;
-	width: auto;
-	pointer-events: none;
-	background: #fff;
-	margin-top: 50px;
-	border-radius: 5px;
-}
-
-.modal-body__add {
-	padding-top: 20px;
-}
-
-.modal-content {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	color: var(--bs-modal-color);
-	pointer-events: auto;
-	background-color: #fff;
-	background-clip: padding-box;
-	border: 1px solid rgba($color: #000000, $alpha: 0.18);
-	border-radius: 5px;
-	outline: 0;
-}
-
-
-.modal-header {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	border-bottom: 1px solid #dee2e6;
-	padding: 20px;
-
-	h5 {
-		margin: 0;
-		font-size: 24px;
-		color: #000;
-	}
-
-	.btn-close {
-		background: none;
-		border: 0;
-	}
-}
-
 .z-99 {
 	z-index: 9999;
 }
 
-.modal-body {
-	padding: 0 20px 20px;
+.add-product {
+	position: relative;
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 80% 1fr;
+	margin-bottom: 15px;
 
-	&__top {
-		position: relative;
+	&__wrap {
 		display: grid;
-		grid-template-columns: 12% 48% 20% 20%;
-		border-bottom: 1px solid #ccc;
-		padding: 10px 0;
+		gap: 10px;
+		grid-template-columns: 80% 1fr;
+		margin-bottom: 15px;
 	}
 
-	&__inner {
-		position: relative;
-		display: grid;
-		grid-template-columns: 12% 48% 20% 20%;
-		border-bottom: 1px solid #ccc;
-
-		&:last-child {
-			border-bottom: 0;
-		}
-	}
-
-	&__product {
-		.add-product {
-			position: relative;
-			display: grid;
-			gap: 10px;
-			grid-template-columns: 90% 1fr;
-			margin-bottom: 15px;
-		}
-
-		select,
-		input {
-			width: 100%;
-			padding: 5px 10px;
-			max-width: 100%;
-		}
-	}
-
-	.disabled {
-		opacity: 0.5;
+	select,
+	input {
+		width: 100%;
+		padding: 5px 10px;
+		max-width: 100%;
 	}
 }
 
-@media (min-width: 576px) {
-	.modal-dialog {
-		max-width: 1200px;
-		margin-right: auto;
-		margin-left: auto;
+.crm-list {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+
+	.crm-table {
+		width: 70%;
 	}
+
+	.crm-action {
+		width: calc(100% - 70% - 20px);
+		border: 1px solid var(--color-gray);
+		padding: 5px 20px 20px;
+		background-color: #fff;
+		border-radius: 12px;
+		margin-left: 20px;
+		margin-top: 25px;
+	}
+}
+
+.disabled {
+	opacity: 0.5;
+}
+
+svg {
+	fill: #737b83;
+}
+
+.remove-product {
+	svg {
+		fill: #eb4242;
+	}
+}
+
+.button-view {
+	svg {
+		fill: none;
+	}
+}
+
+select:disabled {
+	color: #000 !important;
+	border: 1px solid #8c8f94 !important;
 }
