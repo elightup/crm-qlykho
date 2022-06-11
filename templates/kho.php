@@ -7,7 +7,7 @@
 <div class="wrap">
 
 	<div class="crm-content" x-data="data()">
-		<div class="crm-table">
+		<div id="crm-table" class="crm-table">
 			<h2 class="mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Danh sách Kho</h2>
 			<div class="form-search lg:mr-32 mb-4">
 				<div class="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
@@ -43,7 +43,7 @@
 						<th class="px-4 py-3">Hành động</th>
 					</tr>
 				</thead>
-				<tbody class="data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+				<tbody class="list data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 					<?php
 					foreach ( $warehouses as $warehouse ) :
 						$user_id = $warehouse->id_user;
@@ -92,6 +92,9 @@
 						<?php require CRM_DIR . 'src/Kho/popup.php'; ?>
 				</tbody>
 			</table>
+			<span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+				<ul class="pagination inline-flex items-center mt-4"></ul>
+			</span>
 		</div>
 		<fieldset class="crm-action">
 			<legend><h2 class="mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Thông tin kho</h2></legend>

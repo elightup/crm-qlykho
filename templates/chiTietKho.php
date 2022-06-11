@@ -6,9 +6,33 @@ $products = $wpdb->get_results( $sql );
 ?>
 <div class="wrap">
 	<div class="crm-list" x-data="data()">
-		<div class="crm-table">
+		<div id="crm-table" class="crm-table">
 			<h2 class="mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Danh sách sản phẩm trong kho</h2>
-
+			<div class="form-search lg:mr-32 mb-4">
+				<div
+				class="relative w-full max-w-xl mr-6 focus-within:text-purple-500"
+				>
+				<div class="absolute inset-y-0 flex items-center pl-2">
+					<svg
+					class="w-4 h-4"
+					aria-hidden="true"
+					fill="currentColor"
+					viewBox="0 0 20 20"
+					>
+					<path
+						fill-rule="evenodd"
+						d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+						clip-rule="evenodd"
+					></path>
+					</svg>
+				</div>
+				<input
+					class="search w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+					type="text"
+					placeholder="Tìm kiếm sản phẩm"
+				/>
+				</div>
+			</div>
 			<table class="table table-striped w-full overflow-hidden rounded-lg shadow-xs">
 				<thead>
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -18,7 +42,7 @@ $products = $wpdb->get_results( $sql );
 						<th class="px-4 py-3">Hành động</th>
 					</tr>
 				</thead>
-				<tbody class="data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+				<tbody class="list data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 					<?php
 					foreach ( $products as $product ) :
 						$idsp     = $product->idSanPham;
@@ -28,7 +52,7 @@ $products = $wpdb->get_results( $sql );
 						?>
 						<tr class="text-gray-700 dark:text-gray-400" product-id="<?= esc_attr( $idsp );?>" >
 							<td class="px-4 py-3">#<?= esc_html( $idsp ) ?></td>
-							<td product-name="<?= esc_attr( $san_pham[0]->ten_sp );?>" class="name_product px-4 py-3"><?= esc_attr( $san_pham[0]->ten_sp );?></td>
+							<td product-name="<?= esc_attr( $san_pham[0]->ten_sp );?>" class="name_product product__name px-4 py-3"><?= esc_attr( $san_pham[0]->ten_sp );?></td>
 							<td product-number="<?= esc_attr( $numbersp );?>" class="product-number px-4 py-3"><?= esc_html( $numbersp ) ?></td>
 
 							<td class="action px-4 py-3">
@@ -50,6 +74,9 @@ $products = $wpdb->get_results( $sql );
 						<?php require CRM_DIR . 'src/Kho/list.php'; ?>
 				</tbody>
 			</table>
+			<span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+				<ul class="pagination inline-flex items-center mt-4"></ul>
+			</span>
 		</div>
 		<fieldset class="crm-action">
 			<legend><h2 class="title-action mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Thêm sản phẩm vào kho</h2></legend>

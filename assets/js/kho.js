@@ -243,6 +243,7 @@ jQuery( function ( $ ) {
 					};
 					$( '.add-product__inner' ).html( response.data );
 					$( '.data-list' ).prepend( product_kho.htmlLayout( data_sp_kho ) );
+					product_kho.showPopup();
 					$( '.message-error' ).remove();
 				} );
 			}
@@ -327,6 +328,19 @@ jQuery( function ( $ ) {
 				let id_kho = $( this ).attr( 'data-kho' ),
 					id_product = $( this ).attr( 'data-id' );
 				product_kho.remove( id_product, id_kho );
+			} );
+		},
+		showPopup: function () {
+			const toast =
+				`<div class="toast">
+				<p class="title">Đã thêm sản phẩm thành công</p>
+				<div class="img-toast">
+					<span class="dashicons dashicons-yes-alt"></span>
+				</div>
+			</div>`;
+
+			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
+				$( '.toast' ).remove();
 			} );
 		}
 	};
