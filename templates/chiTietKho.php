@@ -114,6 +114,7 @@ $products = $wpdb->get_results( $sql );
 			<div class="action_btn">
 				<button data-kho="<?= esc_attr( $id_kho );?>" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple add_product_kho">Thêm</button>
 				<button data-kho="<?= esc_attr( $id_kho );?>" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save_product">Lưu</button>
+				<button data-kho="<?= esc_attr( $id_kho );?>" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple btn-clear disabled" disabled="disabled">Hủy</button>
 			</div>
 		</fieldset>
 	</div>

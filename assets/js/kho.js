@@ -10,6 +10,7 @@ jQuery( function ( $ ) {
 			kho.clickSave();
 			kho.editButton();
 			kho.removeButton();
+			kho.clearButton();
 		},
 		htmlLayout: function ( data ) {
 			return `
@@ -89,6 +90,17 @@ jQuery( function ( $ ) {
 				$( '.message-error' ).remove();
 			} );
 		},
+		clearButton: function () {
+			$( '.btn-clear-kho' ).on( 'click', function () {
+				let id_kho = $( this ).attr( 'data-kho' );
+				$( 'input[name="ten"]' ).val( '' );
+				$( 'select[name="user_name"] option:selected' ).val( '' );
+				$( 'select[name="user_name"] option:selected' ).text( 'Chọn user' );
+				$( '.btn-clear-kho' ).addClass( 'disabled' );
+				$( '.btn-clear-kho' ).attr( 'disabled', true );
+				$( '.btn-clear-kho' ).removeAttr( 'data-kho', id_kho );
+			} );
+		},
 		edit: function ( data_kho ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_kho',
@@ -119,16 +131,21 @@ jQuery( function ( $ ) {
 		},
 		editButton: function () {
 			$d.on( 'click', '.data-list .button-edit', function ( e ) {
+
 				let parent = $( this ).parents( 'tr' ),
 					id_kho = parent.data( 'kho' ),
 					ten = parent.find( '.name_kho' ),
 					id_user = parent.find( '.name_user' );
+				console.log( ten.text() );
 				$( 'input[name="ten"]' ).val( ten.text() );
 				$( 'select[name="user_name"] option:selected' ).val( id_user.data( 'user' ) );
 				$( 'select[name="user_name"] option:selected' ).text( id_user.data( 'name-user' ) );
 
 				$( '.btn_add_kho' ).addClass( 'edit' );
 				$( '.btn_add_kho' ).attr( 'data-id', id_kho );
+				$( '.btn-clear-kho' ).removeClass( 'disabled' );
+				$( '.btn-clear-kho' ).removeAttr( 'disabled' );
+				$( '.btn-clear-kho' ).attr( 'data-kho', id_kho );
 			} );
 		},
 		remove: function ( id ) {
@@ -177,6 +194,7 @@ jQuery( function ( $ ) {
 			product_kho.clickSave();
 			product_kho.editButton();
 			product_kho.removeButton();
+			product_kho.clearButton();
 		},
 		htmlLayout: function ( data ) {
 			products = data.products;
@@ -295,6 +313,24 @@ jQuery( function ( $ ) {
 				$( '.add_product_kho[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
 				$( '.add_product_kho[data-kho=' + id_kho + ']' ).attr( "disabled", true );
 				$( '.title-action' ).text( 'Sửa thông tin sản phẩm' );
+				$( '.btn-clear[data-kho=' + id_kho + ']' ).removeClass( 'disabled' );
+				$( '.btn-clear[data-kho=' + id_kho + ']' ).removeAttr( "disabled" );
+			} );
+		},
+		clearButton: function () {
+			$( '.btn-clear' ).on( 'click', function () {
+				let id_kho = $( this ).attr( 'data-kho' );
+				console.log( 'id_kho', id_kho );
+				$( 'input[name="number_product"]' ).val( '' );
+				$( 'select[name="product_name"] option:selected' ).text( 'Chọn sản phẩm' );
+				$( 'select[name="product_name"] option:selected' ).val( '' );
+				$( '.add_product_kho[data-kho=' + id_kho + ']' ).removeClass( 'disabled' );
+				$( '.add_product_kho[data-kho=' + id_kho + ']' ).removeAttr( "disabled" );
+				$( 'select[name="product_name"]' ).removeAttr( "disabled" );
+				$( '.save_product' ).removeClass( 'edit' );
+				$( '.save_product' ).removeAttr( 'data-id' );
+				$( '.btn-clear[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
+				$( '.btn-clear[data-kho=' + id_kho + ']' ).removeAttr( "disabled" );
 			} );
 		},
 		remove: function ( id_product, id_kho ) {
