@@ -20,7 +20,7 @@ jQuery( function( $ ) {
 						<img class="object-cover w-full h-full rounded-full border-0" src="${data.hinhanh}">
 					</div>
 				</td>
-				<td class="product__name">${data.ten_sp}</td>
+				<td class="product__name px-4 py-3">${data.ten_sp}</td>
 				<td class="product__gia-niem-yet px-4 py-3 text-right" data-gia-niem-yet="${data.gia_niem_yet}">${gia_niem_yet}</td>
 				<td class="product__gia-ban-le px-4 py-3 text-right" data-gia-ban-le="${data.gia_ban_le}">${gia_ban_le}</td>
 				<td class="product__gia-ban-buon px-4 py-3 text-right" data-gia-ban-buon="${data.gia_ban_buon}">${gia_ban_buon}</td>

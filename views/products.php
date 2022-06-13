@@ -59,7 +59,7 @@
 									<img class="object-cover w-full h-full rounded-full border-0" src="<?= esc_url( $product->hinhanh ) ?>">
 								</div>
 							</td>
-							<td class="product__name"><?= esc_html( $product->ten_sp ) ?></td>
+							<td class="product__name px-4 py-3"><?= esc_html( $product->ten_sp ) ?></td>
 							<td data-gia-niem-yet="<?= esc_attr( $product->gia_niem_yet ) ?>" class="product__gia-niem-yet px-4 py-3 text-right">
 								<?= esc_html( number_format( $product->gia_niem_yet, 0, ',', '.' ) ) ?>
 							</td>
