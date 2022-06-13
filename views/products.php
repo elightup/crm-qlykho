@@ -107,6 +107,7 @@
 						x-transition:leave-start="opacity-100"
 						x-transition:leave-end="opacity-0"
 						class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
+						style="display: none"
 					>
 						<!-- Modal -->
 						<div
