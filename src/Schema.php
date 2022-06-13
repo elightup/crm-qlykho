@@ -9,7 +9,7 @@ class Schema {
 	public function create_tables() {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		$sql         = '
+		$sql          = '
 		CREATE TABLE sanpham (
 			`id` mediumint unsigned NOT NULL auto_increment,
 			`ten_sp` varchar(50) NOT NULL,
@@ -21,7 +21,7 @@ class Schema {
 			PRIMARY KEY  (`id`)
 		);
 		';
-		$sql_kho     = '
+		$sql_kho      = '
 			CREATE TABLE kho (
 				`id` mediumint unsigned NOT NULL auto_increment,
 				`ten_kho` varchar(50) NOT NULL,
@@ -29,7 +29,7 @@ class Schema {
 				PRIMARY KEY  (`id`)
 			);
 		';
-		$sql_spkho   = '
+		$sql_spkho    = '
 			CREATE TABLE sanpham_kho (
 				`id` mediumint unsigned NOT NULL auto_increment,
 				`idKho` mediumint NOT NULL,
@@ -38,20 +38,32 @@ class Schema {
 				PRIMARY KEY  (`id`)
 			);
 		';
-		$sql_donhang = '
+		$sql_donhang  = '
 			CREATE TABLE donhang (
 				`id` mediumint unsigned NOT NULL auto_increment,
-				`sanpham` mediumint NOT NULL,
+				`san_pham` mediumint NOT NULL,
 				`id_khachhang` mediumint NOT NULL,
 				`tong_tien` mediumint NOT NULL,
 				`date` datetime NOT NULL,
+				`status` varchar(50) NOT NULL,
 				PRIMARY KEY  (`id`)
 			);
+		';
+		$sql_nhap_kho = '
+		CREATE TABLE nhap_kho (
+			`id` mediumint unsigned NOT NULL auto_increment,
+			`id_san_pham` mediumint NOT NULL,
+			`so_luong` mediumint NOT NULL,
+			`id_kho` mediumint NOT NULL,
+			`date` datetime NOT NULL,
+			PRIMARY KEY  (`id`)
+		);
 		';
 
 		dbDelta( $sql );
 		dbDelta( $sql_kho );
 		dbDelta( $sql_spkho );
 		dbDelta( $sql_donhang );
+		dbDelta( $sql_nhap_kho );
 	}
 }
