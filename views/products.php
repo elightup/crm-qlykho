@@ -36,7 +36,7 @@
 				/>
 				</div>
 			</div>
-
+			<?php require CRM_DIR . '/src/SanPham/modal.php' ?>
 			<table class="table table-striped w-full overflow-hidden rounded-lg shadow-xs">
 				<thead>
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -47,6 +47,7 @@
 						<th class="px-4 py-3 whitespace-no-wrap text-right">Giá bán lẻ</th>
 						<th class="px-4 py-3 whitespace-no-wrap text-right">Giá bán buôn</th>
 						<th class="px-4 py-3">Thông số kỹ thuật</th>
+						<th class="px-4 py-3">Kho</th>
 						<th class="px-4 py-3">Hành động</th>
 					</tr>
 				</thead>
@@ -70,6 +71,17 @@
 								<?= esc_html( number_format( $product->gia_ban_buon, 0, ',', '.' ) ) ?>
 							</td>
 							<td class="product__thongso px-4 py-3"><?= esc_html( wp_trim_words( $product->thongso_kythuat, 15 ) ) ?></td>
+							<td class="px-4 py-3">
+								<button class="popup-kho flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+									aria-label="View"
+									data-popup="product-<?= esc_attr( $product->id ) ?>"
+								>
+									<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+									</svg>
+								</button>
+							</td>
 							<td class="px-4 py-3">
 								<div class="flex items-center space-x-4 text-sm">
 									<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
