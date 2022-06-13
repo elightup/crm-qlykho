@@ -40,6 +40,8 @@
 					<?php endforeach; ?>
 					</tbody>
 				</table>
+				<?php else : ?>
+					<p class="mt-4">Sản phẩm này chưa có ở kho nào</p>
 				<?php endif; ?>
 			</div>
 		</div>

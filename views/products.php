@@ -39,7 +39,7 @@
 			<?php require CRM_DIR . '/src/SanPham/modal.php' ?>
 			<table class="table table-striped w-full overflow-hidden rounded-lg shadow-xs">
 				<thead>
-					<tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+					<tr class="text-xs font-semibold tracking-wide text-left text-gray-700 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
 						<th class="px-4 py-3">Mã</th>
 						<th class="px-4 py-3 whitespace-no-wrap">Hình ảnh</th>
 						<th class="px-4 py-3">Tên Sản phẩm</th>
