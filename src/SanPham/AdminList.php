@@ -20,6 +20,6 @@ class AdminList {
 	}
 
 	public function render() {
-		include CRM_DIR . 'templates/product.php';
+		include CRM_DIR . 'views/products.php';
 	}
 }
