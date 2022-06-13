@@ -100,3 +100,31 @@ select:disabled {
 	color: #000 !important;
 	border: 1px solid #8c8f94 !important;
 }
+
+.search-product-kho {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+
+	.search-product {
+		width: 50%;
+	}
+
+	.finter-date {
+		width: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+
+		input {
+			padding: 5px 8px 6px;
+		}
+	}
+
+	.btn-submit {
+		input {
+			padding: 8px 15px;
+		}
+	}
+}

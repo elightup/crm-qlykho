@@ -195,6 +195,7 @@ jQuery( function ( $ ) {
 			product_kho.editButton();
 			product_kho.removeButton();
 			product_kho.clearButton();
+			product_kho.search();
 		},
 		htmlLayout: function ( data ) {
 			products = data.products;
@@ -377,6 +378,15 @@ jQuery( function ( $ ) {
 
 			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
 				$( '.toast' ).remove();
+			} );
+		},
+		search: function () {
+			$( '.submit-search' ).on( 'click', function () {
+				//console.log( 'search' );
+				let start_date = $( '#start_date' ).val(),
+					end_date = $( '#end_date' ).val();
+				console.log( 'start_date', start_date );
+				console.log( 'end_date', end_date );
 			} );
 		}
 	};

@@ -30,10 +30,10 @@ class AdminList {
 	}
 
 	protected function render_kho() {
-		include CRM_DIR . 'templates/kho.php';
+		include CRM_DIR . 'views/kho.php';
 	}
 
 	protected function render_product() {
-		include CRM_DIR . 'templates/chiTietKho.php';
+		include CRM_DIR . 'views/chiTietKho.php';
 	}
 }
