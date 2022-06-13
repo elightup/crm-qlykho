@@ -128,8 +128,8 @@
 				</div>
 			</div>
 			<div class="action_btn" data-href="<?= admin_url( 'edit.php?page=kho' );?>">
-				<button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple btn_add_kho">Lưu</button>
-				<button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple btn-clear-kho disabled" disabled="disabled">Hủy</button>
+				<button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple btn_add_kho">Lưu</button>
+				<button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple btn-clear-kho disabled" disabled="disabled">Hủy</button>
 			</div>
 		</fieldset>
 	</div>
