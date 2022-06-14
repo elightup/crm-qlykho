@@ -1,6 +1,6 @@
 <?php foreach ( $products as $product ) :
 	$warehouses = $wpdb->get_results( $wpdb->prepare(
-		'SELECT * FROM sanpham_kho as sk INNER JOIN kho as k
+		'SELECT * FROM san_pham_kho as sk INNER JOIN kho as k
 	 	 ON sk.idKho = k.id
 		 WHERE sk.idSanPham=%d
 		 ORDER BY sk.id DESC',

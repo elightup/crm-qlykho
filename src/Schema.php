@@ -9,28 +9,28 @@ class Schema {
 	public function create_tables() {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		$sql          = '
-		CREATE TABLE sanpham (
+		$sql              = '
+		CREATE TABLE san_pham (
 			`id` mediumint unsigned NOT NULL auto_increment,
-			`ten_sp` varchar(50) NOT NULL,
+			`ten` varchar(50) NOT NULL,
 			`gia_niem_yet` int unsigned NOT NULL,
 			`gia_ban_le` int unsigned NOT NULL,
 			`gia_ban_buon` int unsigned NOT NULL,
-			`thongso_kythuat` text,
-			`hinhanh` text,
+			`thong_so` text,
+			`hinh_anh` text,
 			PRIMARY KEY  (`id`)
 		);
 		';
-		$sql_kho      = '
+		$sql_kho          = '
 			CREATE TABLE kho (
 				`id` mediumint unsigned NOT NULL auto_increment,
-				`ten_kho` varchar(50) NOT NULL,
+				`ten` varchar(50) NOT NULL,
 				`id_user` mediumint NOT NULL,
 				PRIMARY KEY  (`id`)
 			);
 		';
-		$sql_spkho    = '
-			CREATE TABLE sanpham_kho (
+		$sql_san_pham_kho = '
+			CREATE TABLE san_pham_kho (
 				`id` mediumint unsigned NOT NULL auto_increment,
 				`idKho` mediumint NOT NULL,
 				`idSanPham` mediumint NOT NULL,
@@ -38,18 +38,18 @@ class Schema {
 				PRIMARY KEY  (`id`)
 			);
 		';
-		$sql_donhang  = '
-			CREATE TABLE donhang (
+		$sql_don_hang     = '
+			CREATE TABLE don_hang (
 				`id` mediumint unsigned NOT NULL auto_increment,
 				`san_pham` longtext,
-				`id_khachhang` mediumint NOT NULL,
+				`id_user` mediumint NOT NULL,
 				`tong_tien` mediumint NOT NULL,
-				`date` datetime NOT NULL,
-				`status` varchar(50) NOT NULL,
+				`ngay` datetime NOT NULL,
+				`trang_thai` varchar(50) NOT NULL,
 				PRIMARY KEY  (`id`)
 			);
 		';
-		$sql_nhap_kho = '
+		$sql_nhap_kho     = '
 		CREATE TABLE nhap_kho (
 			`id` mediumint unsigned NOT NULL auto_increment,
 			`id_san_pham` mediumint NOT NULL,
@@ -62,8 +62,8 @@ class Schema {
 
 		dbDelta( $sql );
 		dbDelta( $sql_kho );
-		dbDelta( $sql_spkho );
-		dbDelta( $sql_donhang );
+		dbDelta( $sql_san_pham_kho );
+		dbDelta( $sql_don_hang );
 		dbDelta( $sql_nhap_kho );
 	}
 }

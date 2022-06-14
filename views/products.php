@@ -1,6 +1,6 @@
 <?php
 	global $wpdb;
-	$sql      = 'SELECT * FROM sanpham ORDER BY id DESC';
+	$sql      = 'SELECT * FROM san_pham ORDER BY id DESC';
 	$products = $wpdb->get_results( $sql );
 ?>
 <div class="wrap">
@@ -55,12 +55,12 @@
 					<?php foreach ( $products as $key => $product ) : ?>
 						<tr class="text-gray-700 dark:text-gray-400" data-product="<?= esc_attr( $product->id ) ?>">
 							<td class="px-4 py-3">#<?= esc_html( $product->id ) ?></td>
-							<td data-link-image="<?= esc_attr( $product->hinhanh ) ?>" class="product__thumbnail px-4 py-3">
+							<td data-link-image="<?= esc_attr( $product->hinh_anh ) ?>" class="product__thumbnail px-4 py-3">
 								<div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-									<img class="object-cover w-full h-full rounded-full border-0" src="<?= esc_url( $product->hinhanh ) ?>">
+									<img class="object-cover w-full h-full rounded-full border-0" src="<?= esc_url( $product->hinh_anh ) ?>">
 								</div>
 							</td>
-							<td class="product__name px-4 py-3"><?= esc_html( $product->ten_sp ) ?></td>
+							<td class="product__name px-4 py-3"><?= esc_html( $product->ten ) ?></td>
 							<td data-gia-niem-yet="<?= esc_attr( $product->gia_niem_yet ) ?>" class="product__gia-niem-yet px-4 py-3 text-right">
 								<?= esc_html( number_format( $product->gia_niem_yet, 0, ',', '.' ) ) ?>
 							</td>
@@ -70,7 +70,7 @@
 							<td data-gia-ban-buon="<?= esc_attr( $product->gia_ban_buon ) ?>" class="product__gia-ban-buon px-4 py-3 text-right">
 								<?= esc_html( number_format( $product->gia_ban_buon, 0, ',', '.' ) ) ?>
 							</td>
-							<td class="product__thongso px-4 py-3"><?= esc_html( wp_trim_words( $product->thongso_kythuat, 15 ) ) ?></td>
+							<td class="product__thongso px-4 py-3"><?= esc_html( wp_trim_words( $product->thong_so, 15 ) ) ?></td>
 							<td class="px-4 py-3">
 								<button class="popup-kho flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
 									aria-label="View"
@@ -199,8 +199,8 @@
 					<input class="deleteable" type="number" id="gia_ban_buon" name="gia_ban_buon" />
 				</div>
 				<div class="action_input-item">
-					<label for="thong_so_ky_thuat">Thông số kỹ thuật:</label>
-					<textarea class="deleteable" id="thong_so_ky_thuat" name="thong_so_ky_thuat" rows="5"></textarea>
+					<label for="thong_so">Thông số kỹ thuật:</label>
+					<textarea class="deleteable" id="thong_so" name="thong_so" rows="5"></textarea>
 				</div>
 				<div class="action_input-item">
 					<label for="hinh_anh">Link hình ảnh:</label>

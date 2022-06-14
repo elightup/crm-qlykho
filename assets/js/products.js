@@ -9,23 +9,23 @@ jQuery( function( $ ) {
 			productList.showListKho();
 		},
 		htmlLayout: function(data) {
-			let gia_niem_yet    = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_niem_yet ) ),
-			    gia_ban_le      = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_le ) ),
-			    gia_ban_buon    = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_buon ) ),
-			    thongso_kythuat = data.thongso_kythuat.substr( 0, 40 );
+			let gia_niem_yet = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_niem_yet ) ),
+				gia_ban_le   = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_le ) ),
+				gia_ban_buon = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_buon ) ),
+				thong_so     = data.thong_so.substr( 0, 40 );
 			return `
 			<tr class="text-gray-700 dark:text-gray-400" data-product="${data.id}">
 				<td class="px-4 py-3">#${data.id}</td>
-				<td data-link-image="${data.hinhanh}" class="product__thumbnail px-4 py-3">
+				<td data-link-image="${data.hinh_anh}" class="product__thumbnail px-4 py-3">
 					<div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-						<img class="object-cover w-full h-full rounded-full border-0" src="${data.hinhanh}">
+						<img class="object-cover w-full h-full rounded-full border-0" src="${data.hinh_anh}">
 					</div>
 				</td>
-				<td class="product__name px-4 py-3">${data.ten_sp}</td>
+				<td class="product__name px-4 py-3">${data.ten}</td>
 				<td class="product__gia-niem-yet px-4 py-3 text-right" data-gia-niem-yet="${data.gia_niem_yet}">${gia_niem_yet}</td>
 				<td class="product__gia-ban-le px-4 py-3 text-right" data-gia-ban-le="${data.gia_ban_le}">${gia_ban_le}</td>
 				<td class="product__gia-ban-buon px-4 py-3 text-right" data-gia-ban-buon="${data.gia_ban_buon}">${gia_ban_buon}</td>
-				<td class="product-thongso px-4 py-3">${thongso_kythuat} ...</td>
+				<td class="product-thongso px-4 py-3">${thong_so} ...</td>
 				<td class="px-4 py-3">
 					<button class="popup-kho flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
 						aria-label="View"
@@ -55,15 +55,15 @@ jQuery( function( $ ) {
 			`;
 		},
 
-		add: function( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh ) {
+		add: function( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thong_so, hinh_anh ) {
 			$.post( ProductParams.ajaxUrl, {
-				action: 'them_san_pham',
-				ten: ten.val(),
+				action      : 'them_san_pham',
+				ten         : ten.val(),
 				gia_niem_yet: gia_niem_yet.val(),
-				gia_ban_le: gia_ban_le.val(),
+				gia_ban_le  : gia_ban_le.val(),
 				gia_ban_buon: gia_ban_buon.val(),
-				thongso: thongso.val(),
-				hinh_anh: hinh_anh.val(),
+				thong_so    : thong_so.val(),
+				hinh_anh    : hinh_anh.val(),
 			}, response => {
 				if ( ! response.success ) {
 					$( '.message-error' ).remove();
@@ -71,13 +71,13 @@ jQuery( function( $ ) {
 					return;
 				}
 				let data_sp = {
-					id              : response.data,
-					ten_sp          : ten.val(),
-					gia_niem_yet    : gia_niem_yet.val(),
-					gia_ban_le      : gia_ban_le.val(),
-					gia_ban_buon    : gia_ban_buon.val(),
-					thongso_kythuat : thongso.val(),
-					hinhanh         : hinh_anh.val(),
+					id          : response.data,
+					ten         : ten.val(),
+					gia_niem_yet: gia_niem_yet.val(),
+					gia_ban_le  : gia_ban_le.val(),
+					gia_ban_buon: gia_ban_buon.val(),
+					thong_so    : thong_so.val(),
+					hinh_anh    : hinh_anh.val(),
 				}
 				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
 				productList.showPopup();
@@ -92,12 +92,12 @@ jQuery( function( $ ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_san_pham',
 				id: product.id,
-				ten_sp: product.ten_sp,
+				ten: product.ten,
 				gia_niem_yet: product.gia_niem_yet,
 				gia_ban_le: product.gia_ban_le,
 				gia_ban_buon: product.gia_ban_buon,
-				thongso_kythuat: product.thongso_kythuat,
-				hinh_anh: product.hinhanh,
+				thong_so: product.thong_so,
+				hinh_anh: product.hinh_anh,
 			}, response => {
 				if ( ! response.success ) {
 					return;
@@ -132,22 +132,22 @@ jQuery( function( $ ) {
 					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
 					gia_ban_le   = $( 'input[name=gia_ban_le]' ),
 					gia_ban_buon = $( 'input[name=gia_ban_buon]' ),
-					thongso      = $( 'textarea[name=thong_so_ky_thuat]' ),
+					thong_so     = $( 'textarea[name=thong_so]' ),
 					hinh_anh     = $( 'input[name=hinh_anh]' );
 
 				if ( $(this).hasClass( 'edit' ) ) {
 					let data_sp = {
-						id              : $(this).attr( 'data-id' ),
-						ten_sp          : ten.val(),
-						gia_niem_yet    : gia_niem_yet.val(),
-						gia_ban_le      : gia_ban_le.val(),
-						gia_ban_buon    : gia_ban_buon.val(),
-						thongso_kythuat : thongso.val(),
-						hinhanh         : hinh_anh.val(),
+						id          : $(this).attr( 'data-id' ),
+						ten         : ten.val(),
+						gia_niem_yet: gia_niem_yet.val(),
+						gia_ban_le  : gia_ban_le.val(),
+						gia_ban_buon: gia_ban_buon.val(),
+						thong_so    : thong_so.val(),
+						hinh_anh    : hinh_anh.val(),
 					}
 					productList.edit( data_sp );
 				} else {
-					productList.add( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thongso, hinh_anh );
+					productList.add( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thong_so, hinh_anh );
 				}
 			} );
 		},

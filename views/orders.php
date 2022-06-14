@@ -1,6 +1,6 @@
 <?php
 	global $wpdb;
-	$sql    = 'SELECT * FROM donhang ORDER BY id DESC';
+	$sql    = 'SELECT * FROM don_hang ORDER BY id DESC';
 	$orders = $wpdb->get_results( $sql );
 ?>
 <div class="wrap">
@@ -24,18 +24,18 @@
 							<td class="px-4 py-3">#<?= esc_html( $order->id ) ?></td>
 							<td class="px-4 py-3">
 								<?php
-								$user = get_user_by( 'id', $order->id_khachhang );
+								$user = get_user_by( 'id', $order->id_user );
 								echo esc_html( $user->data->display_name );
 								?>
 							</td>
 							<td class="px-4 py-3">
-								<?= esc_html( $order->date ) ?>
+								<?= esc_html( $order->ngay ) ?>
 							</td>
 							<td data-tong-tien="<?= esc_attr( $order->tong_tien ) ?>" class="px-4 py-3 text-right">
 								<?= esc_html( number_format( $order->tong_tien, 0, ',', '.' ) ) ?>
 							</td>
-							<td data-link-image="<?= esc_attr( $order->hinhanh ) ?>" class="product__thumbnail px-4 py-3">
-								<?= esc_html( $order->status ) ?>
+							<td class="px-4 py-3">
+								<?= esc_html( $order->trang_thai ) ?>
 							</td>
 
 							<td class="px-4 py-3">
