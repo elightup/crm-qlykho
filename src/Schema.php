@@ -41,7 +41,7 @@ class Schema {
 		$sql_donhang  = '
 			CREATE TABLE donhang (
 				`id` mediumint unsigned NOT NULL auto_increment,
-				`san_pham` mediumint NOT NULL,
+				`san_pham` longtext,
 				`id_khachhang` mediumint NOT NULL,
 				`tong_tien` mediumint NOT NULL,
 				`date` datetime NOT NULL,

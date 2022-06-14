@@ -22,6 +22,6 @@ class AdminList {
 	}
 
 	public function render() {
-		include CRM_DIR . 'templates/orders.php';
+		include CRM_DIR . 'views/orders.php';
 	}
 }
