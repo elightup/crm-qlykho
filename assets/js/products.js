@@ -213,10 +213,10 @@ jQuery( function( $ ) {
 		showPopup: function( title ) {
 			const toast =
 			`<div class="toast">
-				<p class="title">${title}</p>
 				<div class="img-toast">
 					<span class="dashicons dashicons-yes-alt"></span>
 				</div>
+				<p class="title">${title}</p>
 			</div>`;
 
 			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
