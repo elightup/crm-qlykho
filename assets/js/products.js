@@ -104,6 +104,8 @@ jQuery( function( $ ) {
 				}
 				// product.showPopup();
 
+				productList.clearInput();
+
 				let tr = $( 'tr[data-product='+ product.id +']' );
 				tr.replaceWith( productList.htmlLayout( product ) );
 			} );
