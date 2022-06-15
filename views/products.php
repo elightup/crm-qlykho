@@ -10,7 +10,7 @@
 	</div> -->
 	<div class="crm-content" x-data="data()">
 		<div id="crm-table" class="crm-table">
-			<h2 class="mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Danh sách sản phẩm</h2>
+			<h2 class="mt-4 mb-4 text-lg font-semibold text-gray-700">Danh sách sản phẩm</h2>
 			<div class="form-search lg:mr-32 mb-4">
 				<div
 				class="relative w-full max-w-xl mr-6 focus-within:text-purple-500"
@@ -54,13 +54,13 @@
 				<tbody class="list data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 					<?php foreach ( $products as $key => $product ) : ?>
 						<tr class="text-gray-700 dark:text-gray-400" data-product="<?= esc_attr( $product->id ) ?>">
-							<td class="px-4 py-3">#<?= esc_html( $product->id ) ?></td>
+							<td class="px-4 py-3"><?= esc_html( $product->id ) ?></td>
 							<td data-link-image="<?= esc_attr( $product->hinh_anh ) ?>" class="product__thumbnail px-4 py-3">
 								<div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
 									<img class="object-cover w-full h-full rounded-full border-0" src="<?= esc_url( $product->hinh_anh ) ?>">
 								</div>
 							</td>
-							<td class="product__name px-4 py-3"><?= esc_html( $product->ten ) ?></td>
+							<td class="product__name searchable px-4 py-3"><?= esc_html( $product->ten ) ?></td>
 							<td data-gia-niem-yet="<?= esc_attr( $product->gia_niem_yet ) ?>" class="product__gia-niem-yet px-4 py-3 text-right">
 								<?= esc_html( number_format( $product->gia_niem_yet, 0, ',', '.' ) ) ?>
 							</td>
@@ -180,7 +180,7 @@
 			</span>
 		</div>
 		<fieldset class="crm-action">
-			<legend><h2 class="mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Thêm sản phẩm</h2></legend>
+			<legend><h2 class="mt-4 mb-4 text-lg font-semibold text-gray-700">Thêm sản phẩm</h2></legend>
 			<div class="action_input">
 				<div class="action_input-item">
 					<label for="ten">Tên sản phẩm <span class="action-required">*</span></label>

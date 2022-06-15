@@ -15,13 +15,13 @@ jQuery( function( $ ) {
 				thong_so     = data.thong_so.substr( 0, 40 );
 			return `
 			<tr class="text-gray-700 dark:text-gray-400" data-product="${data.id}">
-				<td class="px-4 py-3">#${data.id}</td>
+				<td class="px-4 py-3">${data.id}</td>
 				<td data-link-image="${data.hinh_anh}" class="product__thumbnail px-4 py-3">
 					<div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
 						<img class="object-cover w-full h-full rounded-full border-0" src="${data.hinh_anh}">
 					</div>
 				</td>
-				<td class="product__name px-4 py-3">${data.ten}</td>
+				<td class="product__name searchable px-4 py-3">${data.ten}</td>
 				<td class="product__gia-niem-yet px-4 py-3 text-right" data-gia-niem-yet="${data.gia_niem_yet}">${gia_niem_yet}</td>
 				<td class="product__gia-ban-le px-4 py-3 text-right" data-gia-ban-le="${data.gia_ban_le}">${gia_ban_le}</td>
 				<td class="product__gia-ban-buon px-4 py-3 text-right" data-gia-ban-buon="${data.gia_ban_buon}">${gia_ban_buon}</td>
