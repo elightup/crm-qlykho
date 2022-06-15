@@ -100,6 +100,8 @@ jQuery( function( $ ) {
 				hinh_anh: product.hinh_anh,
 			}, response => {
 				if ( ! response.success ) {
+					$( '.message-error' ).remove();
+					$( '.crm-action' ).append( '<p class="message-error text-xs text-red-600 dark:text-red-400">' + response.data + '</p>' );
 					return;
 				}
 				productList.showPopup( 'Đã sửa sản phẩm thành công' );
@@ -107,6 +109,8 @@ jQuery( function( $ ) {
 
 				let tr = $( 'tr[data-product='+ product.id +']' );
 				tr.replaceWith( productList.htmlLayout( product ) );
+
+				$( '.message-error' ).remove();
 			} );
 		},
 		remove: function( id ) {
