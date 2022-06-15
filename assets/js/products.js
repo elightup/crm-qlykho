@@ -2,7 +2,7 @@ jQuery( function( $ ) {
 	const $d = $( document );
 	let productList = {
 		init: function() {
-			productList.onSave();
+			productList.clickSave();
 			productList.editButton();
 			productList.removeButton();
 			productList.clearButton();
@@ -80,7 +80,7 @@ jQuery( function( $ ) {
 					hinh_anh    : hinh_anh.val(),
 				}
 				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
-				productList.showPopup();
+				productList.showPopup( 'Đã thêm sản phẩm thành công' );
 				productList.clearInput();
 
 				ten.focus();
@@ -102,8 +102,7 @@ jQuery( function( $ ) {
 				if ( ! response.success ) {
 					return;
 				}
-				// product.showPopup();
-
+				productList.showPopup( 'Đã sửa sản phẩm thành công' );
 				productList.clearInput();
 
 				let tr = $( 'tr[data-product='+ product.id +']' );
@@ -119,6 +118,8 @@ jQuery( function( $ ) {
 					return;
 				}
 
+				productList.showPopup( 'Đã xóa sản phẩm thành công' );
+
 				let tr = $( 'tr[data-product='+ id +']' );
 				tr.remove();
 			} );
@@ -126,9 +127,10 @@ jQuery( function( $ ) {
 
 		clearInput: function() {
 			$( '.deleteable' ).val( '' );
+			$( '.btn_add_product' ).removeClass( 'edit' );
 		},
 
-		onSave: function() {
+		clickSave: function() {
 			$d.on( 'click', '.btn_add_product', function() {
 				let ten          = $( 'input[name=ten]' ),
 					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
@@ -193,7 +195,6 @@ jQuery( function( $ ) {
 		clearButton: function() {
 			$d.on( 'click', '.btn_clear_product', function() {
 				productList.clearInput();
-				$( '.btn_add_product' ).removeClass( 'edit' );
 				$( '.crm-action h2' ).text( 'Thêm sản phẩm' );
 				$( '.btn_add_product' ).text( 'Thêm' );
 			} );
@@ -209,10 +210,10 @@ jQuery( function( $ ) {
 			} );
 		},
 
-		showPopup: function() {
+		showPopup: function( title ) {
 			const toast =
 			`<div class="toast">
-				<p class="title">Đã thêm sản phẩm thành công</p>
+				<p class="title">${title}</p>
 				<div class="img-toast">
 					<span class="dashicons dashicons-yes-alt"></span>
 				</div>
@@ -225,7 +226,6 @@ jQuery( function( $ ) {
 
 		showListKho: function() {
 			$d.on( 'click', '.popup-kho', function() {
-				// $(this).next().addClass( 'current' );
 				let popup = $(this).attr( 'data-popup' );
 				$( `#${popup}` ).addClass( 'current' );
 			} );
