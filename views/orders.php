@@ -6,7 +6,7 @@
 <div class="wrap">
 	<div class="crm-content" x-data="data()">
 		<div id="crm-table" class="crm-table">
-			<h2 class="mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Danh sách đơn hàng</h2>
+			<h2 class="mt-4 mb-4 text-lg font-semibold text-gray-700">Danh sách đơn hàng</h2>
 			<table class="table table-striped w-full overflow-hidden rounded-lg shadow-xs">
 				<thead>
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-700 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">

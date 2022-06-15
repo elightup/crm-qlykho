@@ -7,6 +7,12 @@ body {
 .bg-blue-600 {
 	background-color: var(--color-accent);
 }
+.right-1 {
+	right: 1rem;
+}
+.w-24 {
+	width: 6rem;
+}
 
 .crm-content {
 	display: grid;
@@ -205,5 +211,11 @@ body {
 		margin-left: auto;
 		top: 50%;
 		transform: translate(0, -50%);
+	}
+}
+
+@media (min-width: 640px) {
+	.sm\:max-w-l {
+		max-width: 28rem;
 	}
 }
