@@ -25,5 +25,5 @@ if ( is_admin() ) {
 	new Field;
 	new SanPham\Index;
 	new Kho\Index;
-	( new DonHang\AdminList() )->init();
+	new DonHang\Index;
 }

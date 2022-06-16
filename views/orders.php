@@ -4,7 +4,94 @@
 	$orders = $wpdb->get_results( $sql );
 ?>
 <div class="wrap">
-	<div class="crm-content" x-data="data()">
+	<div class="crm-title">
+		<h2 class="text-lg px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">Lên đơn</h2>
+	</div>
+	<div class="crm-content">
+		<div class="px-4 py-3 mb-8">
+			<table class="table w-full overflow-hidden rounded-lg shadow-xs mb-4">
+				<thead>
+					<tr class="text-xs font-semibold tracking-wide text-left text-gray-700 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+						<th class="px-4 py-3">Sản phẩm</th>
+						<th class="px-4 py-3 text-right">Giá</th>
+						<th class="px-4 py-3 whitespace-no-wrap">Số lượng</th>
+						<th class="px-4 py-3 whitespace-no-wrap">Chiết khấu</th>
+						<th class="px-4 py-3 whitespace-no-wrap text-right">Tổng tiền</th>
+					</tr>
+				</thead>
+				<tbody class="table-product bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+					<tr class="clone-product text-gray-700 dark:text-gray-400">
+						<td class="px-4 py-3">
+							<select name="product_name" id="product__name" class="rwmb">
+								<option value="" selected hidden>Chọn sản phẩm</option>
+								<?php
+								$sql     = 'SELECT * FROM san_pham ORDER BY id DESC';
+								$sanpham = $wpdb->get_results( $sql );
+
+								foreach ( $sanpham as $sp ) :
+									$number = $wpdb->get_col( $wpdb->prepare(
+										'SELECT SUM(soLuong) FROM san_pham_kho
+										 WHERE idSanPham=%d',
+										$sp->id
+									) );
+									$number = $number[0] ? $number[0] : '';
+									?>
+									<option data-soluong="<?= esc_attr( $number ); ?>" data-price="<?= esc_attr( $sp->gia_niem_yet ); ?>" value="<?= esc_attr( $sp->id );?>"><?= esc_html( $sp->ten );?></option>
+									<?php
+								endforeach;
+								?>
+							</select>
+						</td>
+						<td class="px-4 py-3 product-price text-right">
+
+						</td>
+						<td class="px-4 py-3 product-number">
+							<input class="" type="number" min="0" >
+							<button class="px-4 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple btn_add_product">Chọn kho</button>
+						</td>
+						<td class="px-4 py-3">
+							5%
+						</td>
+						<td class="px-4 py-3 product-sub-total text-right">
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="mb-4 text-right product-total text-lg font-medium">1000000</div>
+			<div class="flex justify-between">
+				<button class="add_order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+					Lên đơn
+				</button>
+				<button class="add_product_kho px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+					Thêm sản phẩm
+				</button>
+			</div>
+		</div>
+		<div class="px-4 py-3 mb-8 mx-1">
+			<fieldset class="crm-action" style="margin: 0">
+				<legend><h2 class="text-lg font-semibold text-gray-600 dark:text-gray-300">Khách hàng</h2></legend>
+				<div class="action_input">
+					<div class="action_input-item action_user">
+						<select name="user_name" id="user_name">
+							<option value=""><?= esc_html( 'Chọn user' );?></option>
+							<?php
+							$users = get_users();
+							foreach ( $users as $user ) :
+								$user_id   = $user->ID;
+								$user_name = $user->display_name;
+								?>
+								<option value="<?= esc_attr( $user_id );?>"><?= esc_html( $user_name );?></option>
+								<?php
+							endforeach;
+							?>
+						</select>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+	<div class="crm-content mt-8" x-data="data()">
 		<div id="crm-table" class="crm-table">
 			<h2 class="mt-4 mb-4 text-lg font-semibold text-gray-700">Danh sách đơn hàng</h2>
 			<table class="table table-striped w-full overflow-hidden rounded-lg shadow-xs">
@@ -82,11 +169,11 @@
 							x-transition:leave-end="opacity-0  transform translate-y-1/2"
 							@click.away="closeModal"
 							@keydown.escape="closeModal"
-							class="form-popup-remove w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+							class="form-popup-remove w-full text-center px-6 py-4 relative overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-l"
 							id="modal"
 						>
 							<!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
-							<header class="flex justify-end">
+							<header class="flex justify-end absolute right-1">
 								<button
 								class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700"
 								aria-label="close"
@@ -108,7 +195,7 @@
 								</button>
 							</header>
 							<!-- Modal body -->
-							<div class="mt-4 mb-6">
+							<div class="mb-6">
 								<!-- Modal title -->
 								<p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">Xác nhận</p>
 								<!-- Modal description -->
@@ -117,18 +204,18 @@
 								</p>
 							</div>
 							<footer
-								class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800"
+								class="flex flex-col items-center justify-center px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800"
 							>
 								<button
 								@click="closeModal"
-								class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+								class="px-5 py-3 text-sm w-24 font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
 								>
 								Hủy
 								</button>
 								<button
 								:class="isModalOpen ? 'confirmed' : ''"
 								@click="closeModal"
-								class="confirm-remove w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 focus:outline-none focus:shadow-outline-purple"
+								class="confirm-remove px-5 py-3 w-24 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg sm:px-4 sm:py-2 focus:outline-none focus:shadow-outline-purple"
 								>
 								Xác nhận
 								</button>
