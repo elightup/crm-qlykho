@@ -361,8 +361,8 @@ jQuery( function ( $ ) {
 				$( 'select[name="product_name"]' ).removeAttr( "disabled" );
 				$( '.save_product' ).removeClass( 'edit' );
 				$( '.save_product' ).removeAttr( 'data-id' );
-				$( '.btn-clear[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
-				$( '.btn-clear[data-kho=' + id_kho + ']' ).removeAttr( "disabled" );
+				// $( '.btn-clear[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
+				// $( '.btn-clear[data-kho=' + id_kho + ']' ).removeAttr( "disabled" );
 			} );
 		},
 		remove: function ( id_product, id_kho ) {

@@ -141,7 +141,7 @@ class Ajax {
 		global $wpdb;
 		$id_sp  = isset( $_POST['id_sp'] ) ? $_POST['id_sp'] : '';
 		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
-		$wpdb->delete( 'sanpham_kho', array(
+		$wpdb->delete( 'san_pham_kho', array(
 			'idSanPham' => $id_sp,
 			'idKho'     => $id_kho,
 		) );
@@ -193,7 +193,7 @@ class Ajax {
 		$products = $data['products'];
 		foreach ( $products as $product ) {
 			$wpdb->update(
-				'sanpham_kho',
+				'san_pham_kho',
 				[
 					'idSanPham' => $product['id_product'],
 					'soLuong'   => $product['number'],
