@@ -19,10 +19,19 @@ class Ajax {
 	}
 
 	public function ajax_them_kho() {
-		$data = [
+		global $wpdb;
+		$data       = [
 			'ten'  => isset( $_POST['ten'] ) ? $_POST['ten'] : '',
 			'user' => isset( $_POST['user'] ) ? $_POST['user'] : '',
 		];
+		$sql        = 'SELECT * FROM kho ORDER BY id DESC';
+		$warehouses = $wpdb->get_results( $sql );
+		foreach ( $warehouses as $warehouse ) {
+			$ten_kho = $warehouse->ten;
+			if ( $ten_kho === $data['ten'] ) {
+				wp_send_json_error( 'Bạn đã có kho này. Vui lòng nhập lại ' );
+			}
+		}
 		if ( empty( $data['ten'] ) ) {
 			wp_send_json_error( 'Thông tin kho trống. Bạn hãy nhập đủ thông tin ' );
 		}
@@ -33,7 +42,7 @@ class Ajax {
 		global $wpdb;
 		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
 		$wpdb->delete( 'kho', array( 'id' => $id_kho ) );
-		$wpdb->delete( 'sanpham_kho', array( 'idKho' => $id_kho ) );
+		$wpdb->delete( 'san_pham_kho', array( 'idKho' => $id_kho ) );
 		ob_start();
 		$sql        = 'SELECT * FROM kho ORDER BY id DESC';
 		$warehouses = $wpdb->get_results( $sql );
@@ -81,7 +90,7 @@ class Ajax {
 		$wpdb->update(
 			'kho',
 			[
-				'ten_kho' => $data['ten_kho'],
+				'ten'     => $data['ten_kho'],
 				'id_user' => $data['user'],
 			],
 			[ 'id' => $id ]
@@ -92,7 +101,7 @@ class Ajax {
 		$wpdb->insert(
 			'kho',
 			[
-				'ten_kho' => $data['ten'],
+				'ten'     => $data['ten'],
 				'id_user' => $data['user'],
 			]
 		);
@@ -104,9 +113,11 @@ class Ajax {
 		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
 		$data   = [
 			'id_kho'   => isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '',
+			'date'     => isset( $_POST['date'] ) ? $_POST['date'] : '',
 			'products' => isset( $_POST['products'] ) ? $_POST['products'] : '',
 		];
 		$this->them_sp_kho( $data );
+		$this->them_nhap_kho( $data );
 		ob_start();
 		$this->changed_products( $id_kho );
 		$result = ob_get_clean();
@@ -116,9 +127,11 @@ class Ajax {
 		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
 		$data   = [
 			'id_kho'   => isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '',
+			'date'     => isset( $_POST['date'] ) ? $_POST['date'] : '',
 			'products' => isset( $_POST['products'] ) ? $_POST['products'] : '',
 		];
 		$this->edit_sp_kho( $data );
+		$this->them_nhap_kho( $data );
 		ob_start();
 		$this->changed_products( $id_kho );
 		$result = ob_get_clean();
@@ -128,7 +141,14 @@ class Ajax {
 		global $wpdb;
 		$id_sp  = isset( $_POST['id_sp'] ) ? $_POST['id_sp'] : '';
 		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
-		$wpdb->delete( 'sanpham_kho', array( 'idSanPham' => $id_sp ) );
+		$wpdb->delete( 'sanpham_kho', array(
+			'idSanPham' => $id_sp,
+			'idKho'     => $id_kho,
+		) );
+		$wpdb->delete( 'nhap_kho', array(
+			'idSanPham' => $id_sp,
+			'idKho'     => $id_kho,
+		) );
 		ob_start();
 		$this->changed_products( $id_kho );
 		$result = ob_get_clean();
@@ -140,7 +160,7 @@ class Ajax {
 		$products = $data['products'];
 		foreach ( $products as $product ) {
 			$wpdb->insert(
-				'sanpham_kho',
+				'san_pham_kho',
 				[
 					'idKho'     => $data['id_kho'],
 					'idSanPham' => $product['id_product'],
@@ -150,6 +170,23 @@ class Ajax {
 		}
 		$kho_id = $wpdb->insert_id;
 		return $kho_id;
+	}
+	public function them_nhap_kho( $data ) {
+		global $wpdb;
+		$products = $data['products'];
+		foreach ( $products as $product ) {
+			$wpdb->insert(
+				'nhap_kho',
+				[
+					'id_san_pham' => $product['id_product'],
+					'so_luong'    => $product['number'],
+					'id_kho'      => $data['id_kho'],
+					'date'        => $data['date'],
+				]
+			);
+		}
+		$id = $wpdb->insert_id;
+		return $id;
 	}
 	public function edit_sp_kho( $data ) {
 		global $wpdb;
@@ -167,7 +204,7 @@ class Ajax {
 	}
 	public function changed_products( $id ) {
 		global $wpdb;
-		$sql_kho  = 'SELECT * FROM sanpham_kho WHERE idKho = ' . $id;
+		$sql_kho  = 'SELECT * FROM san_pham_kho WHERE idKho = ' . $id;
 		$products = $wpdb->get_results( $sql_kho );
 		?>
 		<div class="add-product">

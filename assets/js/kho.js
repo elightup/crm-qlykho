@@ -49,12 +49,17 @@ jQuery( function ( $ ) {
 				let ten = $( 'input[name=ten]' ),
 					user = $( 'select[name="user_name"] option:selected' ),
 					user_name = $( 'select[name="user_name"] option:selected' );
+				if ( user.val() === '' ) {
+					user_name = '';
+				} else {
+					user_name = user_name.text();
+				}
 				if ( $( this ).hasClass( 'edit' ) ) {
 					let data_kho = {
 						id: $( this ).data( 'id' ),
 						ten: ten.val(),
 						user: user.val(),
-						user_name: user_name.text(),
+						user_name: user_name,
 						href: href,
 					};
 					kho.edit( data_kho );
@@ -68,25 +73,26 @@ jQuery( function ( $ ) {
 				action: 'them_kho',
 				ten: ten.val(),
 				user: user.val(),
-				user_name: user_name.text(),
+				user_name: user_name,
 				href: href,
 			}, response => {
 				if ( !response.success ) {
-					$( '.crm-action' ).append( '<p class="message-error">' + response.data + '</p>' );
+					$( '.message-error' ).remove();
+					$( '.crm-action' ).append( '<p class="message-error text-red-600">' + response.data + '</p>' );
 					return;
 				}
 				let data_kho = {
 					id: response.data,
 					ten: ten.val(),
 					user: user.val(),
-					user_name: user_name.text(),
+					user_name: user_name,
 					href: href,
 				};
 				$( '.data-list' ).prepend( kho.htmlLayout( data_kho ) );
 				kho.showPopup();
 				ten.val( '' );
 				user.val( '' );
-				user_name.text( 'Chọn user' );
+				//user_name.text( 'Chọn user' );
 				$( '.message-error' ).remove();
 			} );
 		},
@@ -96,12 +102,10 @@ jQuery( function ( $ ) {
 				$( 'input[name="ten"]' ).val( '' );
 				$( 'select[name="user_name"] option:selected' ).val( '' );
 				$( 'select[name="user_name"] option:selected' ).text( 'Chọn user' );
-				$( '.btn-clear-kho' ).addClass( 'disabled' );
-				$( '.btn-clear-kho' ).attr( 'disabled', true );
-				$( '.btn-clear-kho' ).removeAttr( 'data-kho', id_kho );
 			} );
 		},
 		edit: function ( data_kho ) {
+			console.log( data_kho );
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_kho',
 				id: data_kho.id,
@@ -110,8 +114,16 @@ jQuery( function ( $ ) {
 				user_name: data.user_name,
 			}, response => {
 				if ( !response.success ) {
+					console.log( 'ss' );
+					$( '.message-error' ).remove();
+					$( '.crm-action' ).append( '<p class="message-error text-red-600">' + response.data + '</p>' );
 					return;
 				}
+				kho.showPopupEdit();
+				$( '.title-action-kho' ).text( 'Thêm thông tin kho' );
+				$( 'input[name="ten"]' ).val( '' );
+				$( 'select[name="user_name"] option:selected' ).val( '' );
+				$( 'select[name="user_name"] option:selected' ).text( 'Chọn user' );
 				let tr = $( 'tr[data-kho=' + data_kho.id + ']' );
 				tr.replaceWith( kho.htmlLayout( data_kho ) );
 			} );
@@ -129,6 +141,19 @@ jQuery( function ( $ ) {
 				$( '.toast' ).remove();
 			} );
 		},
+		showPopupEdit: function () {
+			const toast =
+				`<div class="toast">
+				<p class="title">Sửa kho thành công</p>
+				<div class="img-toast">
+					<span class="dashicons dashicons-yes-alt"></span>
+				</div>
+			</div>`;
+
+			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
+				$( '.toast' ).remove();
+			} );
+		},
 		editButton: function () {
 			$d.on( 'click', '.data-list .button-edit', function ( e ) {
 
@@ -136,16 +161,17 @@ jQuery( function ( $ ) {
 					id_kho = parent.data( 'kho' ),
 					ten = parent.find( '.name_kho' ),
 					id_user = parent.find( '.name_user' );
-				console.log( ten.text() );
 				$( 'input[name="ten"]' ).val( ten.text() );
 				$( 'select[name="user_name"] option:selected' ).val( id_user.data( 'user' ) );
 				$( 'select[name="user_name"] option:selected' ).text( id_user.data( 'name-user' ) );
 
 				$( '.btn_add_kho' ).addClass( 'edit' );
+				$( '.btn_add_kho' ).text( 'Lưu' );
 				$( '.btn_add_kho' ).attr( 'data-id', id_kho );
 				$( '.btn-clear-kho' ).removeClass( 'disabled' );
 				$( '.btn-clear-kho' ).removeAttr( 'disabled' );
 				$( '.btn-clear-kho' ).attr( 'data-kho', id_kho );
+				$( '.title-action-kho' ).text( 'Sửa thông tin kho' );
 			} );
 		},
 		remove: function ( id ) {
@@ -228,9 +254,11 @@ jQuery( function ( $ ) {
 		},
 		edit: function ( data_sp ) {
 			console.log( 'edit' );
+			let date = GetTodayDate();
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_product_kho',
 				id_kho: data_sp.id_kho,
+				date: date,
 				products: data_sp.products,
 			}, response => {
 				if ( !response.success ) {
@@ -245,10 +273,13 @@ jQuery( function ( $ ) {
 			} );
 		},
 		addsp: function ( id_kho, products ) {
+			let date = GetTodayDate();
+			console.log( 'date', date );
 			if ( products.length !== 0 ) {
 				$.post( ProductParams.ajaxUrl, {
 					action: 'them_product_kho',
 					id_kho: id_kho,
+					date: date,
 					products: products,
 				}, response => {
 					if ( !response.success ) {
@@ -394,4 +425,15 @@ jQuery( function ( $ ) {
 	kho.init();
 	product_kho.init();
 } );
+function GetTodayDate() {
+	var tdate = new Date();
+	var dd = tdate.getDate(); //yields day
+	var MM = tdate.getMonth(); //yields month
+	var yyyy = tdate.getFullYear(); //yields year
+	var h = tdate.getHours();
+	var p = tdate.getMinutes();
+	var s = tdate.getSeconds();
+	var currentDate = yyyy + "-" + ( MM + 1 ) + "-" + dd + " " + h + ":" + p + ":" + s;
 
+	return currentDate;
+}
