@@ -221,7 +221,7 @@ jQuery( function ( $ ) {
 			product_kho.editButton();
 			product_kho.removeButton();
 			product_kho.clearButton();
-			product_kho.search();
+			product_kho.searchButton();
 		},
 		htmlLayout: function ( data ) {
 			products = data.products;
@@ -231,6 +231,7 @@ jQuery( function ( $ ) {
 				<tr class="text-gray-700 dark:text-gray-400" product-id="${ products[ i ][ 'id_product' ] }" >
 					<td class="px-4 py-3">#${ products[ i ][ 'id_product' ] }</td>
 					<td product-name="${ products[ i ][ 'name_sp' ] }" class="name_product px-4 py-3">${ products[ i ][ 'name_sp' ] }</td>
+					<td number-history="${ products[ i ][ 'number_history' ] }" class="number-history px-4 py-3">${ products[ i ][ 'number_history' ] }</td>
 					<td product-number="${ products[ i ][ 'number' ] }" class="product-number px-4 py-3">${ products[ i ][ 'number' ] }</td>
 
 					<td class="action px-4 py-3">
@@ -306,16 +307,23 @@ jQuery( function ( $ ) {
 					var id_product = $( this ).find( 'select[name="product_name"] option:selected' ).val();
 					var name_sp = $( this ).find( 'select[name="product_name"] option:selected' ).text();
 					var number = $( this ).find( '#number_product' ).val();
+					var variable = $( this ).attr( 'number-history' );
+					if ( variable === undefined ) {
+						number_history = number;
+					} else {
+						number_history = variable;
+					}
 					if ( id_product !== '' ) {
 						var product = {
 							'id_product': id_product,
 							'name_sp': name_sp,
-							'number': number
+							'number': number,
+							'number_history': number_history,
 						};
 						products.push( product );
 					}
 				} );
-				//console.log( 'products', products );
+				console.log( 'products', products );
 				if ( $( this ).hasClass( 'edit' ) ) {
 
 					let data_sp = {
@@ -335,13 +343,16 @@ jQuery( function ( $ ) {
 				let parent = $( this ).parents( 'tr' ),
 					id_product = parent.attr( 'product-id' ),
 					name_product = parent.find( '.name_product' ),
-					number_product = parent.find( '.product-number' );
+					number_product = parent.find( '.product-number' ),
+					number_history = parent.find( '.number-history' );
+
 				$( 'input[name="number_product"]' ).val( number_product.attr( 'product-number' ) );
 				$( 'select[name="product_name"] option:selected' ).text( name_product.attr( 'product-name' ) );
 				$( 'select[name="product_name"] option:selected' ).val( id_product );
 				$( 'select[name="product_name"]' ).attr( "disabled", true );
 				$( '.save_product' ).addClass( 'edit' );
 				$( '.save_product' ).attr( 'data-id', id_product );
+				$( '.save_product' ).attr( 'number-history', number_history.attr( 'number-history' ) );
 				$( '.add_product_kho[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
 				$( '.add_product_kho[data-kho=' + id_kho + ']' ).attr( "disabled", true );
 				$( '.title-action' ).text( 'Sửa thông tin sản phẩm' );
@@ -361,8 +372,7 @@ jQuery( function ( $ ) {
 				$( 'select[name="product_name"]' ).removeAttr( "disabled" );
 				$( '.save_product' ).removeClass( 'edit' );
 				$( '.save_product' ).removeAttr( 'data-id' );
-				// $( '.btn-clear[data-kho=' + id_kho + ']' ).addClass( 'disabled' );
-				// $( '.btn-clear[data-kho=' + id_kho + ']' ).removeAttr( "disabled" );
+				$( '.save_product' ).removeAttr( 'number-history' );
 			} );
 		},
 		remove: function ( id_product, id_kho ) {
@@ -411,13 +421,28 @@ jQuery( function ( $ ) {
 				$( '.toast' ).remove();
 			} );
 		},
-		search: function () {
+		handleSearch: function ( id_kho, start_date, end_date ) {
+			$.post( ProductParams.ajaxUrl, {
+				action: 'search_products',
+				start_date: start_date,
+				end_date: end_date,
+				id_kho: id_kho,
+			}, response => {
+				//console.log( response.data );
+				if ( !response.success ) {
+					return;
+				}
+				$( '.data-list' ).html( response.data );
+			} );
+		},
+		searchButton: function () {
 			$( '.submit-search' ).on( 'click', function () {
-				//console.log( 'search' );
+				let id_kho = $( this ).attr( 'data-kho' );
 				let start_date = $( '#start_date' ).val(),
 					end_date = $( '#end_date' ).val();
-				console.log( 'start_date', start_date );
-				console.log( 'end_date', end_date );
+				// console.log( 'start_date', start_date );
+				// console.log( 'end_date', end_date );
+				product_kho.handleSearch( id_kho, start_date, end_date );
 			} );
 		}
 	};

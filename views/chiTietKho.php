@@ -46,7 +46,7 @@ $kho      = $wpdb->get_results( $sql );
 					</div>
 					<div class="btn-submit">
 						<label></label><br>
-						<input type="submit" class="submit-search px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" value="Search"/>
+						<input type="submit" data-kho="<?= esc_attr( $id_kho );?>" class="submit-search px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" value="Search"/>
 					</div>
 				</div>
 			</div>
@@ -55,21 +55,27 @@ $kho      = $wpdb->get_results( $sql );
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
 						<th class="px-4 py-3">Mã sản phẩm</th>
 						<th class="px-4 py-3">Tên sản phẩm</th>
-						<th class="px-4 py-3">Số lượng</th>
+						<th class="px-4 py-3">Số lượng đầu kỳ</th>
+						<th class="px-4 py-3">Số lượng còn lại</th>
 						<th class="px-4 py-3">Hành động</th>
 					</tr>
 				</thead>
 				<tbody class="list data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 					<?php
 					foreach ( $products as $product ) :
-						$idsp     = $product->idSanPham;
-						$sql_sp   = 'SELECT * FROM san_pham WHERE id = ' . $idsp;
-						$san_pham = $wpdb->get_results( $sql_sp );
-						$numbersp = $product->soLuong;
+						$idsp       = $product->idSanPham;
+						$sql_sp     = 'SELECT * FROM san_pham WHERE id = ' . $idsp;
+						$san_pham   = $wpdb->get_results( $sql_sp );
+						$numbersp   = $product->soLuong;
+						$date_start = '2022-06-01';
+						$date_end   = date( 'Y-m-d', strtotime( '+ 1 day' ) );
+						$sql        = 'SELECT so_luong FROM nhap_kho WHERE id_san_pham = ' . $idsp . ' AND id_kho = ' . $id_kho . ' AND `date` BETWEEN CAST( "' . $date_start . '" AS DATE ) AND CAST( "' . $date_end . '" AS DATE )';
+						$sl_kho     = $wpdb->get_results( $sql );
 						?>
 						<tr class="text-gray-700 dark:text-gray-400" product-id="<?= esc_attr( $idsp );?>" >
 							<td class="px-4 py-3">#<?= esc_html( $idsp ) ?></td>
 							<td product-name="<?= esc_attr( $san_pham[0]->ten );?>" class="name_product searchable px-4 py-3"><?= esc_attr( $san_pham[0]->ten );?></td>
+							<td number-history="<?= esc_attr( $sl_kho[0]->so_luong );?>" class="number-history px-4 py-3"><?= esc_html( $sl_kho[0]->so_luong ) ?></td>
 							<td product-number="<?= esc_attr( $numbersp );?>" class="product-number px-4 py-3"><?= esc_html( $numbersp ) ?></td>
 
 							<td class="action px-4 py-3">
