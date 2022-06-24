@@ -63,14 +63,22 @@ $kho      = $wpdb->get_results( $sql );
 				<tbody class="list data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
 					<?php
 					foreach ( $products as $product ) :
-						$idsp       = $product->idSanPham;
-						$sql_sp     = 'SELECT * FROM san_pham WHERE id = ' . $idsp;
-						$san_pham   = $wpdb->get_results( $sql_sp );
-						$numbersp   = $product->soLuong;
-						$date_start = '2022-06-01';
-						$date_end   = date( 'Y-m-d', strtotime( '+ 1 day' ) );
-						$sql        = 'SELECT so_luong FROM nhap_kho WHERE id_san_pham = ' . $idsp . ' AND id_kho = ' . $id_kho . ' AND `date` BETWEEN CAST( "' . $date_start . '" AS DATE ) AND CAST( "' . $date_end . '" AS DATE )';
-						$sl_kho     = $wpdb->get_results( $sql );
+						$idsp        = $product->idSanPham;
+						$sql_sp      = 'SELECT * FROM san_pham WHERE id = ' . $idsp;
+						$san_pham    = $wpdb->get_results( $sql_sp );
+						$numbersp    = $product->soLuong;
+						$day_now     = date( 'd' );
+						$month_later = date( 'm', strtotime( '- 1 month' ) );
+						$year_now    = date( 'Y' );
+						if ( $day_now === '01' ) {
+							$date_start = date( 'Y-m-d', strtotime( '- 1 month' ) );
+						} else {
+							$date_start = $year_now . '-' . $month_later . '-01';
+						}
+						$date_end = date( 'Y-m-d', strtotime( '+ 1 day' ) );
+						$sql      = 'SELECT so_luong FROM nhap_kho WHERE id_san_pham = ' . $idsp . ' AND id_kho = ' . $id_kho . ' AND `date` BETWEEN CAST( "' . $date_start . '" AS DATE ) AND CAST( "' . $date_end . '" AS DATE )';
+						// var_dump( $sql );
+						$sl_kho = $wpdb->get_results( $sql );
 						?>
 						<tr class="text-gray-700 dark:text-gray-400" product-id="<?= esc_attr( $idsp );?>" >
 							<td class="px-4 py-3">#<?= esc_html( $idsp ) ?></td>

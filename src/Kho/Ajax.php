@@ -147,8 +147,8 @@ class Ajax {
 			'idKho'     => $id_kho,
 		) );
 		$wpdb->delete( 'nhap_kho', array(
-			'idSanPham' => $id_sp,
-			'idKho'     => $id_kho,
+			'id_san_pham' => $id_sp,
+			'id_kho'      => $id_kho,
 		) );
 		ob_start();
 		$this->changed_products( $id_kho );
