@@ -1,5 +1,12 @@
 {
 	"autoload": {
-		"psr-4": { "CRM\\": ["src/"] }
+		"psr-4": {
+			"CRM\\": [
+				"src/"
+			]
+		}
+	},
+	"require": {
+		"phpoffice/phpspreadsheet": "^1.23"
 	}
 }
