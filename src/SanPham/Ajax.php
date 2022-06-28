@@ -41,7 +41,7 @@ class Ajax {
 				'gia_niem_yet' => $data['gia_niem_yet'],
 				'gia_ban_le'   => $data['gia_ban_le'],
 				'gia_ban_buon' => $data['gia_ban_buon'],
-				'thong_so'     => $data['thong_so'],
+				'thong_so'     => esc_textarea( $data['thong_so'] ),
 				'hinh_anh'     => $data['hinh_anh'],
 			]
 		);
@@ -76,7 +76,7 @@ class Ajax {
 				'gia_niem_yet' => $data['gia_niem_yet'],
 				'gia_ban_le'   => $data['gia_ban_le'],
 				'gia_ban_buon' => $data['gia_ban_buon'],
-				'thong_so'     => $data['thong_so'],
+				'thong_so'     => esc_textarea( $data['thong_so'] ),
 				'hinh_anh'     => $data['hinh_anh'],
 			],
 			[ 'id' => $id ]

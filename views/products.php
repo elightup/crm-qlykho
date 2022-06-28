@@ -70,7 +70,12 @@
 							<td data-gia-ban-buon="<?= esc_attr( $product->gia_ban_buon ) ?>" class="product__gia-ban-buon px-4 py-3 text-right">
 								<?= esc_html( number_format( $product->gia_ban_buon, 0, ',', '.' ) ) ?>
 							</td>
-							<td class="product__thongso px-4 py-3"><?= esc_html( wp_trim_words( $product->thong_so, 15 ) ) ?></td>
+							<td class="product__thongso px-4 py-3">
+								<p class="hidden">
+									<?= esc_html( $product->thong_so ) ?>
+								</p>
+								<?= esc_html( wp_trim_words( $product->thong_so, 15 ) ) ?>
+							</td>
 							<td class="px-4 py-3">
 								<button class="popup-kho flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
 									aria-label="View"
