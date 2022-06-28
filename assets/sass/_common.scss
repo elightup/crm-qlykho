@@ -1,6 +1,10 @@
 body {
 	font-size: 14px;
 }
+button:disabled {
+	pointer-events: none;
+	background: #707275;;
+}
 .text-right {
 	text-align: right;
 }

@@ -56,6 +56,8 @@ jQuery( function( $ ) {
 		},
 
 		add: function( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thong_so, hinh_anh ) {
+			$( '.btn_add_product' ).prop( 'disabled', true );
+
 			$.post( ProductParams.ajaxUrl, {
 				action      : 'them_san_pham',
 				ten         : ten.val(),
@@ -65,6 +67,8 @@ jQuery( function( $ ) {
 				thong_so    : thong_so.val(),
 				hinh_anh    : hinh_anh.val(),
 			}, response => {
+				$( '.btn_add_product' ).prop( 'disabled', false );
+
 				if ( ! response.success ) {
 					$( '.message-error' ).remove();
 					$( '.crm-action' ).append( '<p class="message-error text-xs text-red-600 dark:text-red-400">' + response.data + '</p>' );
@@ -79,11 +83,12 @@ jQuery( function( $ ) {
 					thong_so    : thong_so.val(),
 					hinh_anh    : hinh_anh.val(),
 				}
-				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
-				productList.showPopup( 'Đã thêm sản phẩm thành công' );
-				productList.clearInput();
 
-				ten.focus();
+				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
+
+				productList.showPopup( 'Đã thêm sản phẩm thành công' );
+
+				productList.clearInput();
 
 				$( '.message-error' ).remove();
 			} );
@@ -111,6 +116,7 @@ jQuery( function( $ ) {
 				tr.replaceWith( productList.htmlLayout( product ) );
 
 				$( '.message-error' ).remove();
+				$( '.crm-action h2' ).text( 'Thêm sản phẩm' );
 			} );
 		},
 		remove: function( id ) {

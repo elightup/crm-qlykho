@@ -21,11 +21,10 @@ class Ajax {
 			'gia_niem_yet' => isset( $_POST['gia_niem_yet'] ) ? $_POST['gia_niem_yet'] : '',
 			'gia_ban_le'   => isset( $_POST['gia_ban_le'] ) ? $_POST['gia_ban_le'] : '',
 			'gia_ban_buon' => isset( $_POST['gia_ban_buon'] ) ? $_POST['gia_ban_buon'] : '',
-			'gia_niem_yet' => isset( $_POST['gia_niem_yet'] ) ? $_POST['gia_niem_yet'] : '',
 			'thong_so'     => isset( $_POST['thong_so'] ) ? $_POST['thong_so'] : '',
 			'hinh_anh'     => isset( $_POST['hinh_anh'] ) ? $_POST['hinh_anh'] : '',
 		];
-		if ( empty( $data['ten'] ) || empty( $data['gia_niem_yet'] ) || empty( $data['gia_ban_buon'] ) ) {
+		if ( empty( $data['ten'] ) || empty( $data['gia_niem_yet'] ) || empty( $data['gia_ban_le'] ) || empty( $data['gia_ban_buon'] ) ) {
 			wp_send_json_error( 'Thông tin sản phẩm trống. Bạn hãy nhập đủ thông tin ' );
 		}
 
@@ -60,7 +59,7 @@ class Ajax {
 			'thong_so'     => isset( $_POST['thong_so'] ) ? $_POST['thong_so'] : '',
 			'hinh_anh'     => isset( $_POST['hinh_anh'] ) ? $_POST['hinh_anh'] : '',
 		];
-		if ( empty( $data['ten'] ) || empty( $data['gia_niem_yet'] ) || empty( $data['gia_ban_buon'] ) ) {
+		if ( empty( $data['ten'] ) || empty( $data['gia_niem_yet'] ) || empty( $data['gia_ban_le'] ) || empty( $data['gia_ban_buon'] ) ) {
 			wp_send_json_error( 'Thông tin sản phẩm trống. Bạn hãy nhập đủ thông tin ' );
 		}
 
