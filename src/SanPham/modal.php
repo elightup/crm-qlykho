@@ -31,7 +31,7 @@
 							#<?= esc_html( $warehouse->id ) ?>
 						</td>
 						<td class="px-4 py-3">
-							<?= esc_html( $warehouse->ten_kho ) ?>
+							<?= esc_html( $warehouse->ten ) ?>
 						</td>
 						<td class="px-4 py-3">
 							<?= esc_html( $warehouse->soLuong ) ?>
