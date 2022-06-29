@@ -17,12 +17,14 @@ class Ajax {
 
 	public function ajax_them_san_pham() {
 		$data = [
-			'ten'          => isset( $_POST['ten'] ) ? $_POST['ten'] : '',
-			'gia_niem_yet' => isset( $_POST['gia_niem_yet'] ) ? $_POST['gia_niem_yet'] : '',
-			'gia_ban_le'   => isset( $_POST['gia_ban_le'] ) ? $_POST['gia_ban_le'] : '',
-			'gia_ban_buon' => isset( $_POST['gia_ban_buon'] ) ? $_POST['gia_ban_buon'] : '',
-			'thong_so'     => isset( $_POST['thong_so'] ) ? $_POST['thong_so'] : '',
-			'hinh_anh'     => isset( $_POST['hinh_anh'] ) ? $_POST['hinh_anh'] : '',
+			'ten'           => isset( $_POST['ten'] ) ? $_POST['ten'] : '',
+			'gia_niem_yet'  => isset( $_POST['gia_niem_yet'] ) ? $_POST['gia_niem_yet'] : '',
+			'gia_ban_le'    => isset( $_POST['gia_ban_le'] ) ? $_POST['gia_ban_le'] : '',
+			'gia_ban_buon'  => isset( $_POST['gia_ban_buon'] ) ? $_POST['gia_ban_buon'] : '',
+			'thong_so'      => isset( $_POST['thong_so'] ) ? $_POST['thong_so'] : '',
+			'hang_san_xuat' => isset( $_POST['hang_san_xuat'] ) ? $_POST['hang_san_xuat'] : '',
+			'xuat_xu'       => isset( $_POST['xuat_xu'] ) ? $_POST['xuat_xu'] : '',
+			'hinh_anh'      => isset( $_POST['hinh_anh'] ) ? $_POST['hinh_anh'] : '',
 		];
 		if ( strlen( trim( $data['ten'] ) ) <= 0 || empty( $data['gia_niem_yet'] ) || empty( $data['gia_ban_le'] ) || empty( $data['gia_ban_buon'] ) ) {
 			wp_send_json_error( 'Thông tin sản phẩm trống. Bạn hãy nhập đủ thông tin ' );
@@ -37,12 +39,14 @@ class Ajax {
 		$wpdb->insert(
 			'san_pham',
 			[
-				'ten'          => $data['ten'],
-				'gia_niem_yet' => $data['gia_niem_yet'],
-				'gia_ban_le'   => $data['gia_ban_le'],
-				'gia_ban_buon' => $data['gia_ban_buon'],
-				'thong_so'     => esc_textarea( $data['thong_so'] ),
-				'hinh_anh'     => $data['hinh_anh'],
+				'ten'           => $data['ten'],
+				'gia_niem_yet'  => $data['gia_niem_yet'],
+				'gia_ban_le'    => $data['gia_ban_le'],
+				'gia_ban_buon'  => $data['gia_ban_buon'],
+				'thong_so'      => esc_textarea( $data['thong_so'] ),
+				'hang_san_xuat' => $data['hang_san_xuat'],
+				'xuat_xu'       => $data['xuat_xu'],
+				'hinh_anh'      => $data['hinh_anh'],
 			]
 		);
 		$product_id = $wpdb->insert_id;
@@ -52,12 +56,14 @@ class Ajax {
 	public function ajax_edit_san_pham() {
 		$id   = isset( $_POST['id'] ) ? $_POST['id'] : '';
 		$data = [
-			'ten'          => isset( $_POST['ten'] ) ? $_POST['ten'] : '',
-			'gia_niem_yet' => isset( $_POST['gia_niem_yet'] ) ? $_POST['gia_niem_yet'] : '',
-			'gia_ban_le'   => isset( $_POST['gia_ban_le'] ) ? $_POST['gia_ban_le'] : '',
-			'gia_ban_buon' => isset( $_POST['gia_ban_buon'] ) ? $_POST['gia_ban_buon'] : '',
-			'thong_so'     => isset( $_POST['thong_so'] ) ? $_POST['thong_so'] : '',
-			'hinh_anh'     => isset( $_POST['hinh_anh'] ) ? $_POST['hinh_anh'] : '',
+			'ten'           => isset( $_POST['ten'] ) ? $_POST['ten'] : '',
+			'gia_niem_yet'  => isset( $_POST['gia_niem_yet'] ) ? $_POST['gia_niem_yet'] : '',
+			'gia_ban_le'    => isset( $_POST['gia_ban_le'] ) ? $_POST['gia_ban_le'] : '',
+			'gia_ban_buon'  => isset( $_POST['gia_ban_buon'] ) ? $_POST['gia_ban_buon'] : '',
+			'thong_so'      => isset( $_POST['thong_so'] ) ? $_POST['thong_so'] : '',
+			'hang_san_xuat' => isset( $_POST['hang_san_xuat'] ) ? $_POST['hang_san_xuat'] : '',
+			'xuat_xu'       => isset( $_POST['xuat_xu'] ) ? $_POST['xuat_xu'] : '',
+			'hinh_anh'      => isset( $_POST['hinh_anh'] ) ? $_POST['hinh_anh'] : '',
 		];
 		if ( strlen( trim( $data['ten'] ) ) <= 0 || empty( $data['gia_niem_yet'] ) || empty( $data['gia_ban_le'] ) || empty( $data['gia_ban_buon'] ) ) {
 			wp_send_json_error( 'Thông tin sản phẩm trống. Bạn hãy nhập đủ thông tin ' );
@@ -72,12 +78,14 @@ class Ajax {
 		$wpdb->update(
 			'san_pham',
 			[
-				'ten'          => $data['ten'],
-				'gia_niem_yet' => $data['gia_niem_yet'],
-				'gia_ban_le'   => $data['gia_ban_le'],
-				'gia_ban_buon' => $data['gia_ban_buon'],
-				'thong_so'     => esc_textarea( $data['thong_so'] ),
-				'hinh_anh'     => $data['hinh_anh'],
+				'ten'           => $data['ten'],
+				'gia_niem_yet'  => $data['gia_niem_yet'],
+				'gia_ban_le'    => $data['gia_ban_le'],
+				'gia_ban_buon'  => $data['gia_ban_buon'],
+				'thong_so'      => esc_textarea( $data['thong_so'] ),
+				'hang_san_xuat' => $data['hang_san_xuat'],
+				'xuat_xu'       => $data['xuat_xu'],
+				'hinh_anh'      => $data['hinh_anh'],
 			],
 			[ 'id' => $id ]
 		);

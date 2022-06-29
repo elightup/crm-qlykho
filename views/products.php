@@ -47,6 +47,8 @@
 						<th class="px-4 py-3 whitespace-no-wrap text-right">Giá bán lẻ</th>
 						<th class="px-4 py-3 whitespace-no-wrap text-right">Giá bán buôn</th>
 						<th class="px-4 py-3">Thông số kỹ thuật</th>
+						<th class="px-4 py-3 hidden">Hãng sản xuất</th>
+						<th class="px-4 py-3 hidden">Xuất xứ</th>
 						<th class="px-4 py-3">Kho</th>
 						<th class="px-4 py-3">Hành động</th>
 					</tr>
@@ -76,6 +78,8 @@
 								</p>
 								<?= esc_html( wp_trim_words( $product->thong_so, 15 ) ) ?>
 							</td>
+							<td class="product__hang-san-xuat px-4 py-3 hidden"><?= esc_html( $product->hang_san_xuat ) ?></td>
+							<td class="product__xuat-xu px-4 py-3 hidden"><?= esc_html( $product->xuat_xu ) ?></td>
 							<td class="px-4 py-3">
 								<button class="popup-kho flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
 									aria-label="View"
@@ -206,6 +210,14 @@
 				<div class="action_input-item">
 					<label for="thong_so">Thông số kỹ thuật:</label>
 					<textarea class="deleteable" id="thong_so" name="thong_so" rows="5"></textarea>
+				</div>
+				<div class="action_input-item">
+					<label for="hang_san_xuat">Hãng sản xuất </label>
+					<input class="deleteable" type="text" id="hang_san_xuat" name="hang_san_xuat" />
+				</div>
+				<div class="action_input-item">
+					<label for="xuat_xu">Xuất xứ </label>
+					<input class="deleteable" type="text" id="xuat_xu" name="xuat_xu" />
 				</div>
 				<div class="action_input-item">
 					<label for="hinh_anh">Link hình ảnh:</label>

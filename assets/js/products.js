@@ -30,6 +30,8 @@ jQuery( function( $ ) {
 					</p>
 					${data.thong_so.substr( 0, 40 )} ...
 				</td>
+				<td class="product__hang-san-xuat px-4 py-3 hidden">${data.hang_san_xuat}</td>
+				<td class="product__xuat-xu px-4 py-3 hidden">${data.xuat_xu}</td>
 				<td class="px-4 py-3">
 					<button class="popup-kho flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
 						aria-label="View"
@@ -59,17 +61,13 @@ jQuery( function( $ ) {
 			`;
 		},
 
-		add: function( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thong_so, hinh_anh ) {
+		add: function( product ) {
+			// const { ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thong_so, hang_san_xuat, xuat_xu, hinh_anh } = product;
 			$( '.btn_add_product' ).prop( 'disabled', true );
 
 			$.post( ProductParams.ajaxUrl, {
-				action      : 'them_san_pham',
-				ten         : ten.val(),
-				gia_niem_yet: gia_niem_yet.val(),
-				gia_ban_le  : gia_ban_le.val(),
-				gia_ban_buon: gia_ban_buon.val(),
-				thong_so    : thong_so.val(),
-				hinh_anh    : hinh_anh.val(),
+				action : 'them_san_pham',
+				...product
 			}, response => {
 				$( '.btn_add_product' ).prop( 'disabled', false );
 
@@ -79,13 +77,8 @@ jQuery( function( $ ) {
 					return;
 				}
 				let data_sp = {
-					id          : response.data,
-					ten         : ten.val(),
-					gia_niem_yet: gia_niem_yet.val(),
-					gia_ban_le  : gia_ban_le.val(),
-					gia_ban_buon: gia_ban_buon.val(),
-					thong_so    : thong_so.val(),
-					hinh_anh    : hinh_anh.val(),
+					id : response.data,
+					...product
 				}
 
 				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
@@ -100,13 +93,7 @@ jQuery( function( $ ) {
 		edit: function( product ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_san_pham',
-				id: product.id,
-				ten: product.ten,
-				gia_niem_yet: product.gia_niem_yet,
-				gia_ban_le: product.gia_ban_le,
-				gia_ban_buon: product.gia_ban_buon,
-				thong_so: product.thong_so,
-				hinh_anh: product.hinh_anh,
+				...product
 			}, response => {
 				if ( ! response.success ) {
 					$( '.message-error' ).remove();
@@ -146,46 +133,57 @@ jQuery( function( $ ) {
 
 		clickSave: function() {
 			$d.on( 'click', '.btn_add_product', function() {
-				let ten          = $( 'input[name=ten]' ),
-					gia_niem_yet = $( 'input[name=gia_niem_yet]' ),
-					gia_ban_le   = $( 'input[name=gia_ban_le]' ),
-					gia_ban_buon = $( 'input[name=gia_ban_buon]' ),
-					thong_so     = $( 'textarea[name=thong_so]' ),
-					hinh_anh     = $( 'input[name=hinh_anh]' );
+				let ten           = $( 'input[name=ten]' ),
+				    gia_niem_yet  = $( 'input[name=gia_niem_yet]' ),
+				    gia_ban_le    = $( 'input[name=gia_ban_le]' ),
+				    gia_ban_buon  = $( 'input[name=gia_ban_buon]' ),
+				    thong_so      = $( 'textarea[name=thong_so]' ),
+				    hang_san_xuat = $( 'input[name=hang_san_xuat]' ),
+				    xuat_xu       = $( 'input[name=xuat_xu]' ),
+				    hinh_anh      = $( 'input[name=hinh_anh]' );
 
+				let data_sp = {
+					ten          : ten.val(),
+					gia_niem_yet : gia_niem_yet.val(),
+					gia_ban_le   : gia_ban_le.val(),
+					gia_ban_buon : gia_ban_buon.val(),
+					thong_so     : thong_so.val(),
+					hang_san_xuat: hang_san_xuat.val(),
+					xuat_xu      : xuat_xu.val(),
+					hinh_anh     : hinh_anh.val(),
+				}
 				if ( $(this).hasClass( 'edit' ) ) {
-					let data_sp = {
-						id          : $(this).attr( 'data-id' ),
-						ten         : ten.val(),
-						gia_niem_yet: gia_niem_yet.val(),
-						gia_ban_le  : gia_ban_le.val(),
-						gia_ban_buon: gia_ban_buon.val(),
-						thong_so    : thong_so.val(),
-						hinh_anh    : hinh_anh.val(),
+					data_sp = {
+						id : $(this).attr( 'data-id' ),
+						...data_sp
 					}
 					productList.edit( data_sp );
 				} else {
-					productList.add( ten, gia_niem_yet, gia_ban_le, gia_ban_buon, thong_so, hinh_anh );
+					productList.add( data_sp );
 				}
 			} );
 		},
 
 		editButton: function() {
 			$d.on( 'click', '.data-list .button-edit',  function() {
-				let parent       = $(this).parents( 'tr' ),
-					id_product   = parent.data( 'product' ),
-					ten          = parent.find( '.product__name' ),
-					gia_niem_yet = parent.find( '.product__gia-niem-yet' ),
-					gia_ban_le   = parent.find( '.product__gia-ban-le' ),
-					gia_ban_buon = parent.find( '.product__gia-ban-buon' ),
-					thong_so     = parent.find( '.product__thongso p' ),
-					hinh_anh     = parent.find( '.product__thumbnail' );
+				let parent        = $(this).parents( 'tr' ),
+				    id_product    = parent.data( 'product' ),
+				    ten           = parent.find( '.product__name' ),
+				    gia_niem_yet  = parent.find( '.product__gia-niem-yet' ),
+				    gia_ban_le    = parent.find( '.product__gia-ban-le' ),
+				    gia_ban_buon  = parent.find( '.product__gia-ban-buon' ),
+				    thong_so      = parent.find( '.product__thongso p' ),
+				    hang_san_xuat = parent.find( '.product__hang-san-xuat' ),
+				    xuat_xu       = parent.find( '.product__xuat-xu' ),
+				    hinh_anh      = parent.find( '.product__thumbnail' );
 
 				$( 'input[name="ten"]' ).val( ten.text() );
 				$( 'input[name="gia_niem_yet"]' ).val( gia_niem_yet.data( 'gia-niem-yet' ) );
 				$( 'input[name="gia_ban_le"]' ).val( gia_ban_le.data( 'gia-ban-le' ) );
 				$( 'input[name="gia_ban_buon"]' ).val( gia_ban_buon.data( 'gia-ban-buon' ) );
 				$( 'textarea[name="thong_so"]' ).val( thong_so.html().trim() );
+				$( 'input[name="hang_san_xuat"]' ).val( hang_san_xuat.text() );
+				$( 'input[name="xuat_xu"]' ).val( xuat_xu.text() );
 				$( 'input[name="hinh_anh"]' ).val( hinh_anh.data( 'link-image' ) );
 
 				$( '.crm-action h2' ).text( 'Sửa sản phẩm' );

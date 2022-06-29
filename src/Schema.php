@@ -17,6 +17,8 @@ class Schema {
 			`gia_ban_le` int unsigned NOT NULL,
 			`gia_ban_buon` int unsigned NOT NULL,
 			`thong_so` text,
+			`hang_san_xuat` text,
+			`xuat_xu` text,
 			`hinh_anh` text,
 			PRIMARY KEY  (`id`)
 		);
