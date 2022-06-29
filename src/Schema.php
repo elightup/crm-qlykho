@@ -21,6 +21,7 @@ class Schema {
 			`xuat_xu` text,
 			`hinh_anh` text,
 			PRIMARY KEY  (`id`)
+			CHARACTER SET utf8m4
 		);
 		';
 		$sql_kho          = '
