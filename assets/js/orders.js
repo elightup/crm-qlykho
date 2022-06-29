@@ -49,29 +49,64 @@ jQuery( function( $ ) {
 		},
 
 		onClickAddSanPham: function() {
-			$( '.add_product_kho' ).on( 'click', function ( e ) {
-				e.preventDefault();
+			$d.on( 'click', '.add_product_order', function() {
 				$( '.clone-product' ).last().clone().appendTo( '.table-product' );
 			} );
 		},
 
 		changeSanPham: function() {
 			$d.on( 'change', '#product__name', function() {
-				let parent = $( this ).parent();
-				let optionSelected = $(this).find( 'option:selected' );
-				let gia_niem_yet   = formatNumber( 0, 3, '.', ',', parseFloat( optionSelected.attr( 'data-price' ) ) );
-				let soLuong        = optionSelected.attr( 'data-soluong' ) ? formatNumber( 0, 3, '.', ',', parseFloat( optionSelected.attr( 'data-soluong' ) ) ) : 0;
+				let parent         = $( this ).parent();
+
+				parent.siblings( '.product-number' ).find( 'input' ).val( 1 );
+
+				let optionSelected = $(this).find( 'option:selected' ),
+					max_number     = optionSelected.attr( 'data-soluong' ),
+					price          = optionSelected.attr( 'data-price' ),
+					soLuong        = parent.siblings( '.product-number' ).find( 'input' ).val(),
+					gia_niem_yet   = formatNumber( 0, 3, '.', ',', parseFloat( price ) ),
+					sub_total      = formatNumber( 0, 3, '.', ',', parseFloat( price * soLuong ) );
 
 				parent.siblings( '.product-price' ).text( gia_niem_yet );
-				parent.siblings( '.product-number' ).find( 'input' ).val( soLuong );
-				parent.siblings( '.product-number' ).find( 'input' ).attr( 'max', soLuong );
+				parent.siblings( '.product-sub-total' ).text( sub_total );
+				parent.siblings( '.product-sub-total' ).attr( 'data-sub-total', price * soLuong );
+				parent.siblings( '.product-number' ).find( 'input' ).attr( 'max', max_number );
+
+
+				let total = 0;
+				$( '.product-sub-total' ).each( function () {
+					total += parseInt( $( this ).attr( 'data-sub-total' ) );
+				} );
+
+				$( '.product-total span' ).text( formatNumber( 0, 3, '.', ',', total ) );
+				$( '.product-total' ).attr( 'data-total', total );
+			} );
+			$d.on( 'input', '.product-number input', function() {
+				let parent         = $( this ).parent(),
+					optionSelected = parent.siblings( '.product-name' ).find( 'option:selected' ),
+					price          = optionSelected.attr( 'data-price' ),
+					sub_total      = formatNumber( 0, 3, '.', ',', parseFloat( price * $(this).val() ) );
+				if ( price )  {
+					parent.siblings( '.product-sub-total' ).text( sub_total );
+					parent.siblings( '.product-sub-total' ).attr( 'data-sub-total', price * $(this).val() );
+				}
+
+
+				let total = 0;
+				$( '.product-sub-total' ).each( function () {
+					total += parseInt( $( this ).attr( 'data-sub-total' ) );
+				} );
+
+				$( '.product-total span' ).text( formatNumber( 0, 3, '.', ',', total ) );
+				$( '.product-total' ).attr( 'data-total', total );
 			} );
 		},
 
 		add: function( data_order ) {
-			const { tong_tien, id_user } = data_order;
+			const { product, tong_tien, id_user } = data_order;
 			$.post( ProductParams.ajaxUrl, {
 				action   : 'them_don',
+				product  : product,
 				tong_tien: tong_tien,
 				id_user  : id_user,
 			}, response => {
@@ -90,27 +125,40 @@ jQuery( function( $ ) {
 				// productList.showPopup( 'Đã thêm sản phẩm thành công' );
 				// productList.clearInput();
 
-				// ten.focus();
 
 				// $( '.message-error' ).remove();
 			} );
 		},
 
 		clickSave: function() {
-			$d.on( 'click', '.add_order', function() {
+			$d.on( 'click', '.add_order', () => {
 				let tong_tien = $( '.product-total' ),
 					id_user   = $( '#user_name' );
 
+
+				let product = {};
+				$( '.clone-product' ).each( function () {
+					let optionSelected = $(this).find( '.product-name option:selected' ),
+					product_id     = optionSelected.val(),
+					quantity       = $(this).find( '.product-number input' ).val(),
+					price          = optionSelected.attr( 'data-price' );
+					product[product_id] = {
+						quantity: quantity,
+						price   : price
+					}
+				} );
+
 				let data_order = {
-					tong_tien: tong_tien.text(),
-					id_user  : id_user.find(":selected").val(),
+					product: product,
+					tong_tien: tong_tien.attr( 'data-total' ),
+					id_user  : id_user.find( ":selected" ).val()
 				}
-				console.log('data_order', data_order);
-				if ( $(this).hasClass( 'edit' ) ) {
-					order.edit( data_order );
-				} else {
-					order.add( data_order );
-				}
+
+
+				console.log('product', product);
+
+				order.add( data_order );
+
 			} );
 		},
 	};

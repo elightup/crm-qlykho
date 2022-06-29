@@ -16,6 +16,7 @@ class Ajax {
 	}
 	public function ajax_them_don() {
 		$data = [
+			'product'   => isset( $_POST['product'] ) ? $_POST['product'] : '',
 			'tong_tien' => isset( $_POST['tong_tien'] ) ? $_POST['tong_tien'] : '',
 			'id_user'   => isset( $_POST['id_user'] ) ? $_POST['id_user'] : '',
 		];
@@ -37,7 +38,7 @@ class Ajax {
 		$wpdb->insert(
 			'don_hang',
 			[
-				'san_pham'   => '',
+				'san_pham'   => json_encode( $data['product'] ),
 				'tong_tien'  => $data['tong_tien'],
 				'id_user'    => $data['id_user'],
 				'ngay'       => current_time( 'mysql' ),
