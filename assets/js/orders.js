@@ -5,6 +5,7 @@
 			order.onClickAddSanPham();
 			order.changeSanPham();
 			order.clickSave();
+			order.removeButton();
 			order.showListKho();
 		},
 		htmlLayout: function(data) {
@@ -132,6 +133,22 @@
 			} );
 		},
 
+		remove: function( id ) {
+			$.post( ProductParams.ajaxUrl, {
+				action: 'remove_don',
+				id: id,
+			}, response => {
+				if ( ! response.success ) {
+					return;
+				}
+
+				scriptJS.showPopup( 'Đã xóa sản phẩm thành công' );
+
+				let tr = $( 'tr[data-order='+ id +']' );
+				tr.remove();
+			} );
+		},
+
 		clickSave: function() {
 			$d.on( 'click', '.add_order', () => {
 				let tong_tien = $( '.product-total' ),
@@ -167,6 +184,26 @@
 				}
 
 				order.add( data_order );
+
+			} );
+		},
+
+		removeButton: function() {
+			$d.on( 'click', '.data-list .button-remove', function() {
+				let parent     = $(this).parents( 'tr' ),
+					id_order = parent.data( 'order' );
+
+				$( '.confirm-remove' ).addClass( 'confirmed' );
+				$( '.confirm-remove' ).attr( 'data-id', id_order );
+				order.confirmRemove( id_order );
+			} );
+		},
+
+		confirmRemove: function() {
+			$d.on( 'click', '.confirm-remove', function() {
+				let id_order = $(this).attr( 'data-id' );
+
+				order.remove( id_order );
 
 			} );
 		},

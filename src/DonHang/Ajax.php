@@ -48,6 +48,24 @@ class Ajax {
 		$order_id = $wpdb->insert_id;
 		return $order_id;
 	}
+
+	public function ajax_remove_don() {
+		$id = isset( $_POST['id'] ) ? $_POST['id'] : '';
+		if ( empty( $id ) ) {
+			wp_send_json_error( 'Có lỗi xảy ra' );
+		}
+
+		$this->remove_don( $id );
+		wp_send_json_success();
+	}
+
+	public function remove_don( $id ) {
+		global $wpdb;
+		$wpdb->delete(
+			'don_hang',
+			[ 'id' => $id ]
+		);
+	}
 }
 
 
