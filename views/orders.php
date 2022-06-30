@@ -2,6 +2,8 @@
 	global $wpdb;
 	$sql    = 'SELECT * FROM don_hang ORDER BY id DESC';
 	$orders = $wpdb->get_results( $sql );
+
+	$products = $wpdb->get_results( 'SELECT * FROM san_pham ORDER BY id DESC' );
 ?>
 <div class="wrap">
 	<div class="crm-title">
@@ -9,6 +11,7 @@
 	</div>
 	<div class="crm-content">
 		<div class="px-4 py-3 mb-8">
+			<?php require CRM_DIR . '/src/DonHang/modal.php' ?>
 			<table class="table w-full overflow-hidden rounded-lg shadow-xs mb-4">
 				<thead>
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-700 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -47,7 +50,10 @@
 						</td>
 						<td class="px-4 py-3 product-number clearable">
 							<input class="" type="number" min="0" value="1" style="width: 5rem">
-							<button class="px-4 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple btn_add_product">Chọn kho</button>
+							<button class="popup-kho px-4 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple btn_add_product"
+								data-popup="">
+								Chọn kho
+							</button>
 						</td>
 						<td class="px-4 py-3"></td>
 						<td class="px-4 py-3 product-sub-total clearable text-right"></td>

@@ -39,7 +39,7 @@ class Ajax {
 			'don_hang',
 			[
 				'san_pham'   => json_encode( $data['product'] ),
-				'tong_tien'  => $data['tong_tien'],
+				'tong_tien'  => (int) $data['tong_tien'],
 				'id_user'    => $data['id_user'],
 				'ngay'       => current_time( 'mysql' ),
 				'trang_thai' => 'Đã lên đơn',

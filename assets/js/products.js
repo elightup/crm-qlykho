@@ -1,4 +1,4 @@
-jQuery( function( $ ) {
+( function( $, scriptJS ) {
 	const $d = $( document );
 	let productList = {
 		init: function() {
@@ -83,7 +83,7 @@ jQuery( function( $ ) {
 
 				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
 
-				productList.showPopup( 'Đã thêm sản phẩm thành công' );
+				scriptJS.showPopup( 'Đã thêm sản phẩm thành công' );
 
 				productList.clearInput();
 
@@ -100,7 +100,7 @@ jQuery( function( $ ) {
 					$( '.crm-action' ).append( '<p class="message-error text-xs text-red-600 dark:text-red-400">' + response.data + '</p>' );
 					return;
 				}
-				productList.showPopup( 'Đã sửa sản phẩm thành công' );
+				scriptJS.showPopup( 'Đã sửa sản phẩm thành công' );
 				productList.clearInput();
 
 				let tr = $( 'tr[data-product='+ product.id +']' );
@@ -119,7 +119,7 @@ jQuery( function( $ ) {
 					return;
 				}
 
-				productList.showPopup( 'Đã xóa sản phẩm thành công' );
+				scriptJS.showPopup( 'Đã xóa sản phẩm thành công' );
 
 				let tr = $( 'tr[data-product='+ id +']' );
 				tr.remove();
@@ -223,20 +223,6 @@ jQuery( function( $ ) {
 			} );
 		},
 
-		showPopup: function( title ) {
-			const toast =
-			`<div class="toast">
-				<div class="img-toast">
-					<span class="dashicons dashicons-yes-alt"></span>
-				</div>
-				<p class="title">${title}</p>
-			</div>`;
-
-			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
-				$( '.toast' ).remove();
-			} );
-		},
-
 		showListKho: function() {
 			$d.on( 'click', '.popup-kho', function() {
 				let popup = $(this).attr( 'data-popup' );
@@ -249,7 +235,7 @@ jQuery( function( $ ) {
 	};
 
 	productList.init();
-} );
+} )( jQuery, scriptJS );
 
 function formatNumber( n, x, s, c, number ) {
 	var re = '\\d(?=(\\d{' + ( x || 3 ) + '})+' + ( n > 0 ? '\\D' : '$' ) + ')',

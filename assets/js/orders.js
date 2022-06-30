@@ -1,10 +1,11 @@
-jQuery( function( $ ) {
+( function( $, scriptJS ) {
 	const $d = $( document );
 	let order = {
 		init: function() {
 			order.onClickAddSanPham();
 			order.changeSanPham();
 			order.clickSave();
+			order.showListKho();
 		},
 		htmlLayout: function(data) {
 			let tong_tien = formatNumber( 0, 3, '.', ',', parseFloat( data.tong_tien ) );
@@ -71,6 +72,7 @@ jQuery( function( $ ) {
 				parent.siblings( '.product-sub-total' ).text( sub_total );
 				parent.siblings( '.product-sub-total' ).attr( 'data-sub-total', price * soLuong );
 				parent.siblings( '.product-number' ).find( 'input' ).attr( 'max', max_number );
+				parent.siblings( '.product-number' ).find( 'button' ).attr( 'data-popup', `product-${optionSelected.val()}` );
 
 
 				let total = 0;
@@ -122,7 +124,7 @@ jQuery( function( $ ) {
 					ngay     : response.data.ngay,
 				}
 				$( '.data-list' ).prepend( order.htmlLayout( data_order ) );
-				// productList.showPopup( 'Đã thêm sản phẩm thành công' );
+				scriptJS.showPopup( 'Đã thêm sản phẩm thành công' );
 				// productList.clearInput();
 
 
@@ -142,9 +144,19 @@ jQuery( function( $ ) {
 					product_id     = optionSelected.val(),
 					quantity       = $(this).find( '.product-number input' ).val(),
 					price          = optionSelected.attr( 'data-price' );
+
+					let kho =[];
+					$( `#product-${product_id} tbody tr` ).each( function() {
+						kho.push( {
+							id: $( this ).find( '.ten-kho' ).attr( 'data-kho' ),
+							quantity: $( this ).find( '.chon-kho input' ).val()
+						} );
+					} );
+
 					product[product_id] = {
-						quantity: quantity,
-						price   : price
+						quantity : quantity,
+						price    : price,
+						warehouse: kho,
 					}
 				} );
 
@@ -154,17 +166,24 @@ jQuery( function( $ ) {
 					id_user  : id_user.find( ":selected" ).val()
 				}
 
-
-				console.log('product', product);
-
 				order.add( data_order );
 
 			} );
 		},
+
+		showListKho: function() {
+			$d.on( 'click', '.popup-kho', function() {
+				let popup = $(this).attr( 'data-popup' );
+				$( `#${popup}` ).addClass( 'current' );
+			} );
+			$d.on( 'click', '.btn-close', function() {
+				$(this).parents( '.modal' ).removeClass( 'current' );
+			} )
+		}
 	};
 
 	order.init();
-} );
+} )( jQuery, scriptJS );
 
 function formatNumber( n, x, s, c, number ) {
 	var re = '\\d(?=(\\d{' + ( x || 3 ) + '})+' + ( n > 0 ? '\\D' : '$' ) + ')',

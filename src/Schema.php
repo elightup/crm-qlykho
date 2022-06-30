@@ -45,7 +45,7 @@ class Schema {
 				`id` mediumint unsigned NOT NULL auto_increment,
 				`san_pham` longtext,
 				`id_user` mediumint NOT NULL,
-				`tong_tien` mediumint NOT NULL,
+				`tong_tien` int NOT NULL,
 				`ngay` datetime NOT NULL,
 				`trang_thai` varchar(50) NOT NULL,
 				PRIMARY KEY  (`id`)
