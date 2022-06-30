@@ -2,11 +2,8 @@
 	const $d = $( document );
 	let order = {
 		init: function() {
-			order.onClickAddSanPham();
+			order.addEventListeners();
 			order.changeSanPham();
-			order.clickSave();
-			order.removeButton();
-			order.showListKho();
 		},
 		htmlLayout: function(data) {
 			let tong_tien = formatNumber( 0, 3, '.', ',', parseFloat( data.tong_tien ) );
@@ -50,10 +47,20 @@
 			`;
 		},
 
-		onClickAddSanPham: function() {
-			$d.on( 'click', '.add_product_order', function() {
-				$( '.clone-product' ).last().clone().appendTo( '.table-product' );
-			} );
+		addEventListeners: function() {
+			$d.on( 'click', '.add-product-order', order.onAddSanPham );
+			$d.on( 'click', '.remove-product-order .dashicons', order.onRemoveSanPham );
+			$d.on( 'click', '.add-order', order.onCreateOrder );
+			$d.on( 'click', '.data-list .button-remove', order.onRemoveOrder );
+			$d.on( 'click', '.popup-kho', order.onShowPopupKho );
+			$d.on( 'click', '.btn-close', order.onClosePopupKho );
+		},
+		onAddSanPham: function() {
+			$( '.clone-product' ).last().clone().appendTo( '.table-product' );
+		},
+		onRemoveSanPham: function() {
+			let parent = $(this).parents( 'tr' );
+			parent.remove();
 		},
 
 		changeSanPham: function() {
@@ -149,54 +156,49 @@
 			} );
 		},
 
-		clickSave: function() {
-			$d.on( 'click', '.add_order', () => {
-				let tong_tien = $( '.product-total' ),
-					id_user   = $( '#user_name' );
+		onCreateOrder: function() {
+			let tong_tien = $( '.product-total' ),
+				id_user   = $( '#user_name' );
 
+			let product = {};
+			$( '.clone-product' ).each( function () {
+				let optionSelected = $(this).find( '.product-name option:selected' ),
+				product_id     = optionSelected.val(),
+				quantity       = $(this).find( '.product-number input' ).val(),
+				price          = optionSelected.attr( 'data-price' );
 
-				let product = {};
-				$( '.clone-product' ).each( function () {
-					let optionSelected = $(this).find( '.product-name option:selected' ),
-					product_id     = optionSelected.val(),
-					quantity       = $(this).find( '.product-number input' ).val(),
-					price          = optionSelected.attr( 'data-price' );
-
-					let kho =[];
-					$( `#product-${product_id} tbody tr` ).each( function() {
-						kho.push( {
-							id: $( this ).find( '.ten-kho' ).attr( 'data-kho' ),
-							quantity: $( this ).find( '.chon-kho input' ).val()
-						} );
+				let kho =[];
+				$( `#product-${product_id} tbody tr` ).each( function() {
+					kho.push( {
+						id: $( this ).find( '.ten-kho' ).attr( 'data-kho' ),
+						quantity: $( this ).find( '.chon-kho input' ).val()
 					} );
-
-					product[product_id] = {
-						quantity : quantity,
-						price    : price,
-						warehouse: kho,
-					}
 				} );
 
-				let data_order = {
-					product: product,
-					tong_tien: tong_tien.attr( 'data-total' ),
-					id_user  : id_user.find( ":selected" ).val()
+				product[product_id] = {
+					quantity : quantity,
+					price    : price,
+					warehouse: kho,
 				}
-
-				order.add( data_order );
-
 			} );
+
+			let data_order = {
+				product: product,
+				tong_tien: tong_tien.attr( 'data-total' ),
+				id_user  : id_user.find( ":selected" ).val()
+			}
+
+			order.add( data_order );
+
 		},
 
-		removeButton: function() {
-			$d.on( 'click', '.data-list .button-remove', function() {
-				let parent     = $(this).parents( 'tr' ),
-					id_order = parent.data( 'order' );
+		onRemoveOrder: function() {
+			let parent     = $(this).parents( 'tr' ),
+				id_order = parent.data( 'order' );
 
-				$( '.confirm-remove' ).addClass( 'confirmed' );
-				$( '.confirm-remove' ).attr( 'data-id', id_order );
-				order.confirmRemove( id_order );
-			} );
+			$( '.confirm-remove' ).addClass( 'confirmed' );
+			$( '.confirm-remove' ).attr( 'data-id', id_order );
+			order.confirmRemove( id_order );
 		},
 
 		confirmRemove: function() {
@@ -208,14 +210,13 @@
 			} );
 		},
 
-		showListKho: function() {
-			$d.on( 'click', '.popup-kho', function() {
-				let popup = $(this).attr( 'data-popup' );
-				$( `#${popup}` ).addClass( 'current' );
-			} );
-			$d.on( 'click', '.btn-close', function() {
-				$(this).parents( '.modal' ).removeClass( 'current' );
-			} )
+		onShowPopupKho: function() {
+			let popup = $(this).attr( 'data-popup' );
+			$( `#${popup}` ).addClass( 'current' );
+		},
+
+		onClosePopupKho: function() {
+			$(this).parents( '.modal' ).removeClass( 'current' );
 		}
 	};
 

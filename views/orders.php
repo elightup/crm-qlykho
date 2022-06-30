@@ -12,7 +12,7 @@
 	<div class="crm-content">
 		<div class="px-4 py-3 mb-8">
 			<?php require CRM_DIR . '/src/DonHang/modal.php' ?>
-			<table class="table w-full overflow-hidden rounded-lg shadow-xs mb-4">
+			<table class="table table-add-order w-full overflow-hidden rounded-lg shadow-xs mb-4">
 				<thead>
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-700 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
 						<th class="px-4 py-3">Sản phẩm</th>
@@ -20,6 +20,7 @@
 						<th class="px-4 py-3 whitespace-no-wrap">Số lượng</th>
 						<th class="px-4 py-3 whitespace-no-wrap">Chiết khấu</th>
 						<th class="px-4 py-3 whitespace-no-wrap text-right">Tổng tiền</th>
+						<th class="px-4 py-3 whitespace-no-wrap text-right"></th>
 					</tr>
 				</thead>
 				<tbody class="table-product bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -57,15 +58,18 @@
 						</td>
 						<td class="px-4 py-3"></td>
 						<td class="px-4 py-3 product-sub-total clearable text-right"></td>
+						<td class="px-4 py-3 text-red-600 remove-product-order">
+							<span class="dashicons dashicons-no"></span>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 			<div class="mb-4 text-right product-total text-lg font-medium">Tổng: <span></span></div>
 			<div class="flex justify-between">
-				<button class="add_order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+				<button class="add-order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
 					Lên đơn
 				</button>
-				<button class="add_product_order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+				<button class="add-product-order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
 					Thêm sản phẩm
 				</button>
 			</div>
