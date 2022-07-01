@@ -21,7 +21,7 @@ class Schema {
 			`xuat_xu` text,
 			`hinh_anh` text,
 			PRIMARY KEY  (`id`)
-		) CHARACTER SET utf8m4;
+		) CHARACTER SET utf8mb4;
 		';
 		$sql_kho          = '
 			CREATE TABLE kho (
@@ -49,7 +49,7 @@ class Schema {
 				`ngay` datetime NOT NULL,
 				`trang_thai` varchar(50) NOT NULL,
 				PRIMARY KEY  (`id`)
-			) CHARACTER SET utf8m4;
+			) CHARACTER SET utf8mb4;
 		';
 		$sql_nhap_kho     = '
 		CREATE TABLE nhap_kho (
