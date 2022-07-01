@@ -31,8 +31,9 @@
 					{ item: '<li class="rounded-md focus:outline-none focus:shadow-outline-purple"><a class="page px-3 py-1" href="#"></a></li>', }
 				]
 			};
-
-			var itemList = new List( 'crm-table', options );
+			if ( $( 'tbody.list' ).html().trim() !== '' ) {
+				var itemList = new List( 'crm-table', options );
+			}
 		},
 		showPopup: function( title ) {
 			const toast =
