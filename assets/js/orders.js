@@ -54,6 +54,7 @@
 			$d.on( 'click', '.data-list .button-remove', order.onRemoveOrder );
 			$d.on( 'click', '.popup-kho', order.onShowPopupKho );
 			$d.on( 'click', '.btn-close', order.onClosePopupKho );
+			$d.on( 'click', '.clear-order', order.onClearOrder );
 		},
 		onAddSanPham: function() {
 			$( '.clone-product' ).last().clone().appendTo( '.table-product' );
@@ -133,10 +134,9 @@
 				}
 				$( '.data-list' ).prepend( order.htmlLayout( data_order ) );
 				scriptJS.showPopup( 'Đã thêm sản phẩm thành công' );
-				// productList.clearInput();
+				order.onClearOrder();
 
-
-				// $( '.message-error' ).remove();
+				$( '.message-error' ).remove();
 			} );
 		},
 
@@ -208,6 +208,14 @@
 				order.remove( id_order );
 
 			} );
+		},
+
+		onClearOrder: function() {
+			$( 'select[name="product_name"]' ).val( '' );
+			$( '.clearable' ).text( '' );
+			$( '.product-number input' ).val( 0 );
+			// $( '.product-sub-total' ).val();
+			// $( '.product-total span' ).val();
 		},
 
 		onShowPopupKho: function() {

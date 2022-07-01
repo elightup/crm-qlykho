@@ -46,11 +46,9 @@
 								?>
 							</select>
 						</td>
-						<td class="px-4 py-3 product-price text-right clearable">
-
-						</td>
-						<td class="px-4 py-3 product-number clearable">
-							<input class="" type="number" min="0" value="1" style="width: 5rem">
+						<td class="px-4 py-3 product-price text-right clearable"></td>
+						<td class="px-4 py-3 product-number">
+							<input class="" type="number" min="0" value="0" style="width: 5rem">
 							<button class="popup-kho px-4 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple btn_add_product"
 								data-popup="">
 								Chọn kho
@@ -64,11 +62,16 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="mb-4 text-right product-total text-lg font-medium">Tổng: <span></span></div>
+			<div class="mb-4 text-right product-total text-lg font-medium">Tổng: <span class="clearable"></span></div>
 			<div class="flex justify-between">
-				<button class="add-order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
-					Lên đơn
-				</button>
+				<div>
+					<button class="add-order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+						Lên đơn
+					</button>
+					<button class="clear-order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+						Nhập lại
+					</button>
+				</div>
 				<button class="add-product-order px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
 					Thêm sản phẩm
 				</button>
