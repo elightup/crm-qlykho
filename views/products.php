@@ -51,7 +51,6 @@
 						<th class="px-4 py-3 hidden">Xuất xứ</th>
 						<th class="px-4 py-3">Kho</th>
 						<th class="px-4 py-3">Hành động</th>
-						<th class="px-4 py-3"></th>
 					</tr>
 				</thead>
 				<tbody class="list data-list bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
