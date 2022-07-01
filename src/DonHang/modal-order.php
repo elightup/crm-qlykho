@@ -70,7 +70,7 @@
 										$product_id
 									) );
 
-									echo $product_name[0] . '<br>';
+									echo '<b>' . $product->quantity . ':</b> ' . $product_name[0] . '<br>';
 								}
 								?>
 							</td>
