@@ -50,6 +50,13 @@
 		},
 	}
 	scriptJS.init();
+	// $( document ).ready( function() {
+	// 	scriptJS.init();
+	// } );
+
+	// $( window ).on( 'load', function() {
+	// 	scriptJS.init();
+	// } );
 
 	// Export cart object.
 	window.scriptJS = scriptJS;

@@ -81,6 +81,7 @@
 				scriptJS.showPopup( 'Đã thêm sản phẩm thành công' );
 
 				productList.clearInput();
+				productList.updateListJS();
 
 				$( '.message-error' ).remove();
 			} );
@@ -118,6 +119,7 @@
 
 				let tr = $( 'tr[data-product='+ id +']' );
 				tr.remove();
+				productList.updateListJS();
 			} );
 		},
 
@@ -226,6 +228,18 @@
 			$d.on( 'click', '.btn-close', function() {
 				$(this).parents( '.modal' ).removeClass( 'current' );
 			} )
+		},
+
+		updateListJS: function() {
+			var options = {
+				valueNames: [ 'searchable' ],
+				page: 10,
+				pagination: [
+					{ item: '<li class="rounded-md focus:outline-none focus:shadow-outline-purple"><a class="page px-3 py-1" href="#"></a></li>', }
+				]
+			};
+			var itemList = new List( 'crm-table', options );
+			itemList.update();
 		}
 	};
 

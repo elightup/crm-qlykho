@@ -3,3 +3,30 @@
 		display: none;
 	}
 }
+.table-order {
+	.modal-dialog {
+		background: unset;
+	}
+	.modal-content {
+		background-color: unset;
+		border: none;
+		overflow: hidden;
+		border-radius: 10px;
+	}
+	.modal-header {
+		border: none;
+	}
+	.modal-body {
+		position: relative;
+		background: #fff;
+		h5::after {
+			content: "";
+			display: block;
+			flex: 1;
+			height: 1px;
+			background: darkcyan;
+			margin-top: auto;
+			margin-left: 15px;
+		}
+	}
+}
