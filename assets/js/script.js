@@ -55,7 +55,7 @@
 		},
 
 		onClosePopup: function(e) {
-			if( $( e.target ).parents( '.modal-dialog' ).length === 0 ) {
+			if( $( e.target ).parents( '.modal-dialog' ).length === 0 || e.target.classList.contains( 'btn-close' ) ) {
 				$( '.modal' ).removeClass( 'current' );
 			}
 		}
