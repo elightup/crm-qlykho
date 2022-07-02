@@ -53,7 +53,7 @@
 			$d.on( 'click', '.add-order', order.onCreateOrder );
 			$d.on( 'click', '.data-list .button-remove', order.onRemoveOrder );
 			$d.on( 'click', '.popup-kho', order.onShowPopupKho );
-			$d.on( 'click', '.btn-close', order.onClosePopupKho );
+			$d.on( 'click', '.btn-close, #wpwrap', order.onClosePopupKho );
 			$d.on( 'click', '.clear-order', order.onClearOrder );
 		},
 		onAddSanPham: function() {
@@ -214,17 +214,16 @@
 			$( 'select[name="product_name"]' ).val( '' );
 			$( '.clearable' ).text( '' );
 			$( '.product-number input' ).val( 0 );
-			// $( '.product-sub-total' ).val();
-			// $( '.product-total span' ).val();
 		},
 
-		onShowPopupKho: function() {
+		onShowPopupKho: function(e) {
+			e.stopPropagation();
 			let popup = $(this).attr( 'data-popup' );
 			$( `#${popup}` ).addClass( 'current' );
 		},
 
 		onClosePopupKho: function() {
-			$(this).parents( '.modal' ).removeClass( 'current' );
+			$( '.modal' ).removeClass( 'current' );
 		}
 	};
 
