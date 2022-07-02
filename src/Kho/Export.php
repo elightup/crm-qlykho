@@ -13,7 +13,7 @@ class Export {
 	 **/
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_admin_pages' ) );
-		// add_action( 'init', array( $this, 'generate_xlsx' ) );
+		add_action( 'init', array( $this, 'generate_xlsx' ) );
 	}
 
 
@@ -32,117 +32,96 @@ class Export {
 	 * @since 0.1
 	 **/
 
-	// public function generate_xlsx() {
-	// $check = ( isset( $_POST['school-address'] ) || isset( $_POST['school-class'] ) );
-	// if ( ! isset( $_POST['_wpnonce-export-users'] ) || ! $check ) {
-	// return;
-	// }
+	public function generate_xlsx() {
+		$check = ( isset( $_POST['kho'] ) );
+		if ( ! isset( $_POST['_wpnonce-export-kho'] ) || ! $check ) {
+			return;
+		}
 
-	// check_admin_referer( 'export-users', '_wpnonce-export-users' );
+		check_admin_referer( 'export-kho', '_wpnonce-export-kho' );
 
-	// $file = 'danh-sach-thi-sinh-' . date( 'd-m-Y' ) . '.xlsx';
+		$file = 'danh-sach-san-pham-' . date( 'd-m-Y' ) . '.xlsx';
 
-	// **
-	// * Generate .xlsx file using PHP_XLSXWriter class
-	// * @link https://github.com/mk-j/PHP_XLSXWriter
-	// */
+		/**
+		* Generate .xlsx file using PHP_XLSXWriter class
+		* @link https://github.com/mk-j/PHP_XLSXWriter
+		*/
 
-	// Create new PHPExcel object
-	// $spreadsheet = new Spreadsheet();
-	// $sheet       = $spreadsheet->getActiveSheet();
+		// Create new PHPExcel object
+		$spreadsheet = new Spreadsheet();
+		$sheet       = $spreadsheet->getActiveSheet();
 
-	// Add some data
-	// $sheet->setCellValue( 'A1', 'STT' )
-	// ->setCellValue( 'B1', 'Tên' )
-	// ->setCellValue( 'C1', 'Lớp' )
-	// ->setCellValue( 'D1', 'Số vote' );
+		// Add some data
+		$sheet->setCellValue( 'A1', 'STT' )
+		->setCellValue( 'B1', 'Tên kho' )
+		->setCellValue( 'C1', 'Tên sản phẩm' )
+		->setCellValue( 'D1', 'Số lượng đầu kỳ' )
+		->setCellValue( 'E1', 'Số lượng Cuối kỳ' );
 
-	// global $wpdb;
-	// $school_address = $_POST['school-address'];
-	// $school_class   = $_POST['school-class'];
-	// $term           = [];
-	// if ( $school_class === null ) {
-	// $term = $school_address;
-	// } elseif ( $school_address === null ) {
-	// $term = $school_class;
-	// } else {
-	// $term = array_merge( $school_address, $school_class );
-	// }
-	// $start_vote = $_POST['start_vote'];
-	// $end_vote   = $_POST['end_vote'];
-	// $date_query = array(
-	// 'relation' => 'AND',
-	// array(
-	// 'before'    => $end_vote,
-	// 'after'     => $start_vote,
-	// 'inclusive' => true,
-	// ),
-	// );
-	// $args       = array(
-	// 'post_type'      => 'competition',
-	// 'posts_per_page' => -1,
-	// 'tax_query'      => [
-	// 'relation' => 'AND',
-	// [
-	// 'taxonomy' => 'area-competition',
-	// 'field'    => 'slug',
-	// 'terms'    => $term,
-	// ],
-	// ],
-	// 'date_query'     => $date_query,
-	// );
-	// $query_args = get_posts( $args );
-	// $candidates = [];
-	// foreach ( $query_args as $query_arg ) {
-	// $post_id = $query_arg->ID;
-	// $vote    = (int) get_post_meta( $post_id, 'voted_number_3', true );
-	// $name    = $query_arg->post_title;
-	// $terms   = get_the_terms( $post_id, 'area-competition' );
-	// foreach ( $terms as $term ) {
-	// if ( $term->parent !== 0 ) {
-	// $class = $term->name;
-	// }
-	// }
-	// $candidates[] = [
-	// 'name'  => $name,
-	// 'votes' => $vote,
-	// 'class' => $class,
-	// ];
-	// }
-	// usort( $candidates, function ( $vote_a, $vote_b ) {
-	// return $vote_b['votes'] - $vote_a['votes'];
-	// } );
-	// $row = 1;
-	// foreach ( $candidates as $candidate ) {
+		global $wpdb;
+		$kho          = $_POST['kho'];
+		$id_kho       = '(' . implode( ',', $kho ) . ')';
+		$start_date   = $_POST['start_date'];
+		$end_date     = $_POST['end_date'];
+		$sql          = 'SELECT DISTINCT id_san_pham FROM nhap_kho WHERE id_kho in ' . $id_kho . ' AND `date` BETWEEN CAST( "' . $start_date . '" AS DATE ) AND CAST( "' . $end_date . '" AS DATE )';
+		$products_kho = $wpdb->get_results( $sql );
+		$candidates   = [];
+		foreach ( $products_kho as $product ) {
+			$id_sp        = $product->id_san_pham;
+			$sql          = 'SELECT * FROM san_pham WHERE id = ' . $id_sp . ' ORDER BY id DESC';
+			$san_pham     = $wpdb->get_results( $sql );
+			$name_sp      = $san_pham[0]->ten;
+			$sql1         = 'SELECT soLuong FROM san_pham_kho WHERE idSanPham = ' . $id_sp . ' AND idKho in ' . $id_kho;
+			$sp_kho       = $wpdb->get_results( $sql1 );
+			$so_luong_con = $sp_kho[0]->soLuong;
+			$sql2         = 'SELECT so_luong FROM nhap_kho WHERE id_san_pham = ' . $id_sp . ' AND id_kho in ' . $id_kho . ' AND `date` BETWEEN CAST( "' . $start_date . '" AS DATE ) AND CAST( "' . $end_date . '" AS DATE )';
+			$spKho        = $wpdb->get_results( $sql2 );
+			$sl_dau       = $spKho[0]->so_luong;
+			$sql          = 'SELECT * FROM kho WHERE id in ' . $id_kho;
+			$warehouses   = $wpdb->get_results( $sql );
+			$name_kho     = $warehouses[0]->ten;
+			$candidates[] = [
+				'name_product' => $name_sp,
+				'sl_dau'       => $sl_dau,
+				'sl_con'       => $so_luong_con,
+				'name_kho'     => $name_kho,
+			];
+		}
 
-	// $row ++;
-	// Add some data
-	// $sheet->setCellValue( 'A' . $row, $row - 1 )
-	// ->setCellValue( 'B' . $row, $candidate['name'] )
-	// ->setCellValue( 'C' . $row, $candidate['class'] )
-	// ->setCellValue( 'D' . $row, $candidate['votes'] );
-	// }
+		$row = 1;
+		foreach ( $candidates as $candidate ) {
 
-	// $writer = new Xlsx( $spreadsheet );
-	// ob_end_clean();
+			$row ++;
+			// Add some data
+			$sheet->setCellValue( 'A' . $row, $row - 1 )
+			->setCellValue( 'B' . $row, $candidate['name_kho'] )
+			->setCellValue( 'C' . $row, $candidate['name_product'] )
+			->setCellValue( 'D' . $row, $candidate['sl_dau'] )
+			->setCellValue( 'E' . $row, $candidate['sl_con'] );
+		}
+		// var_dump( $sheet );
+		// die();
 
-	// Redirect output to a client’s web browser (Excel2007)
-	// header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
-	// header( 'Content-Disposition: attachment;filename="' . $file . '"' );
-	// header( 'Cache-Control: max-age=0' );
-	// If you're serving to IE 9, then the following may be needed
-	// header( 'Cache-Control: max-age=1' );
+		$writer = new Xlsx( $spreadsheet );
+		ob_end_clean();
 
-	// If you're serving to IE over SSL, then the following may be needed
-	// header( 'Expires: Mon, 26 Jul 1997 05:00:00 GMT' ); // Date in the past
-	// header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' ); // always modified
-	// header( 'Cache-Control: cache, must-revalidate' ); // HTTP/1.1
-	// header( 'Pragma: public' ); // HTTP/1.0
+		// Redirect output to a client’s web browser( Excel2007 )
+		header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
+		header( 'Content-Disposition: attachment;filename="' . $file . '"' );
+		header( 'Cache-Control: max-age=0' );
+		// if you 're serving to IE 9, then the following may be needed
+		header( 'Cache - Control: max - age = 1' );
 
-	// $writer->save( 'php://output' );
-	// exit;
+		// If you're serving to IE over SSL, then the following may be needed
+		header( 'Expires: Mon, 26 Jul 1997 05:00:00 GMT' );
+		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' ); // always modified
+		header( 'Cache-Control: cache, must-revalidate' ); // HTTP/1.1
+		header( 'Pragma: public' ); // HTTP/1.0
 
-	// }
+		$writer->save( 'php://output' );
+		exit;
+
+	}
 
 	/**
 	 * Content of the settings page
@@ -158,7 +137,7 @@ class Export {
 				<div class="option_choose" style="display: flex; flex-wrap: wrap; margin-bottom: 20px;">
 					<div id="action-address" style="width: 20%;">
 						<label>Chọn kho:</label><br>
-						<select name="address-users[]" id="number-users" multiple="multiple" style="width: 90%">
+						<select name="kho[]" id="kho" multiple="multiple" style="width: 90%">
 						<?php
 						global $wpdb;
 						$sql        = 'SELECT * FROM kho ORDER BY id DESC';

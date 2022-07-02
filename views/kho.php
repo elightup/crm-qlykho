@@ -48,7 +48,7 @@
 					foreach ( $warehouses as $warehouse ) :
 						$user_id = $warehouse->id_user;
 						if ( $user_id !== '0' ) {
-							$user = get_user_by( 'id', $warehouse->id_user );
+							$user = get_user_by( 'id', $user_id );
 
 							$user_name = $user->display_name;
 							$usermail  = $user->user_email;
@@ -60,9 +60,9 @@
 						$id_kho    = $warehouse->id;
 						?>
 						<tr class="text-gray-700 dark:text-gray-400" data-kho="<?= esc_attr( $warehouse->id );?>" >
-							<td class="px-4 py-3">#<?= esc_html( $warehouse->id ) ?></td>
+							<td class="px-4 py-3"><?= esc_html( $warehouse->id ) ?></td>
 							<td data-name-kho="<?= esc_attr( $warehouse->ten );?>" class="name_kho searchable px-4 py-3"><?= esc_html( $warehouse->ten ) ?></td>
-							<td data-user="<?= esc_attr( $warehouse->id_user );?>" data-name-user="<?= esc_attr( $user_name ) ?>" class="name_user px-4 py-3"><?= esc_html( $user_name ) ?></td>
+							<td data-user="<?= esc_attr( $user_id );?>" data-name-user="<?= esc_attr( $user_name ) ?>" class="name_user px-4 py-3"><?= esc_html( $user_name ) ?></td>
 							<td class="email_user px-4 py-3"><?= esc_html( $usermail ) ?></td>
 							<td class="phone_user px-4 py-3"><?= esc_html( $user_meta ) ?></td>
 							<td class="action px-4 py-3">
@@ -108,9 +108,11 @@
 						<?php
 						$users = get_users();
 						foreach ( $users as $user ) :
-							$user_id   = $user->ID;
-							$user_name = $user->display_name;
-							$hidden    = '';
+							$user_id    = $user->ID;
+							$user_name  = $user->display_name;
+							$user_email = $user->user_email;
+							$user_phone = get_user_meta( $user_id, 'user_phone', true );
+							$hidden     = '';
 							foreach ( $warehouses as $key => $warehouse ) :
 								$warehouse_user = (int) $warehouse->id_user;
 								if ( $user_id === $warehouse_user ) {
@@ -118,7 +120,7 @@
 								}
 							endforeach;
 							?>
-							<option value="<?= esc_attr( $user_id );?>" <?= esc_attr( $hidden );?>><?= esc_html( $user->display_name );?></option>
+							<option value="<?= esc_attr( $user_id );?>" phone="<?= esc_attr( $user_phone );?>" email="<?= esc_attr( $user_email );?>" <?= esc_attr( $hidden );?>><?= esc_html( $user->display_name );?></option>
 							<?php
 						endforeach;
 						?>

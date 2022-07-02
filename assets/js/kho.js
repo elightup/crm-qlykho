@@ -13,26 +13,28 @@ jQuery( function ( $ ) {
 			kho.clearButton();
 		},
 		htmlLayout: function ( data ) {
+			console.log( 'data', data );
+
 			return `
 			<tr class="text-gray-700 dark:text-gray-400" data-kho="${ data.id }">
-				<td class="px-4 py-3">#${ data.id }</td>
+				<td class="px-4 py-3">${ data.id }</td>
 				<td data-name-kho="${ data.ten }" class="name_kho px-4 py-3">${ data.ten }</td>
 				<td data-user="${ data.user }" data-name-user="${ data.user_name }" class="name_user px-4 py-3">${ data.user_name }</td>
-				<td class="email_user px-4 py-3"></td>
-				<td class="phone_user px-4 py-3"></td>
+				<td class="email_user px-4 py-3">${ data.email }</td>
+				<td class="phone_user px-4 py-3">${ data.phone }</td>
 				<td class="action px-4 py-3">
 					<div class="flex items-center space-x-4 text-sm">
-						<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+						<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
 							<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
 								<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
 							</svg>
 						</button>
-						<button data-kho="${ data.id }" @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
+						<button data-kho="${ data.id }" @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
 							<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
 								<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
 							</svg>
 						</button>
-						<a data-kho="${ data.id }" href="${ data.href }&id=${ data.id }" class="button-view flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="View">
+						<a data-kho="${ data.id }" href="${ data.href }&id=${ data.id }" class="button-view flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="View">
 							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -47,12 +49,12 @@ jQuery( function ( $ ) {
 			$d.on( 'click', '.btn_add_kho', function () {
 				let href = $( '.action_btn' ).data( 'href' );
 				let ten = $( 'input[name=ten]' ),
-					user = $( 'select[name="user_name"] option:selected' ),
-					user_name = $( 'select[name="user_name"] option:selected' );
+					user = $( 'select[name="user_name"] option:selected' );
+
 				if ( user.val() === '' ) {
 					user_name = '';
 				} else {
-					user_name = user_name.text();
+					user_name = user.text();
 				}
 				if ( $( this ).hasClass( 'edit' ) ) {
 					let data_kho = {
@@ -61,19 +63,23 @@ jQuery( function ( $ ) {
 						user: user.val(),
 						user_name: user_name,
 						href: href,
+						phone: user.attr( 'phone' ),
+						email: user.attr( 'email' ),
 					};
 					kho.edit( data_kho );
 				} else {
-					kho.add( ten, user, user_name, href );
+					kho.add( ten, user, href );
 				}
 			} );
 		},
-		add: function ( ten, user, user_name, href ) {
+		add: function ( ten, user, href ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'them_kho',
 				ten: ten.val(),
 				user: user.val(),
-				user_name: user_name,
+				user_name: user.text(),
+				phone: user.attr( 'phone' ),
+				email: user.attr( 'email' ),
 				href: href,
 			}, response => {
 				if ( !response.success ) {
@@ -81,31 +87,33 @@ jQuery( function ( $ ) {
 					$( '.crm-action' ).append( '<p class="message-error text-red-600">' + response.data + '</p>' );
 					return;
 				}
+				console.log( response.data );
 				let data_kho = {
 					id: response.data,
 					ten: ten.val(),
 					user: user.val(),
-					user_name: user_name,
+					user_name: user.text(),
+					phone: user.attr( 'phone' ),
+					email: user.attr( 'email' ),
 					href: href,
 				};
 				$( '.data-list' ).prepend( kho.htmlLayout( data_kho ) );
 				kho.showPopup();
-				ten.val( '' );
-				user.val( '' );
-				//user_name.text( 'Chọn user' );
+				$( 'input[name="ten"]' ).val( '' );
+				$( 'select[name="user_name"] option:selected' ).val( '' );
+				$( 'select[name="user_name"] option:selected' ).text( 'Chọn user' );
 				$( '.message-error' ).remove();
 			} );
 		},
 		clearButton: function () {
-			$( '.btn-clear-kho' ).on( 'click', function () {
+			$d.on( 'click', '.btn-clear-kho', function () {
 				let id_kho = $( this ).attr( 'data-kho' );
-				$( 'input[name="ten"]' ).val( '' );
-				$( 'select[name="user_name"] option:selected' ).val( '' );
-				$( 'select[name="user_name"] option:selected' ).text( 'Chọn user' );
+				$( '.title-action-kho' ).text( 'Thêm thông tin kho' );
+				kho.clearInput();
 			} );
 		},
 		edit: function ( data_kho ) {
-			console.log( data_kho );
+			//console.log( data_kho );
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_kho',
 				id: data_kho.id,
@@ -114,7 +122,7 @@ jQuery( function ( $ ) {
 				user_name: data.user_name,
 			}, response => {
 				if ( !response.success ) {
-					console.log( 'ss' );
+					//console.log( 'ss' );
 					$( '.message-error' ).remove();
 					$( '.crm-action' ).append( '<p class="message-error text-red-600">' + response.data + '</p>' );
 					return;
@@ -164,7 +172,7 @@ jQuery( function ( $ ) {
 				$( 'input[name="ten"]' ).val( ten.text() );
 				$( 'select[name="user_name"] option:selected' ).val( id_user.data( 'user' ) );
 				$( 'select[name="user_name"] option:selected' ).text( id_user.data( 'name-user' ) );
-
+				$( '.message-error' ).remove();
 				$( '.btn_add_kho' ).addClass( 'edit' );
 				$( '.btn_add_kho' ).text( 'Lưu' );
 				$( '.btn_add_kho' ).attr( 'data-id', id_kho );
@@ -206,11 +214,9 @@ jQuery( function ( $ ) {
 		},
 		clearInput: function () {
 			let ten = $( 'input[name=ten]' ),
-				user = $( 'select[name="user_name"] option:selected' ),
-				user_name = $( 'select[name="user_name"] option:selected' );
+				user = $( 'select[name="user_name"]' );
 			ten.val( '' );
 			user.val( '' );
-			user_name.text();
 		},
 	};
 

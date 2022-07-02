@@ -37,13 +37,17 @@ class Ajax {
 			wp_send_json_error( 'Thông tin kho trống. Bạn hãy nhập đủ thông tin ' );
 		}
 		$id_kho = $this->them_kho( $data );
-		wp_send_json_success( $id_kho );
+		ob_start();
+		$this->get_user( $data );
+		$result = ob_get_clean();
+		wp_send_json_success( $id_kho, $result );
 	}
 	public function ajax_xoa_kho() {
 		global $wpdb;
 		$id_kho = isset( $_POST['id_kho'] ) ? $_POST['id_kho'] : '';
 		$wpdb->delete( 'kho', array( 'id' => $id_kho ) );
 		$wpdb->delete( 'san_pham_kho', array( 'idKho' => $id_kho ) );
+		$wpdb->delete( 'nhap_kho', array( 'id_kho' => $id_kho ) );
 		ob_start();
 		$sql        = 'SELECT * FROM kho ORDER BY id DESC';
 		$warehouses = $wpdb->get_results( $sql );
@@ -81,7 +85,7 @@ class Ajax {
 			'user_name' => isset( $_POST['user_name'] ) ? $_POST['user_name'] : '',
 		];
 		if ( empty( $data['ten_kho'] ) ) {
-			wp_send_json_error( 'Thông tin sản phẩm trống. Bạn hãy nhập đủ thông tin ' );
+			wp_send_json_error( 'Thông tin kho trống. Bạn hãy nhập đủ thông tin ' );
 		}
 		$this->edit_kho( $id, $data );
 		wp_send_json_success();
@@ -96,6 +100,9 @@ class Ajax {
 			],
 			[ 'id' => $id ]
 		);
+	}
+	public function get_user( $data ) {
+		echo 'ssss';
 	}
 	public function them_kho( $data ) {
 		global $wpdb;
@@ -256,7 +263,7 @@ class Ajax {
 			<select name="product_name" id="product_name" class="rwmb">
 				<option value="" selected disabled hidden>Chọn sản phẩm</option>
 				<?php
-				$sql     = 'SELECT * FROM sanpham ORDER BY id DESC';
+				$sql     = 'SELECT * FROM san_pham ORDER BY id DESC';
 				$sanpham = $wpdb->get_results( $sql );
 				foreach ( $sanpham as $sp ) :
 					$id_sp  = $sp->id;
@@ -268,7 +275,7 @@ class Ajax {
 						}
 					}
 					?>
-					<option value="<?= esc_attr( $sp->id );?>" <?= esc_attr( $hidden );?>><?= esc_html( $sp->ten_sp );?></option>
+					<option value="<?= esc_attr( $sp->id );?>" <?= esc_attr( $hidden );?>><?= esc_html( $sp->ten );?></option>
 					<?php
 				endforeach;
 				?>
