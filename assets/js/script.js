@@ -54,8 +54,10 @@
 			$( `#${popup}` ).addClass( 'current' );
 		},
 
-		onClosePopup: function() {
-			$( '.modal' ).removeClass( 'current' );
+		onClosePopup: function(e) {
+			if( $( e.target ).parents( '.modal-dialog' ).length === 0 ) {
+				$( '.modal' ).removeClass( 'current' );
+			}
 		}
 	}
 	scriptJS.init();

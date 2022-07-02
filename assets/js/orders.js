@@ -1,5 +1,6 @@
 ( function( $, scriptJS ) {
 	const $d = $( document );
+	const clickEvent = 'ontouchstart' in window ? 'touchstart' : 'click';
 	let order = {
 		init: function() {
 			order.addEventListeners();

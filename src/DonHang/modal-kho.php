@@ -34,7 +34,7 @@
 							<?= esc_html( $warehouse->soLuong ) ?>
 						</td>
 						<td class="px-4 py-3 text-right chon-kho">
-							<input type="number" name="choose" style="width: 80px;" max="<?= esc_attr( $warehouse->soLuong ) ?>">
+							<input type="number" name="choose" style="width: 80px;" min="0" max="<?= esc_attr( $warehouse->soLuong ) ?>">
 						</td>
 					</tr>
 					<?php endforeach; ?>
