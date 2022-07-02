@@ -35,7 +35,7 @@
 				var itemList = new List( 'crm-table', options );
 			}
 		},
-		showPopup: function( title ) {
+		showToast: function( title ) {
 			const toast =
 			`<div class="toast">
 				<div class="img-toast">
@@ -48,6 +48,15 @@
 				$( '.toast' ).remove();
 			} );
 		},
+		onShowPopup: function(e) {
+			e.stopPropagation();
+			let popup = $(this).attr( 'data-popup' );
+			$( `#${popup}` ).addClass( 'current' );
+		},
+
+		onClosePopup: function() {
+			$( '.modal' ).removeClass( 'current' );
+		}
 	}
 	scriptJS.init();
 	// $( document ).ready( function() {

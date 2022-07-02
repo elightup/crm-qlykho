@@ -78,7 +78,7 @@
 
 				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
 
-				scriptJS.showPopup( 'Đã thêm sản phẩm thành công' );
+				scriptJS.showToast( 'Đã thêm sản phẩm thành công' );
 
 				productList.clearInput();
 				productList.updateListJS();
@@ -96,7 +96,7 @@
 					$( '.crm-action' ).append( '<p class="message-error text-xs text-red-600 dark:text-red-400">' + response.data + '</p>' );
 					return;
 				}
-				scriptJS.showPopup( 'Đã sửa sản phẩm thành công' );
+				scriptJS.showToast( 'Đã sửa sản phẩm thành công' );
 				productList.clearInput();
 
 				let tr = $( 'tr[data-product='+ product.id +']' );
@@ -115,7 +115,7 @@
 					return;
 				}
 
-				scriptJS.showPopup( 'Đã xóa sản phẩm thành công' );
+				scriptJS.showToast( 'Đã xóa sản phẩm thành công' );
 
 				let tr = $( 'tr[data-product='+ id +']' );
 				tr.remove();
@@ -221,13 +221,8 @@
 		},
 
 		showListKho: function() {
-			$d.on( 'click', '.popup-kho', function() {
-				let popup = $(this).attr( 'data-popup' );
-				$( `#${popup}` ).addClass( 'current' );
-			} );
-			$d.on( 'click', '.btn-close', function() {
-				$(this).parents( '.modal' ).removeClass( 'current' );
-			} )
+			$d.on( 'click', '.popup-kho', scriptJS.onShowPopup );
+			$d.on( 'click', '.btn-close, #wpwrap', scriptJS.onClosePopup );
 		},
 
 		updateListJS: function() {

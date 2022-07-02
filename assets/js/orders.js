@@ -52,8 +52,8 @@
 			$d.on( 'click', '.remove-product-order .dashicons', order.onRemoveSanPham );
 			$d.on( 'click', '.add-order', order.onCreateOrder );
 			$d.on( 'click', '.data-list .button-remove', order.onRemoveOrder );
-			$d.on( 'click', '.popup-kho', order.onShowPopupKho );
-			$d.on( 'click', '.btn-close, #wpwrap', order.onClosePopupKho );
+			$d.on( 'click', '.popup-kho', scriptJS.onShowPopup );
+			$d.on( 'click', '.btn-close, #wpwrap', scriptJS.onClosePopup );
 			$d.on( 'click', '.clear-order', order.onClearOrder );
 		},
 		onAddSanPham: function() {
@@ -133,7 +133,7 @@
 					ngay     : response.data.ngay,
 				}
 				$( '.data-list' ).prepend( order.htmlLayout( data_order ) );
-				scriptJS.showPopup( 'Đã thêm sản phẩm thành công' );
+				scriptJS.showToast( 'Đã thêm sản phẩm thành công' );
 				order.onClearOrder();
 
 				$( '.message-error' ).remove();
@@ -149,7 +149,7 @@
 					return;
 				}
 
-				scriptJS.showPopup( 'Đã xóa sản phẩm thành công' );
+				scriptJS.showToast( 'Đã xóa sản phẩm thành công' );
 
 				let tr = $( 'tr[data-order='+ id +']' );
 				tr.remove();
