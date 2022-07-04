@@ -65,7 +65,7 @@ class Export {
 		$end_date     = $_POST['end_date'];
 		$sql          = 'SELECT DISTINCT id_san_pham FROM nhap_kho WHERE id_kho in ' . $id_kho . ' AND `date` BETWEEN CAST( "' . $start_date . '" AS DATE ) AND CAST( "' . $end_date . '" AS DATE )';
 		$products_kho = $wpdb->get_results( $sql );
-		$candidates   = [];
+		$products     = [];
 		foreach ( $products_kho as $product ) {
 			$id_sp        = $product->id_san_pham;
 			$sql          = 'SELECT * FROM san_pham WHERE id = ' . $id_sp . ' ORDER BY id DESC';
@@ -80,16 +80,15 @@ class Export {
 			$sql          = 'SELECT * FROM kho WHERE id in ' . $id_kho;
 			$warehouses   = $wpdb->get_results( $sql );
 			$name_kho     = $warehouses[0]->ten;
-			$candidates[] = [
+			$products[]   = [
 				'name_product' => $name_sp,
 				'sl_dau'       => $sl_dau,
 				'sl_con'       => $so_luong_con,
 				'name_kho'     => $name_kho,
 			];
 		}
-
 		$row = 1;
-		foreach ( $candidates as $candidate ) {
+		foreach ( $products as $candidate ) {
 
 			$row ++;
 			// Add some data
@@ -99,8 +98,6 @@ class Export {
 			->setCellValue( 'D' . $row, $candidate['sl_dau'] )
 			->setCellValue( 'E' . $row, $candidate['sl_con'] );
 		}
-		// var_dump( $sheet );
-		// die();
 
 		$writer = new Xlsx( $spreadsheet );
 		ob_end_clean();
@@ -110,14 +107,12 @@ class Export {
 		header( 'Content-Disposition: attachment;filename="' . $file . '"' );
 		header( 'Cache-Control: max-age=0' );
 		// if you 're serving to IE 9, then the following may be needed
-		header( 'Cache - Control: max - age = 1' );
 
-		// If you're serving to IE over SSL, then the following may be needed
+		// // If you're serving to IE over SSL, then the following may be needed
 		header( 'Expires: Mon, 26 Jul 1997 05:00:00 GMT' );
 		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' ); // always modified
 		header( 'Cache-Control: cache, must-revalidate' ); // HTTP/1.1
 		header( 'Pragma: public' ); // HTTP/1.0
-
 		$writer->save( 'php://output' );
 		exit;
 
