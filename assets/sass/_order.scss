@@ -30,3 +30,16 @@
 		}
 	}
 }
+
+.detail-order {
+	.add-product {
+		grid-template-columns: 50% 1fr;
+	}
+	.add-product select,
+	.add-product input {
+		padding: 0 8px;
+	}
+	.product-number {
+		text-align: right;
+	}
+}

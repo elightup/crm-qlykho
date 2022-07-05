@@ -22,6 +22,10 @@ class AdminList {
 	}
 
 	public function render() {
-		include CRM_DIR . 'views/orders.php';
+		if ( empty( $_GET['id'] ) ) {
+			include CRM_DIR . 'views/orders.php';
+		} else {
+			include CRM_DIR . 'views/orderDetail.php';
+		}
 	}
 }
