@@ -36,4 +36,5 @@ class AdminList {
 	protected function render_product() {
 		include CRM_DIR . 'views/chiTietKho.php';
 	}
+
 }
