@@ -78,12 +78,18 @@ $kho      = $wpdb->get_results( $sql );
 						$date_end = date( 'Y-m-d', strtotime( '+ 1 day' ) );
 						$sql      = 'SELECT so_luong FROM nhap_kho WHERE id_san_pham = ' . $idsp . ' AND id_kho = ' . $id_kho . ' AND `date` BETWEEN CAST( "' . $date_start . '" AS DATE ) AND CAST( "' . $date_end . '" AS DATE )';
 						// var_dump( $sql );
+						$sl_dau = 0;
 						$sl_kho = $wpdb->get_results( $sql );
+						if ( empty( $sl_kho ) ) {
+							$sl_dau = $numbersp;
+						} else {
+							$sl_dau = $sl_kho[0]->so_luong;
+						}
 						?>
 						<tr class="text-gray-700 dark:text-gray-400" product-id="<?= esc_attr( $idsp );?>" >
 							<td class="px-4 py-3">#<?= esc_html( $idsp ) ?></td>
 							<td product-name="<?= esc_attr( $san_pham[0]->ten );?>" class="name_product searchable px-4 py-3"><?= esc_attr( $san_pham[0]->ten );?></td>
-							<td number-history="<?= esc_attr( $sl_kho[0]->so_luong );?>" class="number-history px-4 py-3"><?= esc_html( $sl_kho[0]->so_luong ) ?></td>
+							<td number-history="<?= esc_attr( $sl_dau );?>" class="number-history px-4 py-3"><?= esc_html( $sl_dau ) ?></td>
 							<td product-number="<?= esc_attr( $numbersp );?>" class="product-number px-4 py-3"><?= esc_html( $numbersp ) ?></td>
 
 							<td class="action px-4 py-3">
