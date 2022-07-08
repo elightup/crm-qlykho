@@ -32,7 +32,8 @@ class Import {
 	 * @since 0.1
 	 **/
 	public function generate_import() {
-		if ( isset( $_POST['submit'] ) ) {
+		$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+		if ( isset( $_POST['submit'] ) && $page == 'import_kho' ) {
 			if ( isset( $_FILES['upload'] ) ) {
 				// sbd_create();
 
