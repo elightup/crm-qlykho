@@ -42,7 +42,7 @@ class Ajax {
 				'tong_tien'  => (int) $data['tong_tien'],
 				'id_user'    => $data['id_user'],
 				'ngay'       => current_time( 'mysql' ),
-				'trang_thai' => 'Đã lên đơn',
+				'trang_thai' => 'Báo giá',
 			]
 		);
 		$order_id = $wpdb->insert_id;

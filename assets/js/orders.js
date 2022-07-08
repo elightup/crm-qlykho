@@ -56,6 +56,9 @@
 			$d.on( 'click', '.popup-kho', scriptJS.onShowPopup );
 			$d.on( 'click', '.btn-close, #wpwrap', scriptJS.onClosePopup );
 			$d.on( 'click', '.clear-order', order.onClearOrder );
+
+			// Page Detail order
+			$d.on( 'click', '.add-product-detail', order.onAddSanPhamDetail );
 		},
 		onAddSanPham: function() {
 			$( '.clone-product' ).last().clone().appendTo( '.table-product' );
@@ -225,7 +228,96 @@
 
 		onClosePopupKho: function() {
 			$( '.modal' ).removeClass( 'current' );
-		}
+		},
+
+		htmlDetailLayout: function(data) {
+			let price = formatNumber( 0, 3, '.', ',', parseFloat( data.price ) ),
+				total = formatNumber( 0, 3, '.', ',', parseFloat( data.price * data.quantity ) ),
+				kho   = ``;
+
+			data.warehouse.forEach( element => {
+				kho += `<b>` + element.quantity + `:</b>` + element.name + `<br>`;
+			} );
+			return `
+			<tr class="text-gray-700 dark:text-gray-400" data-product="${data.id}">
+				<td class="px-4 py-3">${data.name}</td>
+				<td class="px-4 py-3">
+					${data.quantity}
+				</td>
+				<td class="px-4 py-3">
+					${kho}
+				</td>
+				<td class="px-4 py-3 text-right">
+					${price}
+				</td>
+				<td class="px-4 py-3 text-right">
+					${total}
+				</td>
+				<td class="action px-4 py-3">
+					<div class="flex items-center space-x-4 text-sm">
+						<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+							<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+								<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+							</svg>
+						</button>
+						<button data-product="" @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
+							<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+							</svg>
+						</button>
+					</div>
+				</td>
+			</tr>
+			`;
+		},
+		onAddSanPhamDetail: function() {
+			let optionSelected = $( '.product-name option:selected' ),
+			    product_name   = optionSelected.text(),
+			    product_id     = optionSelected.val(),
+			    quantity       = $( '.product-number input' ).val(),
+			    price          = optionSelected.attr( 'data-price' );
+
+			let kho     = [],
+			    product = {};
+			$( `#product-${product_id} tbody tr` ).each( function() {
+				kho.push( {
+					id      : $( this ).find( '.ten-kho' ).attr( 'data-kho' ),
+					name    : $( this ).find( '.ten-kho' ).text(),
+					quantity: $( this ).find( '.chon-kho input' ).val()
+				} );
+			} );
+
+			let data_product = {
+				id       : product_id,
+				name     : product_name,
+				quantity : quantity,
+				warehouse: kho,
+				price    : price,
+			};
+			product[product_id] = {
+				quantity : quantity,
+				price    : price,
+				warehouse: kho,
+			};
+
+			$( '.data-list' ).prepend( order.htmlDetailLayout( data_product ) );
+
+			let total_price = parseInt( $( '.total-price' ).attr( 'data-tong-tien' ) ) + data_product.quantity * data_product.price,
+				format_price = formatNumber( 0, 3, '.', ',', parseFloat( total_price ) );
+			$( '.total-price' ).attr( 'data-tong-tien', total_price );
+			$( '.total-price' ).text( format_price );
+			$( 'input[name="total-price"]' ).val( total_price );
+			let current = $( 'input[name="data-sp"]' ).val();
+			if ( current ) {
+				let json = JSON.parse( current );
+				Object.entries(json).forEach( element => {
+					product[element[0]] = element[1];
+				} );
+			}
+			$( 'input[name="data-sp"]' ).val( JSON.stringify( product ) );
+			// scriptJS.showToast( 'Đã thêm sản phẩm thành công' );
+			// order.onClearOrder();
+		},
 	};
 
 	order.init();
