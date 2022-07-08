@@ -280,7 +280,7 @@ class Ajax {
 				endforeach;
 				?>
 			</select>
-			<input type="number" name="number_product" id="number_product" class="rwmb">
+			<input type="number" name="number_product" id="number_product" value="0" class="rwmb">
 		</div>
 		<?php
 	}

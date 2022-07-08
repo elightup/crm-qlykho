@@ -2,7 +2,10 @@ jQuery( function ( $ ) {
 	const $d = $( document );
 	$( '.add_product_kho' ).on( 'click', function ( e ) {
 		e.preventDefault();
-		$( this ).closest( '.crm-action' ).find( '.add-product' ).last().clone().appendTo( '.add-product__inner' );
+		var newElem = $( this ).closest( '.crm-action' ).find( '.add-product' ).last().clone().appendTo( '.add-product__inner' );
+		$( '.hidden-itemname' ).each( function ( index ) {
+			newElem.children( '.hidden-itemname' ).children( 'option[value="' + $( this ).val() + '"]' ).remove();
+		} );
 	} );
 
 	let kho = {
@@ -13,15 +16,15 @@ jQuery( function ( $ ) {
 			kho.clearButton();
 		},
 		htmlLayout: function ( data ) {
-			console.log( 'data', data );
+			//console.log( 'data', data );
 
 			return `
 			<tr class="text-gray-700 dark:text-gray-400" data-kho="${ data.id }">
 				<td class="px-4 py-3">${ data.id }</td>
 				<td data-name-kho="${ data.ten }" class="name_kho px-4 py-3">${ data.ten }</td>
 				<td data-user="${ data.user }" data-name-user="${ data.user_name }" class="name_user px-4 py-3">${ data.user_name }</td>
-				<td class="email_user px-4 py-3">${ data.email }</td>
-				<td class="phone_user px-4 py-3">${ data.phone }</td>
+				<td data-email="${ data.email }" class="email_user px-4 py-3">${ data.email }</td>
+				<td data-phone="${ data.phone }" class="phone_user px-4 py-3">${ data.phone }</td>
 				<td class="action px-4 py-3">
 					<div class="flex items-center space-x-4 text-sm">
 						<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
@@ -47,6 +50,8 @@ jQuery( function ( $ ) {
 		},
 		clickSave: function () {
 			$d.on( 'click', '.btn_add_kho', function () {
+				let id_kho = $( this ).attr( 'data-kho' );
+				console.log( 'id_kho2', id_kho );
 				let href = $( '.action_btn' ).data( 'href' );
 				let ten = $( 'input[name=ten]' ),
 					user = $( 'select[name="user_name"] option:selected' );
@@ -58,7 +63,7 @@ jQuery( function ( $ ) {
 				}
 				if ( $( this ).hasClass( 'edit' ) ) {
 					let data_kho = {
-						id: $( this ).data( 'id' ),
+						id: id_kho,
 						ten: ten.val(),
 						user: user.val(),
 						user_name: user_name,
@@ -66,7 +71,9 @@ jQuery( function ( $ ) {
 						phone: user.attr( 'phone' ),
 						email: user.attr( 'email' ),
 					};
+					//console.log( 'before', data_kho );
 					kho.edit( data_kho );
+
 				} else {
 					kho.add( ten, user, href );
 				}
@@ -113,7 +120,7 @@ jQuery( function ( $ ) {
 			} );
 		},
 		edit: function ( data_kho ) {
-			//console.log( data_kho );
+			console.log( 'edit', data_kho );
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_kho',
 				id: data_kho.id,
@@ -131,7 +138,9 @@ jQuery( function ( $ ) {
 				$( '.title-action-kho' ).text( 'Thêm thông tin kho' );
 				$( 'input[name="ten"]' ).val( '' );
 				$( 'select[name="user_name"] option:selected' ).val( '' );
-				$( 'select[name="user_name"] option:selected' ).text( 'Chọn user' );
+				$( '.btn_add_kho' ).removeClass( 'edit' );
+				$( '.btn_add_kho' ).text( 'Thêm' );
+				$( '.btn_add_kho' ).removeAttr( 'data-kho' );
 				let tr = $( 'tr[data-kho=' + data_kho.id + ']' );
 				tr.replaceWith( kho.htmlLayout( data_kho ) );
 			} );
@@ -168,14 +177,18 @@ jQuery( function ( $ ) {
 				let parent = $( this ).parents( 'tr' ),
 					id_kho = parent.data( 'kho' ),
 					ten = parent.find( '.name_kho' ),
+					email = parent.find( '.email_user' ),
+					phone = parent.find( '.phone_user' ),
 					id_user = parent.find( '.name_user' );
 				$( 'input[name="ten"]' ).val( ten.text() );
 				$( 'select[name="user_name"] option:selected' ).val( id_user.data( 'user' ) );
 				$( 'select[name="user_name"] option:selected' ).text( id_user.data( 'name-user' ) );
+				$( 'select[name="user_name"] option:selected' ).attr( 'phone', phone.data( 'phone' ) );
+				$( 'select[name="user_name"] option:selected' ).attr( 'email', email.data( 'email' ) );
 				$( '.message-error' ).remove();
 				$( '.btn_add_kho' ).addClass( 'edit' );
 				$( '.btn_add_kho' ).text( 'Lưu' );
-				$( '.btn_add_kho' ).attr( 'data-id', id_kho );
+				$( '.btn_add_kho' ).attr( 'data-kho', id_kho );
 				$( '.btn-clear-kho' ).removeClass( 'disabled' );
 				$( '.btn-clear-kho' ).removeAttr( 'disabled' );
 				$( '.btn-clear-kho' ).attr( 'data-kho', id_kho );
@@ -313,6 +326,7 @@ jQuery( function ( $ ) {
 					var id_product = $( this ).find( 'select[name="product_name"] option:selected' ).val();
 					var name_sp = $( this ).find( 'select[name="product_name"] option:selected' ).text();
 					var number = $( this ).find( '#number_product' ).val();
+					console.log( 'number', number );
 					var variable = $( '.save_product' ).attr( 'number-history' );
 					if ( variable === undefined ) {
 						number_history = number;
@@ -369,7 +383,6 @@ jQuery( function ( $ ) {
 		clearButton: function () {
 			$d.on( 'click', '.btn-clear', function () {
 				let id_kho = $( this ).attr( 'data-kho' );
-				console.log( 'id_kho', id_kho );
 				$( 'input[name="number_product"]' ).val( '' );
 				$( 'select[name="product_name"] option:selected' ).text( 'Chọn sản phẩm' );
 				$( 'select[name="product_name"] option:selected' ).val( '' );
@@ -382,14 +395,12 @@ jQuery( function ( $ ) {
 			} );
 		},
 		remove: function ( id_product, id_kho ) {
-			console.log( 'remove' );
 			$.post( ProductParams.ajaxUrl, {
 				action: 'xoa_sp_kho',
 				id_sp: id_product,
 				id_kho: id_kho,
 			}, response => {
 				if ( !response.success ) {
-					console.log( 'failed' );
 					return;
 				}
 				$( '.add-product__inner' ).html( response.data );
@@ -399,7 +410,6 @@ jQuery( function ( $ ) {
 		},
 		removeButton: function () {
 			$d.on( 'click', '.remove-product', function () {
-				console.log( 'click' );
 				var id_kho = $( this ).attr( 'data-kho' );
 				let parent = $( this ).parents( 'tr' ),
 					id_product = parent.attr( 'product-id' );
@@ -436,7 +446,6 @@ jQuery( function ( $ ) {
 				end_date: end_date,
 				id_kho: id_kho,
 			}, response => {
-				//console.log( response.data );
 				if ( !response.success ) {
 					return;
 				}

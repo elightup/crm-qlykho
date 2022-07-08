@@ -35,11 +35,11 @@
 			<table class="table table-striped w-full overflow-hidden rounded-lg shadow-xs">
 				<thead>
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-						<th class="px-4 py-3">Mã Kho</th>
+						<th class="ma_khos px-4 py-3 col-1">Mã Kho</th>
 						<th class="px-4 py-3">Tên Kho</th>
 						<th class="px-4 py-3">Tên User</th>
 						<th class="px-4 py-3">Email User</th>
-						<th class="phone_user px-4 py-3">Số điện thoại</th>
+						<th class="phone_users px-4 py-3 col-2">Số điện thoại</th>
 						<th class="px-4 py-3">Hành động</th>
 					</tr>
 				</thead>
@@ -60,14 +60,14 @@
 						$id_kho    = $warehouse->id;
 						?>
 						<tr class="text-gray-700 dark:text-gray-400" data-kho="<?= esc_attr( $warehouse->id );?>" >
-							<td class="px-4 py-3"><?= esc_html( $warehouse->id ) ?></td>
+							<td class="ma_kho px-4 py-3 col-1" ><?= esc_html( $warehouse->id ) ?></td>
 							<td data-name-kho="<?= esc_attr( $warehouse->ten );?>" class="name_kho searchable px-4 py-3"><?= esc_html( $warehouse->ten ) ?></td>
 							<td data-user="<?= esc_attr( $user_id );?>" data-name-user="<?= esc_attr( $user_name ) ?>" class="name_user px-4 py-3"><?= esc_html( $user_name ) ?></td>
-							<td class="email_user px-4 py-3"><?= esc_html( $usermail ) ?></td>
-							<td class="phone_user px-4 py-3"><?= esc_html( $user_meta ) ?></td>
+							<td data-email="<?= esc_attr( $usermail ) ?>" class="email_user px-4 py-3"><?= esc_html( $usermail ) ?></td>
+							<td data-phone="<?= esc_attr( $user_meta ) ?>" class="phone_user px-4 py-3 col-2"><?= esc_html( $user_meta ) ?></td>
 							<td class="action px-4 py-3">
 								<div class="flex items-center space-x-4 text-sm">
-									<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+									<button data-kho="<?= esc_attr( $warehouse->id ) ?>" class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
 										<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
 											<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
 										</svg>
@@ -104,7 +104,7 @@
 				<div class="action_input-item action_user">
 					<label for="user">User:</label>
 					<select name="user_name" id="user_name">
-						<option value=""><?= esc_html( 'Chọn user' );?></option>
+						<option value="" phone="" email=""><?= esc_html( 'Chọn user' );?></option>
 						<?php
 						$users = get_users();
 						foreach ( $users as $user ) :

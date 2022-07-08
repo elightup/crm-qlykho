@@ -117,14 +117,14 @@ $kho      = $wpdb->get_results( $sql );
 		</div>
 		<fieldset class="crm-action">
 			<legend><h2 class="title-action mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Thêm sản phẩm vào kho</h2></legend>
-			<div class="action_input">
+			<div class="action_input" id="input1">
 				<div class="add-product__wrap">
 					<label for="ten" >Sản phẩm: <span class="action-required">*</span></label>
 					<label for="ten" >Số lượng:</label>
 				</div>
-				<div class="add-product__inner">
+				<div class="add-product__inner" >
 					<div class="add-product">
-						<select name="product_name" id="product__name" class="rwmb">
+						<select name="product_name" id="product__name" class="hidden-itemname">
 							<option value="" selected hidden>Chọn sản phẩm</option>
 							<?php
 							$sql     = 'SELECT * FROM san_pham ORDER BY id DESC';
@@ -144,7 +144,7 @@ $kho      = $wpdb->get_results( $sql );
 							endforeach;
 							?>
 						</select>
-						<input type="number" name="number_product" id="number_product" class="rwmb">
+						<input type="number" name="number_product" id="number_product" value="0" class="rwmb">
 					</div>
 				</div>
 			</div>
