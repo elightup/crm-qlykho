@@ -85,6 +85,7 @@ button:disabled {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	text-align: center;
 	padding: 15px;
 	border-radius: 5px;
 	animation: zoomIn ease 1s, FadeOut linear 1s 1s forwards;
@@ -92,7 +93,7 @@ button:disabled {
 	.title {
 		color: #fff;
 		font-weight: 700;
-		font-size: 16px;
+		font-size: 14px;
 	}
 	.img-toast {
 		width: 35px ;

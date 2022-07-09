@@ -59,6 +59,8 @@
 
 			// Page Detail order
 			$d.on( 'click', '.add-product-detail', order.onAddSanPhamDetail );
+			$d.on( 'click', '.form-update-order .button-remove', order.onRemoveProduct );
+
 		},
 		onAddSanPham: function() {
 			$( '.clone-product' ).last().clone().appendTo( '.table-product' );
@@ -137,7 +139,7 @@
 					ngay     : response.data.ngay,
 				}
 				$( '.data-list' ).prepend( order.htmlLayout( data_order ) );
-				scriptJS.showToast( 'Đã thêm sản phẩm thành công' );
+				scriptJS.showToast( 'Đã thêm đơn hàng thành công' );
 				order.onClearOrder();
 
 				$( '.message-error' ).remove();
@@ -153,7 +155,7 @@
 					return;
 				}
 
-				scriptJS.showToast( 'Đã xóa sản phẩm thành công' );
+				scriptJS.showToast( 'Đã xóa đơn hàng thành công' );
 
 				let tr = $( 'tr[data-order='+ id +']' );
 				tr.remove();
@@ -317,6 +319,39 @@
 			$( 'input[name="data-sp"]' ).val( JSON.stringify( product ) );
 			// scriptJS.showToast( 'Đã thêm sản phẩm thành công' );
 			// order.onClearOrder();
+		},
+
+		onRemoveProduct: function() {
+			let parent     = $(this).parents( 'tr' ),
+				id_product = parent.data( 'product' );
+
+			$( '.confirm-remove-product' ).addClass( 'confirmed' );
+			$( '.confirm-remove-product' ).attr( 'data-id', id_product );
+			order.confirmRemoveProduct( id_product );
+		},
+
+		confirmRemoveProduct: function() {
+			$d.on( 'click', '.confirm-remove-product', function() {
+				let id_product = parseInt( $(this).attr( 'data-id' ) );
+				let current    = $( 'input[name="data-sp"]' ).val();
+				let json       = JSON.parse( current );
+
+				// Update total price vào input hidden
+				let total_price  = parseInt( $( '.total-price' ).attr( 'data-tong-tien' ) ) - json[id_product]['quantity'] * json[id_product]['price'],
+				    format_price = formatNumber( 0, 3, '.', ',', parseFloat( total_price ) );
+				$( '.total-price' ).attr( 'data-tong-tien', total_price );
+				$( '.total-price' ).text( format_price );
+				$( 'input[name="total-price"]' ).val( total_price );
+
+				// Update data product vào input hidden
+				delete json[id_product];
+				$( 'input[name="data-sp"]' ).val( JSON.stringify( json ) );
+
+				// Xóa dom <tr> của sản phẩm đó
+				let tr = $( 'tr[data-product='+ id_product +']' );
+				tr.remove();
+				scriptJS.showToast( 'Đã xóa sản phẩm trong đơn hàng. Hãy ấn cập nhật lại đơn' );
+			} );
 		},
 	};
 

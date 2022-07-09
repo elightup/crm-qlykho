@@ -44,7 +44,7 @@
 				<p class="title">${title}</p>
 			</div>`;
 
-			$( 'body' ).append( toast ).fadeTo( 2000, 1, () => {
+			$( 'body' ).append( toast ).fadeTo( 3000, 1, () => {
 				$( '.toast' ).remove();
 			} );
 		},

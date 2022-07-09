@@ -42,4 +42,9 @@
 	.product-number {
 		text-align: right;
 	}
+	.button-edit,
+	.button-remove,
+	.confirmed {
+		cursor: pointer;
+	}
 }
