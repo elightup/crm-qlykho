@@ -55,7 +55,7 @@
 			$d.on( 'click', '.data-list .button-remove', order.onRemoveOrder );
 			$d.on( 'click', '.popup-kho', scriptJS.onShowPopup );
 			$d.on( 'click', '.btn-close, #wpwrap', scriptJS.onClosePopup );
-			$d.on( 'click', '.clear-order', order.onClearOrder );
+			$d.on( 'click', '.clear-order, .clear-product', order.onClearOrder );
 
 			// Page Detail order
 			$d.on( 'click', '.add-product-detail', order.onAddSanPhamDetail );
@@ -220,6 +220,7 @@
 			$( 'select[name="product_name"]' ).val( '' );
 			$( '.clearable' ).text( '' );
 			$( '.product-number input' ).val( 0 );
+			$( '.popup-kho' ).attr( 'data-popup', '' );
 		},
 
 		onShowPopupKho: function(e) {
