@@ -36,7 +36,9 @@
 				/>
 				</div>
 			</div>
-			<?php require CRM_DIR . '/src/SanPham/modal.php' ?>
+			<div class="product-modal">
+				<?php require CRM_DIR . '/src/SanPham/modal.php' ?>
+			</div>
 			<table class="table table-striped w-full overflow-hidden rounded-lg shadow-xs">
 				<thead>
 					<tr class="text-xs font-semibold tracking-wide text-left text-gray-700 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">

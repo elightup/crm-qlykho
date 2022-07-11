@@ -126,10 +126,13 @@
 		clearInput: function() {
 			$( '.deleteable' ).val( '' );
 			$( '.btn_add_product' ).removeClass( 'edit' );
+			$( '.message-error' ).remove();
 		},
 
 		clickSave: function() {
 			$d.on( 'click', '.btn_add_product', function() {
+				$( '.message-error' ).remove();
+
 				let ten           = $( 'input[name=ten]' ),
 				    gia_niem_yet  = $( 'input[name=gia_niem_yet]' ),
 				    gia_ban_le    = $( 'input[name=gia_ban_le]' ),
@@ -163,6 +166,8 @@
 
 		editButton: function() {
 			$d.on( 'click', '.data-list .button-edit',  function() {
+				$( '.message-error' ).remove();
+
 				let parent        = $(this).parents( 'tr' ),
 				    id_product    = parent.data( 'product' ),
 				    ten           = parent.find( '.product__name > span' ),
