@@ -144,9 +144,9 @@
 
 				let data_sp = {
 					ten          : ten.val(),
-					gia_niem_yet : gia_niem_yet.val(),
-					gia_ban_le   : gia_ban_le.val(),
-					gia_ban_buon : gia_ban_buon.val(),
+					gia_niem_yet : gia_niem_yet.attr( 'data-number' ),
+					gia_ban_le   : gia_ban_le.attr( 'data-number' ),
+					gia_ban_buon : gia_ban_buon.attr( 'data-number' ),
 					thong_so     : thong_so.val(),
 					hang_san_xuat: hang_san_xuat.val(),
 					xuat_xu      : xuat_xu.val(),
@@ -180,9 +180,14 @@
 				    hinh_anh      = parent.find( '.product__thumbnail' );
 
 				$( 'input[name="ten"]' ).val( ten.text() );
-				$( 'input[name="gia_niem_yet"]' ).val( gia_niem_yet.data( 'gia-niem-yet' ) );
-				$( 'input[name="gia_ban_le"]' ).val( gia_ban_le.data( 'gia-ban-le' ) );
-				$( 'input[name="gia_ban_buon"]' ).val( gia_ban_buon.data( 'gia-ban-buon' ) );
+
+				$( 'input[name="gia_niem_yet"]' ).val( gia_niem_yet.html().trim() );
+				$( 'input[name="gia_niem_yet"]' ).attr( 'data-number', gia_niem_yet.attr( 'data-gia-niem-yet' ) );
+				$( 'input[name="gia_ban_le"]' ).val( gia_ban_le.html().trim() );
+				$( 'input[name="gia_ban_le"]' ).attr( 'data-number', gia_ban_le.attr( 'data-gia-ban-le' ) );
+				$( 'input[name="gia_ban_buon"]' ).val( gia_ban_buon.html().trim() );
+				$( 'input[name="gia_ban_buon"]' ).attr( 'data-number', gia_ban_buon.attr( 'data-gia-ban-buon' ) );
+
 				$( 'textarea[name="thong_so"]' ).val( thong_so.html().trim() );
 				$( 'input[name="hang_san_xuat"]' ).val( hang_san_xuat.text() );
 				$( 'input[name="xuat_xu"]' ).val( xuat_xu.text() );

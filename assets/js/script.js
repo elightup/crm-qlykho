@@ -1,12 +1,14 @@
 ( function ( $, window ) {
 	let fomatNumberTyping = () => {
-		$( '.crm-action input[type="number"]' ).on( 'keyup', function() {
-			// let n = parseInt( $(this).val().replace( /\D/g, '' ), 10 );
-			// let n = $( this ).val().replace( /\D/g, '' );
-			let n = formatNumber( 0, 3, '.', ',', parseFloat( $( this ).val() ) );
+		$( '.crm-action .formatable' ).on( 'keyup', function(e) {
 
-			console.log('n', n);
-			$( this ).val( n );
+			let n = parseFloat( $(this).val().replace( /\D/g, '' ), 10 );
+
+			if ( ! isNaN( n ) ) {
+				$(this).val( n.toLocaleString() );
+				$(this).attr( 'data-number', n )
+			}
+
 		} );
 	}
 
@@ -16,7 +18,7 @@
 		return ( c ? num.replace( '.', c ) : num ).replace( new RegExp( re, 'g' ), '$&' + ( s || ',' ) );
 	}
 
-	// fomatNumberTyping();
+	fomatNumberTyping();
 
 
 	let scriptJS = {

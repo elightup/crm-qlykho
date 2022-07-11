@@ -192,15 +192,15 @@
 				</div>
 				<div class="action_input-item">
 					<label for="gia_niem_yet">Giá niêm yết <span class="action-required">*</span></label>
-					<input class="deleteable" type="number" id="gia_niem_yet" name="gia_niem_yet" />
+					<input class="deleteable formatable" type="text" id="gia_niem_yet" name="gia_niem_yet" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
 				</div>
 				<div class="action_input-item">
 					<label for="gia_ban_le">Giá bán lẻ <span class="action-required">*</span></label>
-					<input class="deleteable" type="number" id="gia_ban_le" name="gia_ban_le" />
+					<input class="deleteable formatable" type="text" id="gia_ban_le" name="gia_ban_le" />
 				</div>
 				<div class="action_input-item">
 					<label for="gia_ban_buon">Giá bán buôn <span class="action-required">*</span></label>
-					<input class="deleteable" type="number" id="gia_ban_buon" name="gia_ban_buon" />
+					<input class="deleteable formatable" type="text" id="gia_ban_buon" name="gia_ban_buon" />
 				</div>
 				<div class="action_input-item">
 					<label for="thong_so">Thông số kỹ thuật:</label>
