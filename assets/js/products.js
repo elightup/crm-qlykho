@@ -1,5 +1,32 @@
 ( function( $, scriptJS ) {
 	const $d = $( document );
+
+	var options = {
+		valueNames: [
+			'product__id',
+			{ attr: 'src', name: 'product__thumbnail_img' },
+			'name',
+			{ attr: 'data-popup', name: 'popup' },
+			'product_gia_niem_yet',
+			{ attr: 'data-gia-niem-yet', name: 'data_gia_niem_yet' },
+			'product_gia_ban_le',
+			{ attr: 'data-gia-ban-le', name: 'data_gia_ban_le' },
+			'product_gia_ban_buon',
+			{ attr: 'data-gia-ban-buon', name: 'data_gia_ban_buon' },
+			'thongso_full',
+			'thongso_excerpt',
+			'hang_san_xuat',
+			'xuat_xu'
+		],
+		page: 10,
+		pagination: [
+			{ item: '<li class="rounded-md focus:outline-none focus:shadow-outline-purple"><a class="page px-3 py-1" href="#"></a></li>', }
+		]
+	};
+	if ( $( 'tbody.list' ).html().trim() !== '' ) {
+		var itemList = new List( 'crm-table', options );
+	}
+
 	let productList = {
 		init: function() {
 			productList.clickSave();
@@ -13,31 +40,32 @@
 				gia_ban_le   = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_le ) ),
 				gia_ban_buon = formatNumber( 0, 3, '.', ',', parseFloat( data.gia_ban_buon ) );
 			return `
-			<tr class="text-gray-700 dark:text-gray-400" data-product="${data.id}">
-				<td class="px-4 py-3">${data.id}</td>
-				<td data-link-image="${data.hinh_anh}" class="product__thumbnail px-4 py-3">
+			<tr class="text-gray-700 dark:text-gray-400">
+				<td class="product__id px-4 py-3">${data.id}</td>
+				<td class="product__thumbnail px-4 py-3">
 					<div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-						<img class="object-cover w-full h-full rounded-full border-0" src="${data.hinh_anh}">
+						<img class="product__thumbnail_img object-cover w-full h-full rounded-full border-0" src="${data.hinh_anh}">
 					</div>
 				</td>
 				<td class="product__name searchable px-4 py-3">
-
-					<span>${data.ten}</span>
+					<span class="name">${data.ten}</span>
 					<div>
-						<span class="popup-kho" data-popup="product-${data.id}">Xem kho</span>
+						<span class="popup popup-kho" data-popup="product-${data.id}">Xem kho</span>
 					</div>
 				</td>
-				<td class="product__gia-niem-yet px-4 py-3 text-right" data-gia-niem-yet="${data.gia_niem_yet}">${gia_niem_yet}</td>
-				<td class="product__gia-ban-le px-4 py-3 text-right" data-gia-ban-le="${data.gia_ban_le}">${gia_ban_le}</td>
-				<td class="product__gia-ban-buon px-4 py-3 text-right" data-gia-ban-buon="${data.gia_ban_buon}">${gia_ban_buon}</td>
+				<td class="product__gia-niem-yet data_gia_niem_yet product_gia_niem_yet px-4 py-3 text-right" data-gia-niem-yet="${data.gia_niem_yet}">${gia_niem_yet}</td>
+				<td class="product__gia-ban-le data_gia_ban_le product_gia_ban_le px-4 py-3 text-right" data-gia-ban-le="${data.gia_ban_le}">${gia_ban_le}</td>
+				<td class="product__gia-ban-buon data_gia_ban_buon product_gia_ban_buon px-4 py-3 text-right" data-gia-ban-buon="${data.gia_ban_buon}">${gia_ban_buon}</td>
 				<td class="product__thongso px-4 py-3">
-					<p class="hidden">
+					<p class="thongso_full hidden">
 						${data.thong_so}
 					</p>
-					${data.thong_so.substr( 0, 40 )} ...
+					<p class="thongso_excerpt">
+						${data.thong_so.substr( 0, 40 )} ...
+					</p>
 				</td>
-				<td class="product__hang-san-xuat px-4 py-3 hidden">${data.hang_san_xuat}</td>
-				<td class="product__xuat-xu px-4 py-3 hidden">${data.xuat_xu}</td>
+				<td class="product__hang-san-xuat hang_san_xuat px-4 py-3 hidden">${data.hang_san_xuat}</td>
+				<td class="product__xuat-xu xuat_xu px-4 py-3 hidden">${data.xuat_xu}</td>
 				<td class="px-4 py-3">
 					<div class="flex items-center space-x-4 text-sm">
 						<button class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
@@ -45,7 +73,7 @@
 								<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
 							</svg>
 						</button>
-						<button data-product="${data.id}" @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-red-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
+						<button @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-red-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
 							<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
 								<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
 							</svg>
@@ -54,6 +82,30 @@
 				</td>
 			</tr>
 			`;
+		},
+
+		valueListJS: function( product ) {
+			let gia_niem_yet = formatNumber( 0, 3, '.', ',', parseFloat( product.gia_niem_yet ) ),
+				gia_ban_le   = formatNumber( 0, 3, '.', ',', parseFloat( product.gia_ban_le ) ),
+				gia_ban_buon = formatNumber( 0, 3, '.', ',', parseFloat( product.gia_ban_buon ) ),
+				excerpt      = product.thong_so.split( ' ' ).splice( 0, 10 ).join( ' ' ) + '...';
+
+			return {
+				product__id           : product.id,
+				product__thumbnail_img: product.hinh_anh,
+				name                  : product.ten,
+				popup				  : `product-${product.id}`,
+				product_gia_niem_yet  : gia_niem_yet,
+				data_gia_niem_yet     : product.gia_niem_yet,
+				product_gia_ban_le    : gia_ban_le,
+				data_gia_ban_le       : product.gia_ban_le,
+				product_gia_ban_buon  : gia_ban_buon,
+				data_gia_ban_buon     : product.gia_ban_buon,
+				thongso_full          : product.thong_so,
+				thongso_excerpt       : excerpt,
+				hang_san_xuat         : product.hang_san_xuat,
+				xuat_xu               : product.xuat_xu,
+			}
 		},
 
 		add: function( product ) {
@@ -76,16 +128,21 @@
 					...product
 				}
 
-				$( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
-
 				scriptJS.showToast( 'Đã thêm sản phẩm thành công' );
 
+				itemList.add( productList.valueListJS( data_sp ) );
+				itemList.sort( 'product__id', {
+					order: 'desc'
+				} )
+				itemList.update();
+
+				// $( '.data-list' ).prepend( productList.htmlLayout( data_sp ) );
 				productList.clearInput();
-				productList.updateListJS();
 
 				$( '.message-error' ).remove();
 			} );
 		},
+
 		edit: function( product ) {
 			$.post( ProductParams.ajaxUrl, {
 				action: 'edit_san_pham',
@@ -99,8 +156,13 @@
 				scriptJS.showToast( 'Đã sửa sản phẩm thành công' );
 				productList.clearInput();
 
-				let tr = $( 'tr[data-product='+ product.id +']' );
-				tr.replaceWith( productList.htmlLayout( product ) );
+				// let tr = $( 'tr[data-product='+ product.id +']' );
+				// tr.replaceWith( productList.htmlLayout( product ) );
+
+
+				var item = itemList.get( 'product__id', product.id )[0];
+				item.values( productList.valueListJS( product ) );
+				itemList.update();
 
 				$( '.message-error' ).remove();
 				$( '.crm-action h2' ).text( 'Thêm sản phẩm' );
@@ -117,9 +179,11 @@
 
 				scriptJS.showToast( 'Đã xóa sản phẩm thành công' );
 
-				let tr = $( 'tr[data-product='+ id +']' );
-				tr.remove();
-				productList.updateListJS();
+				// let tr = $( 'tr[data-product='+ id +']' );
+				// tr.remove();
+
+				itemList.remove( 'product__id', id );
+				itemList.update();
 			} );
 		},
 
@@ -133,24 +197,15 @@
 			$d.on( 'click', '.btn_add_product', function() {
 				$( '.message-error' ).remove();
 
-				let ten           = $( 'input[name=ten]' ),
-				    gia_niem_yet  = $( 'input[name=gia_niem_yet]' ),
-				    gia_ban_le    = $( 'input[name=gia_ban_le]' ),
-				    gia_ban_buon  = $( 'input[name=gia_ban_buon]' ),
-				    thong_so      = $( 'textarea[name=thong_so]' ),
-				    hang_san_xuat = $( 'input[name=hang_san_xuat]' ),
-				    xuat_xu       = $( 'input[name=xuat_xu]' ),
-				    hinh_anh      = $( 'input[name=hinh_anh]' );
-
 				let data_sp = {
-					ten          : ten.val(),
-					gia_niem_yet : gia_niem_yet.attr( 'data-number' ),
-					gia_ban_le   : gia_ban_le.attr( 'data-number' ),
-					gia_ban_buon : gia_ban_buon.attr( 'data-number' ),
-					thong_so     : thong_so.val(),
-					hang_san_xuat: hang_san_xuat.val(),
-					xuat_xu      : xuat_xu.val(),
-					hinh_anh     : hinh_anh.val(),
+					ten          : $( 'input[name=ten]' ).val(),
+					gia_niem_yet : $( 'input[name=gia_niem_yet]' ).attr( 'data-number' ),
+					gia_ban_le   : $( 'input[name=gia_ban_le]' ).attr( 'data-number' ),
+					gia_ban_buon : $( 'input[name=gia_ban_buon]' ).attr( 'data-number' ),
+					thong_so     : $( 'textarea[name=thong_so]' ).val(),
+					hang_san_xuat: $( 'input[name=hang_san_xuat]' ).val(),
+					xuat_xu      : $( 'input[name=xuat_xu]' ).val(),
+					hinh_anh     : $( 'input[name=hinh_anh]' ).val(),
 				}
 				if ( $(this).hasClass( 'edit' ) ) {
 					data_sp = {
@@ -169,8 +224,8 @@
 				$( '.message-error' ).remove();
 
 				let parent        = $(this).parents( 'tr' ),
-				    id_product    = parent.data( 'product' ),
-				    ten           = parent.find( '.product__name > span' ),
+				    id_product    = parent.find( '.product__id' ).text(),
+				    ten           = parent.find( '.name' ),
 				    gia_niem_yet  = parent.find( '.product__gia-niem-yet' ),
 				    gia_ban_le    = parent.find( '.product__gia-ban-le' ),
 				    gia_ban_buon  = parent.find( '.product__gia-ban-buon' ),
@@ -179,7 +234,7 @@
 				    xuat_xu       = parent.find( '.product__xuat-xu' ),
 				    hinh_anh      = parent.find( '.product__thumbnail' );
 
-				$( 'input[name="ten"]' ).val( ten.text() );
+				$( 'input[name="ten"]' ).val( ten.text().trim() );
 
 				$( 'input[name="gia_niem_yet"]' ).val( gia_niem_yet.html().trim() );
 				$( 'input[name="gia_niem_yet"]' ).attr( 'data-number', gia_niem_yet.attr( 'data-gia-niem-yet' ) );
@@ -191,7 +246,7 @@
 				$( 'textarea[name="thong_so"]' ).val( thong_so.html().trim() );
 				$( 'input[name="hang_san_xuat"]' ).val( hang_san_xuat.text() );
 				$( 'input[name="xuat_xu"]' ).val( xuat_xu.text() );
-				$( 'input[name="hinh_anh"]' ).val( hinh_anh.data( 'link-image' ) );
+				$( 'input[name="hinh_anh"]' ).val( hinh_anh.find( 'img' ).attr( 'src' ) );
 
 				$( '.crm-action h2' ).text( 'Sửa sản phẩm' );
 				$( '.btn_add_product' ).text( 'Lưu' );
@@ -204,7 +259,7 @@
 		removeButton: function() {
 			$d.on( 'click', '.data-list .button-remove', function() {
 				let parent     = $(this).parents( 'tr' ),
-					id_product = parent.data( 'product' );
+					id_product = parent.find( '.product__id' ).text();
 
 				$( '.confirm-remove' ).addClass( 'confirmed' );
 				$( '.confirm-remove' ).attr( 'data-id', id_product );
@@ -234,18 +289,6 @@
 			$d.on( 'click', '.popup-kho', scriptJS.onShowPopup );
 			$d.on( 'click', '.btn-close, #wpwrap', scriptJS.onClosePopup );
 		},
-
-		updateListJS: function() {
-			var options = {
-				valueNames: [ 'searchable' ],
-				page: 10,
-				pagination: [
-					{ item: '<li class="rounded-md focus:outline-none focus:shadow-outline-purple"><a class="page px-3 py-1" href="#"></a></li>', }
-				]
-			};
-			var itemList = new List( 'crm-table', options );
-			itemList.update();
-		}
 	};
 
 	productList.init();

@@ -23,11 +23,11 @@
 
 	let scriptJS = {
 		init: function() {
-			scriptJS.listJS();
+			// scriptJS.listJS();
 		},
 		listJS: function() {
 			var options = {
-				valueNames: [ 'searchable' ],
+				valueNames: [ 'product__id', 'searchable' ],
 				page: 10,
 				pagination: [
 					{ item: '<li class="rounded-md focus:outline-none focus:shadow-outline-purple"><a class="page px-3 py-1" href="#"></a></li>', }
