@@ -6,9 +6,11 @@
 
 			if ( ! isNaN( n ) ) {
 				$(this).val( n.toLocaleString() );
-				$(this).attr( 'data-number', n )
+				$(this).attr( 'data-number', n );
+			} else {
+				$(this).val( '' );
+				$(this).attr( 'data-number', '' );
 			}
-
 		} );
 	}
 
