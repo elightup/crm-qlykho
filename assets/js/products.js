@@ -36,6 +36,24 @@
 			productList.showListKho();
 		},
 
+		htmlLayoutPopup: function(id) {
+			return `
+			<div id="product-${id}" class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Danh sách Kho</h5>
+							<button type="button" class="btn-close dashicons dashicons-no" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p class="mt-4">Sản phẩm này chưa có ở kho nào</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			`;
+		},
+
 		valueListJS: function( product ) {
 			let gia_niem_yet = formatNumber( 0, 3, '.', ',', parseFloat( product.gia_niem_yet ) ),
 				gia_ban_le   = formatNumber( 0, 3, '.', ',', parseFloat( product.gia_ban_le ) ),
@@ -88,6 +106,7 @@
 				} )
 				itemList.update();
 
+				$( '.product-modal' ).prepend( productList.htmlLayoutPopup( response.data ) );
 				productList.clearInput();
 
 				$( '.message-error' ).remove();
@@ -126,6 +145,9 @@
 				}
 
 				scriptJS.showToast( 'Đã xóa sản phẩm thành công' );
+
+				let popup = $( `#product-${id}` );
+				popup.remove();
 
 				itemList.remove( 'product__id', id );
 				itemList.update();
