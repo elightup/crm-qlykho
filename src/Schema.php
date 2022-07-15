@@ -55,7 +55,8 @@ class Schema {
 		CREATE TABLE nhap_kho (
 			`id` mediumint unsigned NOT NULL auto_increment,
 			`id_san_pham` mediumint NOT NULL,
-			`so_luong` mediumint NOT NULL,
+			`so_luong_thay_doi` mediumint NOT NULL,
+			`so_luong_tong` mediumint NOT NULL,
 			`id_kho` mediumint NOT NULL,
 			`date` datetime NOT NULL,
 			PRIMARY KEY  (`id`)

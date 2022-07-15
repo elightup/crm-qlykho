@@ -1,6 +1,5 @@
 <?php
 global $wpdb;
-$actual_link = ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 if ( isset( $_POST['submit'] ) ) {
 
@@ -10,6 +9,64 @@ if ( isset( $_POST['submit'] ) ) {
 	$user_id     = $_POST['user_name'];
 	$data        = json_decode( filter_input( INPUT_POST, 'data-sp' ), true );
 
+
+	// Update bảng nhập kho
+	$order_old = $wpdb->get_results( $wpdb->prepare(
+		'SELECT * FROM don_hang
+		 WHERE id=%d',
+		$_GET['id']
+	) );
+	$order_old = $order_old[0];
+
+	if ( $trang_thai !== $order_old->trang_thai ) {
+		$products = json_decode( $order_old->san_pham );
+		foreach ( $products as $product_id => $data_sp ) {
+			foreach ( $data_sp->warehouse as $kho ) {
+				if ( $trang_thai === 'Đã lên đơn' ) {
+					$quantity_change = - $kho->quantity;
+				}
+				if ( $order_old->trang_thai === 'Đã lên đơn' ) {
+					$quantity_change = $kho->quantity;
+				}
+
+				// Lấy số lượng sản phẩm hiện tại ở kho
+				$current_quantity = $wpdb->get_results( $wpdb->prepare(
+					'SELECT soLuong FROM san_pham_kho
+					 WHERE idKho=%d
+						AND idSanPham=%d',
+					$kho->id,
+					$product_id
+				) );
+
+				// Insert vào bảng nhập kho
+				$wpdb->insert(
+					'nhap_kho',
+					[
+						'id_san_pham'       => $product_id,
+						'id_kho'            => $kho->id,
+						'so_luong_thay_doi' => $quantity_change,
+						'so_luong_tong'     => (int) $current_quantity[0]->soLuong + (int) $quantity_change,
+						'date'              => current_time( 'mysql' ),
+					]
+				);
+
+				// Update bảng sản phẩm kho
+				$wpdb->update(
+					'san_pham_kho',
+					[
+						'soLuong' => (int) $current_quantity[0]->soLuong + (int) $quantity_change,
+					],
+					[
+						'idSanPham' => $product_id,
+						'idKho'     => $kho->id,
+					]
+				);
+			}
+		}
+	}
+
+
+	// Update đơn hàng
 	$wpdb->update(
 		'don_hang',
 		[
@@ -132,49 +189,46 @@ $order = $order[0];
 										WHERE id=%d',
 									$product_id
 								) );
-								?>
-								<tr class="text-gray-700 dark:text-gray-400" data-product="<?= esc_attr( $product_id ) ?>">
-									<td class="px-4 py-3"><?= esc_html( $san_pham[0]->ten ) ?></td>
-									<td class="px-4 py-3">
-									<?= esc_html( $product->quantity ) ?>
-									</td>
-									<td class="px-4 py-3">
-									<?php
-									foreach ( $product->warehouse as $warehouse ) {
-										$warehouse_name = $wpdb->get_col( $wpdb->prepare(
-											'SELECT ten FROM kho
-												WHERE id=%d',
-											$warehouse->id
-										) );
-
-										echo '<b>' . $warehouse->quantity . ':</b> ' . $warehouse_name[0] . '<br>';
-									}
+								if ( ! empty( $san_pham ) ) :
 									?>
-									</td>
-									<td data-tong-tien="<?= esc_attr( $order->tong_tien ) ?>" class="px-4 py-3 text-right">
-										<?= esc_html( number_format( $product->price, 0, ',', '.' ) ) ?>
-									</td>
-									<td class="px-4 py-3 text-right">
+									<tr class="text-gray-700 dark:text-gray-400" data-product="<?= esc_attr( $product_id ) ?>">
+										<td class="px-4 py-3"><?= esc_html( $san_pham[0]->ten ) ?></td>
+										<td class="px-4 py-3">
+										<?= esc_html( $product->quantity ) ?>
+										</td>
+										<td class="px-4 py-3">
 										<?php
-										$total = $product->quantity * $product->price;
-										echo esc_html( number_format( $total, 0, ',', '.' ) );
+										foreach ( $product->warehouse as $warehouse ) {
+											$warehouse_name = $wpdb->get_col( $wpdb->prepare(
+												'SELECT ten FROM kho
+													WHERE id=%d',
+												$warehouse->id
+											) );
+
+											echo '<b>' . $warehouse->quantity . ':</b> ' . $warehouse_name[0] . '<br>';
+										}
 										?>
-									</td>
-									<td class="action px-4 py-3">
-										<div class="flex items-center space-x-4 text-sm">
-											<!-- <div class="button-edit flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-gray-500 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
-												<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-													<path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-												</svg>
-											</div> -->
-											<div @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
-												<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-													<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-												</svg>
+										</td>
+										<td class="px-4 py-3 text-right">
+											<?= esc_html( number_format( $product->price, 0, ',', '.' ) ) ?>
+										</td>
+										<td class="px-4 py-3 text-right">
+											<?php
+											$total = $product->quantity * $product->price;
+											echo esc_html( number_format( $total, 0, ',', '.' ) );
+											?>
+										</td>
+										<td class="action px-4 py-3">
+											<div class="flex items-center space-x-4 text-sm">
+												<div @click="openModal" class="button-remove flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete">
+													<svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+														<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+													</svg>
+												</div>
 											</div>
-										</div>
-									</td>
-								</tr>
+										</td>
+									</tr>
+								<?php endif; ?>
 								<?php
 							endforeach;
 						endif;
@@ -242,7 +296,7 @@ $order = $order[0];
 									<p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">Xác nhận</p>
 									<!-- Modal description -->
 									<p class="text-sm text-gray-700 dark:text-gray-400">
-										Bạn có chắc chắn muốn xóa đơn hàng này
+										Bạn có chắc chắn muốn xóa sản phẩm này
 									</p>
 								</div>
 								<footer
@@ -278,53 +332,57 @@ $order = $order[0];
 		?>
 		<fieldset class="crm-action">
 			<legend><h2 class="title-action mt-4 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Thêm sản phẩm vào đơn</h2></legend>
-			<div class="action_input">
-				<div class="add-product__wrap">
-					<label for="ten" >Sản phẩm: <span class="action-required">*</span></label>
-					<label for="ten" >Số lượng:</label>
-				</div>
-				<div class="add-product__inner">
-					<div class="add-product">
-						<div class="product-name">
-							<select name="product_name" id="product__name" class="rwmb">
-								<option value="" selected hidden>Chọn sản phẩm</option>
-								<?php
-								$sql     = 'SELECT * FROM san_pham ORDER BY id DESC';
-								$sanpham = $wpdb->get_results( $sql );
-								foreach ( $sanpham as $sp ) :
-									$number = $wpdb->get_col( $wpdb->prepare(
-										'SELECT SUM(soLuong) FROM san_pham_kho
-										 WHERE idSanPham=%d',
-										$sp->id
-									) );
-									$number = $number[0] ? $number[0] : '';
-									?>
-									<option value="<?= esc_attr( $sp->id ); ?>" data-soluong="<?= esc_attr( $number ); ?>" data-price="<?= esc_attr( $sp->gia_niem_yet ); ?>" >
-										<?= esc_html( $sp->ten ); ?>
-									</option>
+			<?php if ( $order->trang_thai === 'Báo giá' ) : ?>
+				<div class="action_input">
+					<div class="add-product__wrap">
+						<label for="ten" >Sản phẩm: <span class="action-required">*</span></label>
+						<label for="ten" >Số lượng:</label>
+					</div>
+					<div class="add-product__inner">
+						<div class="add-product">
+							<div class="product-name">
+								<select name="product_name" id="product__name" class="rwmb">
+									<option value="" selected hidden>Chọn sản phẩm</option>
 									<?php
-								endforeach;
-								?>
-							</select>
-						</div>
-						<div class="product-number">
-							<input type="number" name="number_product" id="number_product" min="0" value="0" style="width: 5rem;">
-							<button class="popup-kho px-4 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple btn_add_product"
-								data-popup="">
-								Chọn kho
-							</button>
+									$sql     = 'SELECT * FROM san_pham ORDER BY id DESC';
+									$sanpham = $wpdb->get_results( $sql );
+									foreach ( $sanpham as $sp ) :
+										$number = $wpdb->get_col( $wpdb->prepare(
+											'SELECT SUM(soLuong) FROM san_pham_kho
+											WHERE idSanPham=%d',
+											$sp->id
+										) );
+										$number = $number[0] ? $number[0] : '';
+										?>
+										<option value="<?= esc_attr( $sp->id ); ?>" data-soluong="<?= esc_attr( $number ); ?>" data-price="<?= esc_attr( $sp->gia_niem_yet ); ?>" >
+											<?= esc_html( $sp->ten ); ?>
+										</option>
+										<?php
+									endforeach;
+									?>
+								</select>
+							</div>
+							<div class="product-number">
+								<input type="number" name="number_product" id="number_product" min="0" value="0" style="width: 5rem;">
+								<button class="popup-kho px-4 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple btn_add_product"
+									data-popup="">
+									Chọn kho
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="action_btn">
-				<button class="add-product-detail px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
-					Thêm
-				</button>
-				<button class="clear-product px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
-					Nhập lại
-				</button>
-			</div>
+				<div class="action_btn">
+					<button class="add-product-detail px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+						Thêm
+					</button>
+					<button class="clear-product px-4 py-2 font-medium text-white bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 focus:outline-none focus:shadow-outline-purple">
+						Nhập lại
+					</button>
+				</div>
+			<?php else : ?>
+				Hãy đổi trạng thái đơn về "Báo giá" để thêm được sản phẩm vào đơn
+			<?php endif; ?>
 		</fieldset>
 	</div>
 </div>
