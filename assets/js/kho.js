@@ -457,6 +457,18 @@ jQuery( function ( $ ) {
 				let id_kho = $( this ).attr( 'data-kho' );
 				let start_date = $( '#start_date' ).val(),
 					end_date = $( '#end_date' ).val();
+				var tdate = new Date();
+				var dd = tdate.getDate(); //yields day
+				var MM = tdate.getMonth(); //yields month
+				var yyyy = tdate.getFullYear(); //yields year
+				var date = yyyy + "-" + ( MM + 1 ) + "-" + ( dd + 1 );
+				var lastMonth = yyyy + "-" + ( MM ) + "-" + dd;
+				if ( end_date === '' ) {
+					end_date = date;
+				}
+				if ( start_date === '' ) {
+					start_date = lastMonth;
+				}
 				product_kho.handleSearch( id_kho, start_date, end_date );
 			} );
 		}
